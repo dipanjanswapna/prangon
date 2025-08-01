@@ -16,8 +16,9 @@ export default function Home() {
       <div className="relative z-10 text-center px-4" style={{ color: 'rgb(184, 172, 152)' }}>
         <p className="text-sm md:text-base tracking-[0.3em] mb-4">MINH PHAM</p>
         <h1 className="font-headline text-6xl md:text-8xl lg:text-9xl font-black uppercase leading-none tracking-tighter">
-          Making <span className="text-primary">Good</span><br />
-          Shit Since<br />
+          Making<br />
+          <span className="text-primary">Good Shit</span><br />
+          Since<br />
           2009
         </h1>
       </div>
