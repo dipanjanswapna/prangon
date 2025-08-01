@@ -90,10 +90,13 @@ export function Footer() {
                 </div>
             </div>
         </div>
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-start items-center gap-4 mt-8">
           <Link href="/">
               <Image src="https://mir-s3-cdn-cf.behance.net/user/230/1eb6171863399673.6851829692324.png" alt="PRANGON CENTRE Logo" width={50} height={50} className="rounded-full" />
           </Link>
+          <p className="text-sm text-muted-foreground font-code">
+            Thank you for visiting Prangon Centre. Your support is a great motivation for my creative and humanitarian pursuits.
+          </p>
         </div>
       </div>
     </footer>
