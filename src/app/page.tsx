@@ -58,12 +58,26 @@ const AboutMe = () => {
     };
   
     return (
-      <div ref={aboutRef} className="min-h-screen flex flex-col justify-center items-start px-8 md:px-16 lg:px-32" style={{ backgroundColor: '#141414' }}>
-        <p className="text-sm tracking-[0.3em] mb-6" style={{ color: 'rgb(184, 172, 152, 0.7)' }}>ABOUT ME</p>
-        <h2 className="font-sans text-xl md:text-2xl font-normal leading-relaxed text-left max-w-4xl">
-            {renderText()}
-        </h2>
-      </div>
+        <div ref={aboutRef} className="min-h-screen flex items-center justify-center px-8 md:px-16 lg:px-32" style={{ backgroundColor: '#141414' }}>
+            <div className="flex flex-col md:flex-row items-center gap-12">
+                <div className="md:w-3/5">
+                    <p className="text-sm tracking-[0.3em] mb-6" style={{ color: 'rgb(184, 172, 152, 0.7)' }}>ABOUT ME</p>
+                    <h2 className="font-sans text-xl md:text-2xl font-normal leading-relaxed text-left max-w-2xl">
+                        {renderText()}
+                    </h2>
+                </div>
+                <div className="md:w-2/5 flex justify-center">
+                    <Image
+                        src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg"
+                        alt="Dipanjan Prangon"
+                        width={300}
+                        height={300}
+                        className="rounded-full object-cover"
+                        data-ai-hint="profile picture"
+                    />
+                </div>
+            </div>
+        </div>
     );
   };
 
