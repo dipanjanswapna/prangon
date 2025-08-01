@@ -90,6 +90,11 @@ export function Footer() {
                 </div>
             </div>
         </div>
+        <div className="flex justify-center mt-8">
+          <Link href="/">
+              <Image src="https://mir-s3-cdn-cf.behance.net/user/230/1eb6171863399673.6851829692324.png" alt="PRANGON CENTRE Logo" width={50} height={50} className="rounded-full" />
+          </Link>
+        </div>
       </div>
     </footer>
   );
