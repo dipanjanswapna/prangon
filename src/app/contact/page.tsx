@@ -16,9 +16,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Send } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Send, Linkedin, Instagram, Twitter, Facebook, Behance, Youtube } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -31,6 +32,15 @@ const formSchema = z.object({
     message: 'Message must be at least 10 characters.',
   }),
 });
+
+const socialPlatforms = [
+    { name: 'LinkedIn', icon: Linkedin, href: '#' },
+    { name: 'Instagram', icon: Instagram, href: '#' },
+    { name: 'Twitter', icon: Twitter, href: '#' },
+    { name: 'Facebook', icon: Facebook, href: '#' },
+    { name: 'Behance', icon: Behance, href: '#' },
+    { name: 'YouTube', icon: Youtube, href: '#' },
+]
 
 export default function ContactPage() {
   const { toast } = useToast();
@@ -148,6 +158,49 @@ export default function ContactPage() {
               </Form>
             </CardContent>
           </Card>
+        </motion.div>
+
+        <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="mt-12"
+        >
+            <Card className="bg-muted/50 border-border shadow-lg">
+                <CardHeader>
+                    <motion.div variants={itemVariants}>
+                        <CardTitle className="text-2xl font-bold text-center font-headline text-primary-foreground">Find me on</CardTitle>
+                    </motion.div>
+                    <motion.div variants={itemVariants}>
+                        <CardDescription className="text-center">
+                            Connect with me on social media or check out my work.
+                        </CardDescription>
+                    </motion.div>
+                </CardHeader>
+                <CardContent>
+                    <motion.div 
+                        variants={containerVariants}
+                        className="flex justify-center flex-wrap gap-4"
+                    >
+                        {socialPlatforms.map((platform, index) =>(
+                            <motion.div key={platform.name} variants={itemVariants}>
+                                <Link href={platform.href} target="_blank" rel="noopener noreferrer">
+                                    <Button variant="outline" size="icon" aria-label={platform.name}>
+                                        <platform.icon className="h-5 w-5" />
+                                    </Button>
+                                </Link>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </CardContent>
+                 <CardFooter>
+                    <motion.div variants={itemVariants} className="w-full">
+                       <Button className="w-full" asChild>
+                           <Link href="#">Hire Me Now</Link>
+                       </Button>
+                    </motion.div>
+                </CardFooter>
+            </Card>
         </motion.div>
       </div>
     </div>
