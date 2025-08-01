@@ -79,8 +79,15 @@ const itemVariants = {
 
 export default function SocialWorkPage() {
   return (
-    <div className="bg-background min-h-screen">
-      <div className="container mx-auto px-4 py-16 md:py-24">
+    <div className="bg-background min-h-screen relative">
+       <Image
+          src="https://cdnb.artstation.com/p/assets/images/images/060/998/715/large/srabon-arafat-53.jpg?1679785068"
+          alt="Social work background"
+          fill
+          className="fixed inset-0 z-0 object-cover opacity-10"
+          data-ai-hint="abstract background"
+        />
+      <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">
         <motion.header
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -88,13 +95,6 @@ export default function SocialWorkPage() {
           className="relative text-center mb-16 rounded-lg overflow-hidden"
         >
            <div className="py-16 md:py-24">
-             <Image
-              src="https://cdnb.artstation.com/p/assets/images/images/060/998/715/large/srabon-arafat-53.jpg?1679785068"
-              alt="Social work background"
-              fill
-              className="absolute inset-0 z-0 object-cover opacity-10"
-              data-ai-hint="abstract background"
-            />
             <div className="relative z-10">
                 <div className="inline-block bg-primary/10 p-4 rounded-full mb-4">
                    <HandHeart className="h-10 w-10 text-primary" />
