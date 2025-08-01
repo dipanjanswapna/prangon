@@ -19,12 +19,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
     const handleInteraction = () => {
-      setHasInteracted(true);
+      if (!hasInteracted) {
+        setHasInteracted(true);
+        if (audioRef.current && audioRef.current.paused) {
+            audioRef.current.play().catch(e => console.error("Autoplay failed:", e));
+        }
+      }
       window.removeEventListener('click', handleInteraction);
       window.removeEventListener('keydown', handleInteraction);
     };
@@ -36,28 +41,21 @@ export default function RootLayout({
       window.removeEventListener('click', handleInteraction);
       window.removeEventListener('keydown', handleInteraction);
     };
-  }, []);
-
-  useEffect(() => {
-    if (hasInteracted && audioRef.current) {
-        audioRef.current.play().then(() => {
-            setIsPlaying(true);
-        }).catch(error => {
-            console.error("Audio play failed:", error);
-            setIsPlaying(false);
-        });
-    }
   }, [hasInteracted]);
   
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
-        audioRef.current.play().catch(e => console.error("Error playing audio:", e));
+        audioRef.current.play().catch(e => {
+            console.error("Error playing audio:", e);
+            // If autoplay fails, set isPlaying to false, but only if there was no interaction yet.
+            if(!hasInteracted) setIsPlaying(false);
+        });
       } else {
         audioRef.current.pause();
       }
     }
-  }, [isPlaying]);
+  }, [isPlaying, hasInteracted]);
 
   const toggleSound = () => {
     if (!hasInteracted) setHasInteracted(true);
@@ -105,7 +103,7 @@ export default function RootLayout({
 
         <aside className="fixed right-4 bottom-4 z-50 flex items-center space-x-2">
             <button onClick={toggleSound} className="text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
-                {isPlaying ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                {isPlaying ? <Volume2 className="h-4 w-4 md:h-5 md:w-5" /> : <VolumeX className="h-4 w-4 md:h-5 md:w-5" />}
                 <span className="[writing-mode:vertical-rl] text-xs md:text-sm tracking-widest uppercase">
                     {isPlaying ? 'Sound On' : 'Sound Off'}
                 </span>
