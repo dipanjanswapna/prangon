@@ -43,16 +43,16 @@ export const HireMeBanner = () => {
             transition={{ duration: 0.5 }}
             className="fixed bottom-4 left-0 right-0 z-[100]"
         >
-            <div className="bg-gray-800/80 backdrop-blur-lg text-white rounded-lg p-2 shadow-2xl flex items-center gap-4 mx-auto max-w-xl">
+            <div className="bg-primary/80 backdrop-blur-lg text-primary-foreground rounded-lg p-2 shadow-2xl flex items-center gap-4 mx-auto max-w-lg">
                 <Image src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg" alt="Dipanjan Prangon" width={40} height={40} className="rounded-full" />
                 <div className="flex-grow">
                     <h4 className="font-bold">Dipanjan Prangon is available for hire</h4>
-                    <p className="text-sm text-gray-300">Availability: Over a month</p>
+                    <p className="text-sm text-primary-foreground/80">Availability: Over a month</p>
                 </div>
                 <Button variant="secondary" size="sm" asChild>
                     <Link href="/contact">Hire Dipanjan</Link>
                 </Button>
-                <button onClick={handleClose} className="text-gray-400 hover:text-white p-2">
+                <button onClick={handleClose} className="text-primary-foreground/80 hover:text-primary-foreground p-2">
                     <X className="h-5 w-5" />
                 </button>
             </div>
