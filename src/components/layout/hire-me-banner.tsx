@@ -50,14 +50,15 @@ export const HireMeBanner = () => {
                         <h4 className="font-bold">Dipanjan Prangon is available for hire</h4>
                         <p className="text-sm text-primary-foreground/80">Availability: Over a month</p>
                     </div>
-                    <Button 
-                      size="sm" 
-                      asChild
-                      className="bg-contain bg-center bg-no-repeat"
-                      style={{ backgroundImage: "url('https://cbx-prod.b-cdn.net/COLOURBOX52382970.jpg?width=800&height=800&quality=70')" }}
-                    >
-                        <Link href="/contact"></Link>
-                    </Button>
+                    <Link href="/contact" className="block w-10 h-10">
+                      <Image
+                        src="https://cbx-prod.b-cdn.net/COLOURBOX52382970.jpg?width=800&height=800&quality=70"
+                        alt="Hire me button image"
+                        width={40}
+                        height={40}
+                        className="rounded-md object-cover w-full h-full"
+                      />
+                    </Link>
                     <button onClick={handleClose} className="text-primary-foreground/80 hover:text-primary-foreground p-1 rounded-full">
                         <X className="h-4 w-4" />
                     </button>
