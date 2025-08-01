@@ -1,14 +1,16 @@
 'use client';
 
-import { Github, Twitter, Linkedin, Copy, ExternalLink, Facebook } from 'lucide-react';
+import { Github, Twitter, Linkedin, Copy, ExternalLink, Facebook, HandHeart } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import { useState } from 'react';
 
 export function Footer() {
   const { toast } = useToast();
+  const [showSalute, setShowSalute] = useState(false);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText('your-email@example.com');
@@ -16,6 +18,11 @@ export function Footer() {
       title: 'Email Copied!',
       description: 'My email address has been copied to your clipboard.',
     });
+  };
+
+  const handleThankYouClick = () => {
+    setShowSalute(true);
+    setTimeout(() => setShowSalute(false), 2000);
   };
 
   const socialLinks = [
@@ -90,13 +97,31 @@ export function Footer() {
                 </div>
             </div>
         </div>
-        <div className="flex justify-start items-center gap-4 mt-8">
-          <Link href="/">
-              <Image src="https://mir-s3-cdn-cf.behance.net/user/230/1eb6171863399673.6851829692324.png" alt="PRANGON CENTRE Logo" width={50} height={50} className="rounded-full" />
-          </Link>
-          <p className="text-sm text-muted-foreground font-code">
-            Thank you for visiting Prangon Centre. Your support is a great motivation for my creative and humanitarian pursuits.
-          </p>
+        <div className="flex flex-col justify-center items-center gap-4 mt-8 text-center">
+            <Link href="/">
+                <Image src="https://mir-s3-cdn-cf.behance.net/user/230/1eb6171863399673.6851829692324.png" alt="PRANGON CENTRE Logo" width={50} height={50} className="rounded-full" />
+            </Link>
+            <div className="relative">
+                <p 
+                    className="text-sm text-muted-foreground font-code font-bold cursor-pointer"
+                    onClick={handleThankYouClick}
+                >
+                    Thank you for visiting Prangon Centre. Your support is a great motivation for my creative and humanitarian pursuits.
+                </p>
+                <AnimatePresence>
+                {showSalute && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.5 }}
+                        animate={{ opacity: 1, y: -40, scale: 1 }}
+                        exit={{ opacity: 0, y: -60, scale: 0.5 }}
+                        transition={{ duration: 0.5, type: 'spring', stiffness: 200, damping: 15 }}
+                        className="absolute -top-4 left-1/2 -translate-x-1/2"
+                    >
+                        <HandHeart className="h-8 w-8 text-primary" />
+                    </motion.div>
+                )}
+                </AnimatePresence>
+            </div>
         </div>
       </div>
     </footer>
