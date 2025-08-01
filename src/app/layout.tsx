@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
@@ -6,6 +7,8 @@ import Link from 'next/link';
 import { Dribbble, Instagram, Linkedin, PlayCircle, Music2 } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
+import { HireMeBanner } from '@/components/layout/hire-me-banner';
+
 
 export const metadata: Metadata = {
   title: 'PRANGON CENTRE - Creative Design, EdTech, and Digital Innovation',
@@ -61,6 +64,7 @@ export default function RootLayout({
         
         <Footer />
         <Toaster />
+        <HireMeBanner />
       </body>
     </html>
   );
