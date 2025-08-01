@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
@@ -5,6 +6,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { Dribbble, Instagram, Linkedin, PlayCircle } from 'lucide-react';
 import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
 
 export const metadata: Metadata = {
   title: 'PortfolioPro',
@@ -58,6 +60,7 @@ export default function RootLayout({
           </Link>
         </aside>
         
+        <Footer />
         <Toaster />
       </body>
     </html>
