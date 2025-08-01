@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
 
 const AboutMe = () => {
-    const text = "I'm a selectively skilled product designer with strong focus on producing high quality & impactful digital experience.".split(' ');
+    const text = "Hi! I’m Dipanjan “Swapna Prangon” Prangon from Dhaka, Bangladesh. As a passionate student, writer, and EdTech innovator, I founded Prangon’s Ecosystem to bridge creative design with education. I help students and educators through digital tools, branding, and movement-building learning content. With a keen eye for brand identity design, I craft logos, thumbnails, and visual stories that resonate.".split(' ');
     const [visibleWords, setVisibleWords] = useState<string[]>([]);
     const aboutRef = useRef<HTMLDivElement>(null);
   
@@ -34,17 +34,16 @@ const AboutMe = () => {
     }, []);
   
     const renderText = () => {
-      const allWords = "I'm a selectively skilled product designer with strong focus on producing high quality & impactful digital experience.".split(' ');
+      const allWords = "Hi! I’m Dipanjan “Swapna Prangon” Prangon from Dhaka, Bangladesh. As a passionate student, writer, and EdTech innovator, I founded Prangon’s Ecosystem to bridge creative design with education. I help students and educators through digital tools, branding, and movement-building learning content. With a keen eye for brand identity design, I craft logos, thumbnails, and visual stories that resonate.".split(' ');
       let wordIndex = 0;
   
       return allWords.map((word, index) => {
           const isVisible = visibleWords.includes(word) && index <= visibleWords.lastIndexOf(word);
-          const isHighlighted = word === 'selectively' || word === 'skilled';
-
+          
           return (
               <span key={index} className="inline-block">
                 <span style={{
-                    color: isHighlighted ? 'rgb(235, 89, 56)' : 'rgb(184, 172, 152)',
+                    color: 'rgb(184, 172, 152)',
                     transition: 'opacity 0.5s ease-in-out, transform 0.5s ease-in-out',
                     opacity: isVisible ? 1 : 0.1,
                     transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
