@@ -9,14 +9,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const Game = () => {
   const [playerPos, setPlayerPos] = useState({ x: 130, y: 480 });
-  const [opponents, setOpponents] = useState([]);
+  const [opponents, setOpponents] = useState<any[]>([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
-  const gameAreaRef = useRef(null);
-  const animationFrameId = useRef(null);
+  const gameAreaRef = useRef<HTMLDivElement>(null);
+  const animationFrameId = useRef<number | null>(null);
 
-  const movePlayer = (e) => {
+  const movePlayer = (e: MouseEvent) => {
     if (!gameAreaRef.current || gameOver) return;
     const gameArea = gameAreaRef.current;
     let newX = e.clientX - gameArea.getBoundingClientRect().left - 25; // car width / 2
@@ -25,7 +25,7 @@ const Game = () => {
     setPlayerPos(prev => ({ ...prev, x: newX }));
   };
   
-   const movePlayerTouch = (e) => {
+   const movePlayerTouch = (e: TouchEvent) => {
     if (!gameAreaRef.current || gameOver) return;
     const gameArea = gameAreaRef.current;
     let newX = e.touches[0].clientX - gameArea.getBoundingClientRect().left - 25;
@@ -45,7 +45,7 @@ const Game = () => {
   };
 
   const gameLoop = () => {
-    if (!gameStarted || gameOver) {
+    if (gameOver) {
         if(animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
         return;
     }
@@ -73,23 +73,23 @@ const Game = () => {
    useEffect(() => {
     opponents.forEach(op => {
       if (
+        !gameOver &&
         playerPos.x < op.x + 50 &&
         playerPos.x + 50 > op.x &&
         playerPos.y < op.y + 50 &&
         playerPos.y + 50 > op.y
       ) {
         setGameOver(true);
+        if(animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
       }
     });
-  }, [playerPos, opponents]);
+  }, [playerPos, opponents, gameOver]);
 
 
   useEffect(() => {
     if (gameStarted && !gameOver) {
       if(animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
       animationFrameId.current = requestAnimationFrame(gameLoop);
-    } else {
-       if(animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
     }
     
     return () => {
@@ -98,8 +98,9 @@ const Game = () => {
   }, [gameStarted, gameOver]);
   
   useEffect(() => {
-    if (!gameAreaRef.current) return;
     const gameArea = gameAreaRef.current;
+    if (!gameArea) return;
+    
     gameArea.addEventListener('mousemove', movePlayer);
     gameArea.addEventListener('touchmove', movePlayerTouch);
     return () => {
@@ -194,15 +195,16 @@ export default function NotFound() {
           to { background-position-y: 40px; }
         }
       `}</style>
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center text-center p-4">
+      <div className="min-h-screen bg-background flex flex-col md:flex-row items-center justify-center text-center md:text-left p-4 gap-16">
         <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
+            className="md:w-1/2"
         >
             <h1 className="text-8xl md:text-9xl font-black text-primary font-headline tracking-tighter">404</h1>
             <p className="text-2xl md:text-3xl font-semibold text-primary-foreground mt-2">Page Not Found</p>
-            <p className="text-muted-foreground mt-4 max-w-md mx-auto">
+            <p className="text-muted-foreground mt-4 max-w-md md:mx-0 mx-auto">
               Oops! The page you are looking for does not exist. But you can play a game while you're here!
             </p>
             <Link href="/" passHref>
@@ -214,7 +216,7 @@ export default function NotFound() {
         </motion.div>
 
         <motion.div
-            className="mt-12"
+            className="mt-12 md:mt-0"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
