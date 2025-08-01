@@ -4,6 +4,7 @@
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { ChevronLeft, ChevronRight, ChevronsRight } from 'lucide-react';
 
 const AboutMe = () => {
     const text = "Hi! I’m Dipanjan “Swapna Prangon” Prangon from Dhaka, Bangladesh. As a passionate student, writer, and EdTech innovator, I founded Prangon’s Ecosystem to bridge creative design with education. I help students and educators through digital tools, branding, and movement-building learning content. With a keen eye for brand identity design, I craft logos, thumbnails, and visual stories that resonate.".split(' ');
@@ -123,6 +124,91 @@ const SkillsSection = () => {
   );
 };
 
+const WhatTheySaidSection = () => {
+    const testimonials = [
+      {
+        quote: "This looks amazing. Great work!",
+        author: "Peter Smart",
+        title: "Head of Product",
+        company: "Fantasy Interactive",
+        image: "https://placehold.co/100x100.png",
+        imageAiHint: "man face",
+      },
+      {
+        quote: "Incredible attention to detail. A pleasure to work with.",
+        author: "Jane Doe",
+        title: "Creative Director",
+        company: "Acme Corp",
+        image: "https://placehold.co/100x100.png",
+        imageAiHint: "woman face",
+      },
+      {
+        quote: "The final result exceeded all our expectations. Highly recommended.",
+        author: "John Smith",
+        title: "Marketing Manager",
+        company: "Innovate Inc.",
+        image: "https://placehold.co/100x100.png",
+        imageAiHint: "man face glasses",
+      },
+    ];
+  
+    const [activeIndex, setActiveIndex] = useState(0);
+  
+    const nextTestimonial = () => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+    };
+  
+    const prevTestimonial = () => {
+      setActiveIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);
+    };
+  
+    const currentTestimonial = testimonials[activeIndex];
+  
+    return (
+      <div className="min-h-screen bg-[#141414] text-white flex items-center justify-center p-8">
+        <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row gap-16">
+          <div className="md:w-3/4">
+            <div className="relative">
+              <span className="absolute -top-8 -left-4 text-8xl font-black" style={{color: 'rgb(235, 89, 56)'}}>“</span>
+              <h2 className="font-headline text-6xl md:text-8xl font-bold leading-tight" style={{color: 'rgb(184, 172, 152)'}}>
+                {currentTestimonial.quote}
+              </h2>
+            </div>
+            <div className="mt-8">
+              <p className="text-xl font-semibold" style={{color: 'rgb(184, 172, 152)'}}>{currentTestimonial.author}</p>
+              <p className="text-lg text-gray-400">{currentTestimonial.title}</p>
+              <p className="text-lg text-gray-500">{currentTestimonial.company}</p>
+            </div>
+          </div>
+          <div className="md:w-1/4 flex flex-row md:flex-col items-center justify-center gap-4">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="relative flex items-center">
+                 {index === activeIndex && (
+                  <div className="hidden md:block absolute -left-8 text-orange-500">
+                    <ChevronsRight size={24} style={{color: 'rgb(235, 89, 56)'}}/>
+                  </div>
+                )}
+                <Image
+                  src={testimonial.image}
+                  alt={testimonial.author}
+                  width={80}
+                  height={80}
+                  data-ai-hint={testimonial.imageAiHint}
+                  className={`rounded-full cursor-pointer transition-all duration-300 ${
+                    index === activeIndex ? 'scale-110 border-4 border-orange-500' : 'opacity-50'
+                  }`}
+                  onClick={() => setActiveIndex(index)}
+                  style={{borderColor: 'rgb(235, 89, 56)'}}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+  
+
 export default function Home() {
   return (
     <>
@@ -146,6 +232,7 @@ export default function Home() {
       </div>
       <AboutMe />
       <SkillsSection />
+      <WhatTheySaidSection />
     </>
   );
 }
