@@ -98,8 +98,8 @@ const SkillsSection = () => {
         <Image
           src="https://images.pond5.com/3d-animation-earth-rotation-looped-085333912_prevstill.jpeg"
           alt="Earth"
-          layout="fill"
-          objectFit="cover"
+          fill
+          className="object-cover"
           data-ai-hint="dark earth globe"
         />
       </motion.div>
@@ -277,9 +277,8 @@ const InfoSection = () => {
              <Image 
                 src="https://placehold.co/800x400.png"
                 alt="Map of Dhaka"
-                layout="fill"
-                objectFit="cover"
-                className="opacity-20 z-0"
+                fill
+                className="object-cover opacity-20 z-0"
                 data-ai-hint="map Dhaka"
              />
           </div>
@@ -393,9 +392,8 @@ export default function Home() {
           <Image
             src="https://scontent.fdac138-1.fna.fbcdn.net/v/t39.30808-6/489643954_1207618031366053_6391368232504397889_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=bybr_YZJzsUQ7kNvwFkUVAN&_nc_oc=AdknBg_ukuAGHBLRTJ3Z23JbDfxZOAVYo6-Kh_2pziZc2q3gqRlUagLlkiogSv0V5dU&_nc_zt=23&_nc_ht=scontent.fdac138-1.fna&_nc_gid=Ep4pWuNIWrzdeH-MHntHnw&oh=00_AfR85qb8KAeVlYCXXzNw4eT8e7SX-_Hejf8RFCRoD84ZFA&oe=6892201F"
             alt="Minh Pham"
-            layout="fill"
-            objectFit="cover"
-            className="opacity-40"
+            fill
+            className="object-cover opacity-40"
             data-ai-hint="man portrait"
           />
         </div>
