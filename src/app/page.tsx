@@ -10,51 +10,41 @@ const AboutMe = () => {
     const aboutRef = useRef<HTMLDivElement>(null);
   
     useEffect(() => {
-      const handleScroll = () => {
-        if (aboutRef.current) {
-          const { top, bottom } = aboutRef.current.getBoundingClientRect();
-          const windowHeight = window.innerHeight;
-          if (top < windowHeight * 0.8 && bottom > windowHeight * 0.2) {
-             const wordsToShow = [];
-             for (let i = 0; i < text.length; i++) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+             text.forEach((word, i) => {
                 setTimeout(() => {
-                    setVisibleWords(prev => [...prev, text[i]]);
+                    setVisibleWords(prev => [...prev, text.slice(0, i + 1).join(' ')]);
                 }, i * 100);
-             }
+             });
+             observer.disconnect();
           }
-        }
-      };
+        },
+        { threshold: 0.1 }
+      );
   
-      window.addEventListener('scroll', handleScroll);
-      handleScroll(); // Initial check
+      if (aboutRef.current) {
+        observer.observe(aboutRef.current);
+      }
   
       return () => {
-        window.removeEventListener('scroll', handleScroll);
+        if(aboutRef.current) {
+            observer.unobserve(aboutRef.current);
+        }
       };
     }, []);
   
     const renderText = () => {
-      const allWords = "Hi! I’m Dipanjan “Swapna Prangon” Prangon from Dhaka, Bangladesh. As a passionate student, writer, and EdTech innovator, I founded Prangon’s Ecosystem to bridge creative design with education. I help students and educators through digital tools, branding, and movement-building learning content. With a keen eye for brand identity design, I craft logos, thumbnails, and visual stories that resonate.".split(' ');
-      let wordIndex = 0;
-  
-      return allWords.map((word, index) => {
-          const isVisible = visibleWords.includes(word) && index <= visibleWords.lastIndexOf(word);
-          
-          return (
-              <span key={index} className="inline-block">
-                <span style={{
-                    color: 'rgb(184, 172, 152)',
-                    transition: 'opacity 0.5s ease-in-out, transform 0.5s ease-in-out',
-                    opacity: isVisible ? 1 : 0.1,
-                    transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-                    display: 'inline-block'
-                }}>
-                    {word}
-                </span>
-                {' '}
-              </span>
-          );
-      });
+        const animatedText = visibleWords[visibleWords.length - 1] || "";
+        const remainingText = text.join(' ').substring(animatedText.length);
+
+        return (
+            <>
+                <span style={{ color: 'rgb(184, 172, 152)' }}>{animatedText}</span>
+                <span style={{ color: 'rgb(184, 172, 152)', opacity: 0.2 }}>{remainingText}</span>
+            </>
+        );
     };
   
     return (
