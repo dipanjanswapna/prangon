@@ -127,28 +127,28 @@ const SkillsSection = () => {
 const WhatTheySaidSection = () => {
     const testimonials = [
       {
-        quote: "This looks amazing. Great work!",
-        author: "Peter Smart",
-        title: "Head of Product",
-        company: "Fantasy Interactive",
+        quote: "Dipanjan's branding work took our EdTech startup to the next level. The logo and visual identity perfectly capture our mission.",
+        author: "Aarav Sharma",
+        title: "CEO",
+        company: "Edufy",
         image: "https://placehold.co/100x100.png",
         imageAiHint: "man face",
       },
       {
-        quote: "Incredible attention to detail. A pleasure to work with.",
-        author: "Jane Doe",
-        title: "Creative Director",
-        company: "Acme Corp",
+        quote: "The learning materials designed by Prangon’s Ecosystem are both beautiful and effective. Our student engagement has skyrocketed.",
+        author: "Nadia Islam",
+        title: "Head of Curriculum",
+        company: "Shikho",
         image: "https://placehold.co/100x100.png",
         imageAiHint: "woman face",
       },
       {
-        quote: "The final result exceeded all our expectations. Highly recommended.",
-        author: "John Smith",
-        title: "Marketing Manager",
-        company: "Innovate Inc.",
+        quote: "As a student, the digital tools he developed have been a game-changer for my study routine. Incredibly intuitive and helpful.",
+        author: "Priya Das",
+        title: "Student",
+        company: "University of Dhaka",
         image: "https://placehold.co/100x100.png",
-        imageAiHint: "man face glasses",
+        imageAiHint: "woman smiling",
       },
     ];
   
@@ -165,9 +165,9 @@ const WhatTheySaidSection = () => {
   
     return (
       <div className="min-h-screen bg-[#141414] text-white flex items-center justify-center p-8 overflow-hidden">
-        <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row gap-16">
+        <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12">
           <div className="md:w-3/4">
-            <div className="relative h-64">
+            <div className="relative h-64 md:h-72">
               <span className="absolute -top-8 -left-4 text-8xl font-black" style={{color: 'rgb(235, 89, 56)'}}>“</span>
               <AnimatePresence mode="wait">
                 <motion.div
@@ -178,7 +178,7 @@ const WhatTheySaidSection = () => {
                   transition={{ duration: 0.5 }}
                   className="absolute inset-0"
                 >
-                  <h2 className="font-headline text-6xl md:text-8xl font-bold leading-tight" style={{color: 'rgb(184, 172, 152)'}}>
+                  <h2 className="font-headline text-4xl md:text-5xl lg:text-6xl font-bold leading-tight" style={{color: 'rgb(184, 172, 152)'}}>
                     {currentTestimonial.quote}
                   </h2>
                 </motion.div>
@@ -194,7 +194,7 @@ const WhatTheySaidSection = () => {
             {testimonials.map((testimonial, index) => (
               <div key={index} className="relative flex items-center">
                  {index === activeIndex && (
-                  <div className="hidden md:block absolute -left-8 text-orange-500">
+                  <div className="hidden md:block absolute -left-6 text-orange-500">
                     <ChevronsRight size={24} style={{color: 'rgb(235, 89, 56)'}}/>
                   </div>
                 )}
