@@ -41,9 +41,9 @@ export const HireMeBanner = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 100 }}
             transition={{ duration: 0.5 }}
-            className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[100] w-full max-w-2xl"
+            className="fixed bottom-4 left-0 right-0 z-[100]"
         >
-            <div className="bg-gray-800/80 backdrop-blur-lg text-white rounded-lg p-2 shadow-2xl flex items-center gap-4">
+            <div className="bg-gray-800/80 backdrop-blur-lg text-white rounded-lg p-2 shadow-2xl flex items-center gap-4 mx-auto max-w-2xl">
                 <Image src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg" alt="Dipanjan Prangon" width={40} height={40} className="rounded-full" />
                 <div className="flex-grow">
                     <h4 className="font-bold">Dipanjan Prangon is available for hire</h4>
