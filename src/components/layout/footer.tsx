@@ -26,10 +26,16 @@ export function Footer() {
   ];
 
   return (
-    <footer className="bg-[#141414] text-white pt-20 pb-8">
+    <footer className="bg-[#141414] text-white pt-20 pb-8 overflow-hidden">
       <div className="container mx-auto px-4">
         {/* Call to Action Section */}
-        <div className="relative bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-8 md:p-12 mb-20 shadow-lg overflow-hidden">
+        <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.8 }}
+            className="relative bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-8 md:p-12 mb-20 shadow-lg"
+        >
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
             <div className="lg:w-2/3">
               <h2 className="text-3xl md:text-5xl font-bold mb-4">
@@ -54,7 +60,7 @@ export function Footer() {
               </motion.div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Bottom Footer */}
         <div className="border-t border-gray-800 pt-8">
@@ -63,10 +69,18 @@ export function Footer() {
                     &copy; {new Date().getFullYear()} All rights reserved
                 </p>
                 <div className="flex items-center space-x-4 md:space-x-6">
-                    {socialLinks.map((link) => (
-                    <Link key={link.name} href={link.href} className="text-sm hover:text-white transition-colors flex items-center gap-1">
-                        {link.name} <ExternalLink size={14} />
-                    </Link>
+                    {socialLinks.map((link, index) => (
+                        <motion.div
+                            key={link.name}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                        >
+                            <Link href={link.href} className="text-sm hover:text-white transition-colors flex items-center gap-1">
+                                {link.name} <ExternalLink size={14} />
+                            </Link>
+                        </motion.div>
                     ))}
                 </div>
             </div>

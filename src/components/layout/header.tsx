@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -8,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 const navItems = [
   { href: '/about', label: 'About' },
@@ -22,17 +24,18 @@ export function Header() {
   const NavLinks = ({ className }: { className?: string }) => (
     <nav className={cn('flex items-center space-x-6 text-sm font-medium', className)} style={{ color: 'rgb(184, 172, 152)' }}>
       {navItems.map((item) => (
-        <Link
-          key={item.label}
-          href={item.href}
-          onClick={() => setIsMobileMenuOpen(false)}
-          className={cn(
-            'transition-colors hover:text-primary',
-            'font-medium tracking-widest'
-          )}
-        >
-          {item.label}
-        </Link>
+        <motion.div key={item.label} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
+            <Link
+              href={item.href}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={cn(
+                'transition-colors hover:text-primary',
+                'font-medium tracking-widest'
+              )}
+            >
+              {item.label}
+            </Link>
+        </motion.div>
       ))}
     </nav>
   );
@@ -45,7 +48,12 @@ export function Header() {
         </Link>
 
         <div className="hidden md:flex items-center space-x-6">
-           <Circle className="h-4 w-4 text-primary fill-current" />
+           <motion.div
+             animate={{ rotate: 360 }}
+             transition={{ ease: "linear", duration: 10, repeat: Infinity }}
+           >
+            <Circle className="h-4 w-4 text-primary fill-current" />
+           </motion.div>
            <NavLinks />
         </div>
 

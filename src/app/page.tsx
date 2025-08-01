@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence, useInView } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ChevronsRight, Sparkles, Youtube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -54,13 +54,25 @@ const AboutMe = () => {
     return (
         <div ref={aboutRef} className="min-h-screen flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32" style={{ backgroundColor: '#141414' }}>
             <div className="flex flex-col md:flex-row items-center gap-12">
-                <div className="md:w-3/5">
+                <motion.div 
+                    initial={{ opacity: 0, x: -50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.8 }}
+                    className="md:w-3/5"
+                >
                     <p className="text-sm tracking-[0.3em] mb-6" style={{ color: 'rgb(184, 172, 152, 0.7)' }}>ABOUT ME</p>
                     <h2 className="font-sans text-xl md:text-2xl font-normal leading-relaxed text-left max-w-2xl">
                         {renderText()}
                     </h2>
-                </div>
-                <div className="md:w-2/5 flex justify-center">
+                </motion.div>
+                <motion.div 
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.8 }}
+                    className="md:w-2/5 flex justify-center"
+                >
                     <Image
                         src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg"
                         alt="Dipanjan Prangon"
@@ -69,7 +81,7 @@ const AboutMe = () => {
                         className="rounded-full object-cover w-[200px] h-[200px] sm:w-[300px] sm:h-[300px]"
                         data-ai-hint="profile picture"
                     />
-                </div>
+                </motion.div>
             </div>
         </div>
     );
@@ -170,7 +182,12 @@ const WhatTheySaidSection = () => {
         <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12">
           <div className="md:w-3/4 text-center md:text-left">
             <div className="relative h-auto md:h-72">
-              <span className="absolute -top-8 -left-4 text-8xl font-black hidden md:block" style={{color: 'rgb(235, 89, 56)'}}>“</span>
+              <motion.span 
+                initial={{ opacity: 0, scale: 0.5 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="absolute -top-8 -left-4 text-8xl font-black hidden md:block" style={{color: 'rgb(235, 89, 56)'}}>“</motion.span>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex}
@@ -186,15 +203,27 @@ const WhatTheySaidSection = () => {
                 </motion.div>
               </AnimatePresence>
             </div>
-            <div className="mt-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mt-8">
               <p className="text-xl font-semibold" style={{color: 'rgb(184, 172, 152)'}}>{currentTestimonial.author}</p>
               <p className="text-lg text-gray-400">{currentTestimonial.title}</p>
               <p className="text-lg text-gray-500">{currentTestimonial.company}</p>
-            </div>
+            </motion.div>
           </div>
           <div className="md:w-1/4 flex flex-row md:flex-col items-center justify-center gap-4 mt-8 md:mt-0">
             {testimonials.map((testimonial, index) => (
-              <div key={index} className="relative flex items-center">
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="relative flex items-center"
+              >
                  {index === activeIndex && (
                   <div className="hidden md:block absolute -left-6 text-orange-500">
                     <ChevronsRight size={24} style={{color: 'rgb(235, 89, 56)'}}/>
@@ -212,7 +241,7 @@ const WhatTheySaidSection = () => {
                   onClick={() => setActiveIndex(index)}
                   style={{borderColor: 'rgb(235, 89, 56)'}}
                 />
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -226,12 +255,22 @@ const InfoSection = () => {
       { name: 'Mongoose' }, { name: 'jQuery' }, { name: 'MySQL' }, { name: 'PostgreSQL' }
     ];
   
+    const cardVariants = {
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+    };
+  
     return (
       <div className="bg-[#141414] text-white p-4 sm:p-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           
-          {/* My Reads Card */}
-          <div className="bg-[#1C1C1C] rounded-2xl p-6 flex flex-col justify-between col-span-1 row-span-2">
+          <motion.div
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            className="bg-[#1C1C1C] rounded-2xl p-6 flex flex-col justify-between col-span-1 row-span-2"
+          >
             <div>
               <h3 className="flex items-center text-xl font-bold mb-2">
                 <Sparkles className="h-5 w-5 mr-2 text-purple-400" />
@@ -244,29 +283,46 @@ const InfoSection = () => {
               alt="Atomic Habits book cover" 
               width={400} 
               height={600} 
-              className="w-full h-auto rounded-lg object-cover" 
+              className="w-full h-auto rounded-lg object-cover mt-auto" 
               data-ai-hint="book cover" 
             />
-          </div>
+          </motion.div>
   
-          {/* My Toolbox Card */}
-          <div className="bg-[#1C1C1C] rounded-2xl p-6 col-span-1 lg:col-span-2">
+          <motion.div
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            className="bg-[#1C1C1C] rounded-2xl p-6 col-span-1 lg:col-span-2"
+          >
             <h3 className="flex items-center text-xl font-bold mb-2">
               <Sparkles className="h-5 w-5 mr-2 text-purple-400" />
               My Toolbox
             </h3>
             <p className="text-gray-400 mb-6">Explore the technologies and tools I use to create awesome digital experiences.</p>
             <div className="flex flex-wrap gap-2 sm:gap-4">
-              {toolboxItems.map(item => (
-                <div key={item.name} className="bg-[#2a2a2a] rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm flex items-center">
+              {toolboxItems.map((item, index) => (
+                <motion.div 
+                    key={item.name} 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.05 }}
+                    className="bg-[#2a2a2a] rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm flex items-center"
+                >
                   {item.name}
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
   
-          {/* My Hobbies Card */}
-          <div className="bg-[#1C1C1C] rounded-2xl p-6 col-span-1 lg:col-span-2 relative overflow-hidden min-h-[200px] md:h-auto flex flex-col justify-center">
+          <motion.div
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            className="bg-[#1C1C1C] rounded-2xl p-6 col-span-1 lg:col-span-2 relative overflow-hidden min-h-[200px] md:h-auto flex flex-col justify-center"
+          >
              <div className="relative z-10">
                 <h3 className="flex items-center text-xl font-bold mb-2">
                     <Sparkles className="h-5 w-5 mr-2 text-purple-400" />
@@ -281,7 +337,7 @@ const InfoSection = () => {
                 className="object-cover opacity-20 z-0"
                 data-ai-hint="map Dhaka"
              />
-          </div>
+          </motion.div>
   
         </div>
       </div>
@@ -312,18 +368,40 @@ const LatestVideosSection = () => {
         thumbnailAiHint: "youtube thumbnail analysis",
       },
     ];
+
+    const cardVariants = {
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.2 } }
+    };
+    
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+    };
   
     return (
       <div className="bg-[#141414] text-white p-8 md:p-16">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-4">
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-4"
+          >
             <p className="text-lg" style={{ color: 'rgb(184, 172, 152)' }}>Visit and Play</p>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-widest" style={{ color: 'rgb(184, 172, 152, 0.7)' }}>
               LATEST VIDEOS AND SUBSCRIBE
             </h2>
-          </div>
+          </motion.div>
   
-          <div className="bg-[#1C1C1C] rounded-2xl p-6 sm:p-8 mb-8">
+          <motion.div 
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="bg-[#1C1C1C] rounded-2xl p-6 sm:p-8 mb-8"
+          >
             <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
               <div className="flex-shrink-0">
                 <Image 
@@ -344,11 +422,21 @@ const LatestVideosSection = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
   
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+          <motion.div 
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8"
+          >
             {videos.map((video, index) => (
-              <div key={index} className="bg-[#1C1C1C] rounded-lg overflow-hidden group">
+              <motion.div 
+                key={index}
+                variants={itemVariants} 
+                className="bg-[#1C1C1C] rounded-lg overflow-hidden group"
+              >
                 <div className="relative">
                   <Image 
                     src={video.thumbnail} 
@@ -366,18 +454,22 @@ const LatestVideosSection = () => {
                   <h4 className="font-semibold text-base sm:text-lg mb-2" style={{ color: 'rgb(184, 172, 152)' }}>{video.title}</h4>
                   <p className="text-xs sm:text-sm text-gray-400">{video.author} · {video.timestamp}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
   
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-            <Button variant="outline" className="bg-gray-700 hover:bg-gray-600 border-gray-600 text-white w-full sm:w-auto">Load More...</Button>
-            <a href="https://www.youtube.com/@dipanjanswapna" target="_blank" rel="noopener noreferrer" className='w-full sm:w-auto'>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full">
-                <Youtube className="mr-2 h-5 w-5" />
-                Subscribe
-              </Button>
-            </a>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className='w-full sm:w-auto'>
+              <Button variant="outline" className="bg-gray-700 hover:bg-gray-600 border-gray-600 text-white w-full sm:w-auto">Load More...</Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className='w-full sm:w-auto'>
+              <a href="https://www.youtube.com/@dipanjanswapna" target="_blank" rel="noopener noreferrer" className='w-full sm:w-auto'>
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full">
+                  <Youtube className="mr-2 h-5 w-5" />
+                  Subscribe
+                </Button>
+              </a>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -385,6 +477,31 @@ const LatestVideosSection = () => {
   };
 
 export default function Home() {
+
+  const title = "SMILE FOR MILES".split(" ");
+  const titleColor = "FOR".split("");
+
+  const titleContainer = {
+    hidden: { opacity: 0 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 * i },
+    }),
+  };
+
+  const titleItem = {
+    hidden: {
+      opacity: 0,
+      y: 20,
+      transition: { type: "spring", damping: 12, stiffness: 200 },
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", damping: 12, stiffness: 200 },
+    },
+  };
+
   return (
     <>
       <div className="relative w-full h-screen flex items-center justify-center overflow-hidden">
@@ -394,14 +511,40 @@ export default function Home() {
             alt="Minh Pham"
             fill
             className="object-cover opacity-40"
+            priority
             data-ai-hint="man portrait"
           />
         </div>
         <div className="relative z-10 text-center px-4" style={{ color: 'rgb(184, 172, 152)' }}>
-          <p className="text-sm md:text-base tracking-[0.2em] md:tracking-[0.3em] mb-4">WELCOME TO PRANGON CENTRE</p>
-          <h1 className="font-headline text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase leading-none tracking-tighter">
-            smile <span style={{ color: 'rgb(235, 89, 56)' }}>for</span> miles
-          </h1>
+          <motion.p 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-sm md:text-base tracking-[0.2em] md:tracking-[0.3em] mb-4"
+          >
+            WELCOME TO PRANGON CENTRE
+          </motion.p>
+          <motion.h1 
+            variants={titleContainer}
+            initial="hidden"
+            animate="visible"
+            className="font-headline text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase leading-none tracking-tighter"
+          >
+           {title.map((word, index) => (
+             <span key={index} className="inline-block">
+                {word === "FOR" ? (
+                    <motion.span variants={titleItem} style={{ color: 'rgb(235, 89, 56)' }}>FOR&nbsp;</motion.span>
+                ) : (
+                    word.split("").map((char, charIndex) => (
+                        <motion.span key={charIndex} variants={titleItem} className="inline-block">
+                            {char}
+                        </motion.span>
+                    ))
+                )}
+                {index < title.length -1 && <span>&nbsp;</span>}
+            </span>
+           ))}
+          </motion.h1>
         </div>
       </div>
       <AboutMe />
@@ -412,3 +555,4 @@ export default function Home() {
     </>
   );
 }
+
