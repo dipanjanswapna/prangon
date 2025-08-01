@@ -20,6 +20,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Send, Linkedin, Instagram, Twitter, Facebook, Youtube, Briefcase } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -78,130 +79,140 @@ export default function ContactPage() {
 
 
   return (
-    <div className="container mx-auto px-4 py-8 md:py-12">
-      <div className="max-w-2xl mx-auto">
-        <motion.div variants={containerVariants} initial="hidden" animate="visible">
-          <Card className="bg-muted/50 border-border shadow-lg">
-            <CardHeader className="text-center">
-              <motion.div variants={itemVariants}>
-                <CardTitle className="text-4xl font-bold font-headline text-primary-foreground">Contact Me</CardTitle>
-              </motion.div>
-              <motion.div variants={itemVariants}>
-              <CardDescription className="text-lg text-muted-foreground mt-2">
-                Have a project in mind or just want to say hi?
-              </CardDescription>
-              </motion.div>
-            </CardHeader>
-            <CardContent>
-              <Form {...form}>
-                <motion.form 
-                  variants={containerVariants}
-                  onSubmit={form.handleSubmit(onSubmit)} 
-                  className="space-y-6"
-                >
-                  <motion.div variants={itemVariants}>
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Your Name" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </motion.div>
-                  <motion.div variants={itemVariants}>
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input placeholder="your.email@example.com" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                   </motion.div>
-                  <motion.div variants={itemVariants}>
-                    <FormField
-                      control={form.control}
-                      name="message"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Message</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Tell me about your project or idea..."
-                              className="min-h-[150px]"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </motion.div>
-                  <motion.div variants={itemVariants} className="flex justify-end">
-                    <Button type="submit" disabled={form.formState.isSubmitting}>
-                      <Send className="mr-2 h-4 w-4" />
-                      Send Message
-                    </Button>
-                  </motion.div>
-                </motion.form>
-              </Form>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="mt-12"
-        >
-            <Card className="bg-muted/50 border-border shadow-lg">
-                <CardHeader>
+    <div className="relative min-h-screen py-8 md:py-12">
+      <Image
+        src="https://cdnb.artstation.com/p/assets/images/images/068/573/083/large/srabon-arafat-lost-in-space-1.jpg?1698155818"
+        alt="Contact background"
+        layout="fill"
+        objectFit="cover"
+        className="absolute inset-0 z-0 opacity-20"
+        data-ai-hint="space background"
+      />
+      <div className="relative z-10 container mx-auto px-4">
+        <div className="max-w-2xl mx-auto">
+          <motion.div variants={containerVariants} initial="hidden" animate="visible">
+            <Card className="bg-background/80 backdrop-blur-sm border-border shadow-lg">
+              <CardHeader className="text-center">
+                <motion.div variants={itemVariants}>
+                  <CardTitle className="text-4xl font-bold font-headline text-primary-foreground">Contact Me</CardTitle>
+                </motion.div>
+                <motion.div variants={itemVariants}>
+                <CardDescription className="text-lg text-muted-foreground mt-2">
+                  Have a project in mind or just want to say hi?
+                </CardDescription>
+                </motion.div>
+              </CardHeader>
+              <CardContent>
+                <Form {...form}>
+                  <motion.form 
+                    variants={containerVariants}
+                    onSubmit={form.handleSubmit(onSubmit)} 
+                    className="space-y-6"
+                  >
                     <motion.div variants={itemVariants}>
-                        <CardTitle className="text-2xl font-bold text-center font-headline text-primary-foreground">Find me on</CardTitle>
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Your Name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </motion.div>
                     <motion.div variants={itemVariants}>
-                        <CardDescription className="text-center">
-                            Connect with me on social media or check out my work.
-                        </CardDescription>
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input placeholder="your.email@example.com" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </motion.div>
-                </CardHeader>
-                <CardContent>
-                    <motion.div 
-                        variants={containerVariants}
-                        className="flex justify-center flex-wrap gap-4"
-                    >
-                        {socialPlatforms.map((platform, index) =>(
-                            <motion.div key={platform.name} variants={itemVariants}>
-                                <Link href={platform.href} target="_blank" rel="noopener noreferrer">
-                                    <Button variant="outline" size="icon" aria-label={platform.name}>
-                                        <platform.icon className="h-5 w-5" />
-                                    </Button>
-                                </Link>
-                            </motion.div>
-                        ))}
+                    <motion.div variants={itemVariants}>
+                      <FormField
+                        control={form.control}
+                        name="message"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Message</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Tell me about your project or idea..."
+                                className="min-h-[150px]"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </motion.div>
-                </CardContent>
-                 <CardFooter>
-                    <motion.div variants={itemVariants} className="w-full">
-                       <Button className="w-full" asChild>
-                           <Link href="#">Hire Me Now</Link>
-                       </Button>
+                    <motion.div variants={itemVariants} className="flex justify-end">
+                      <Button type="submit" disabled={form.formState.isSubmitting}>
+                        <Send className="mr-2 h-4 w-4" />
+                        Send Message
+                      </Button>
                     </motion.div>
-                </CardFooter>
+                  </motion.form>
+                </Form>
+              </CardContent>
             </Card>
-        </motion.div>
+          </motion.div>
+
+          <motion.div 
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="mt-12"
+          >
+              <Card className="bg-background/80 backdrop-blur-sm border-border shadow-lg">
+                  <CardHeader>
+                      <motion.div variants={itemVariants}>
+                          <CardTitle className="text-2xl font-bold text-center font-headline text-primary-foreground">Find me on</CardTitle>
+                      </motion.div>
+                      <motion.div variants={itemVariants}>
+                          <CardDescription className="text-center">
+                              Connect with me on social media or check out my work.
+                          </CardDescription>
+                      </motion.div>
+                  </CardHeader>
+                  <CardContent>
+                      <motion.div 
+                          variants={containerVariants}
+                          className="flex justify-center flex-wrap gap-4"
+                      >
+                          {socialPlatforms.map((platform, index) =>(
+                              <motion.div key={platform.name} variants={itemVariants}>
+                                  <Link href={platform.href} target="_blank" rel="noopener noreferrer">
+                                      <Button variant="outline" size="icon" aria-label={platform.name}>
+                                          <platform.icon className="h-5 w-5" />
+                                      </Button>
+                                  </Link>
+                              </motion.div>
+                          ))}
+                      </motion.div>
+                  </CardContent>
+                  <CardFooter>
+                      <motion.div variants={itemVariants} className="w-full">
+                        <Button className="w-full" asChild>
+                            <Link href="#">Hire Me Now</Link>
+                        </Button>
+                      </motion.div>
+                  </CardFooter>
+              </Card>
+          </motion.div>
+        </div>
       </div>
     </div>
   );
