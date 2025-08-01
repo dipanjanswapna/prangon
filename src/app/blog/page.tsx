@@ -33,30 +33,32 @@ const itemVariants = {
 export default function BlogPage() {
   return (
     <div className="bg-background min-h-screen">
-      <div className="container mx-auto px-4 py-16 md:py-24">
+      <div className="container mx-auto px-4">
         <motion.header
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="relative text-center mb-16 p-8 md:p-16 rounded-lg overflow-hidden"
+          className="relative text-center mb-16 rounded-lg overflow-hidden"
         >
-          <Image
-            src="https://wallpapercat.com/w/full/d/d/f/46447-3840x2160-desktop-4k-squid-game-wallpaper.jpg"
-            alt="Blog background"
-            fill
-            className="absolute inset-0 z-0 object-cover opacity-25"
-            data-ai-hint="abstract technology background"
-          />
-          <div className="relative z-10">
-              <div className="inline-block bg-primary/10 p-3 rounded-full mb-4">
-                 <Rss className="h-8 w-8 text-primary" />
-              </div>
-              <h1 className="text-5xl md:text-7xl font-black font-headline tracking-tighter text-primary-foreground uppercase">
-                The Blog
-              </h1>
-              <p className="text-xl md:text-2xl text-muted-foreground mt-4 max-w-4xl mx-auto">
-                Insights, stories, and thoughts on technology, design, and education.
-              </p>
+          <div className="py-16 md:py-24">
+            <Image
+              src="https://wallpapercat.com/w/full/d/d/f/46447-3840x2160-desktop-4k-squid-game-wallpaper.jpg"
+              alt="Blog background"
+              fill
+              className="absolute inset-0 z-0 object-cover opacity-25"
+              data-ai-hint="abstract technology background"
+            />
+            <div className="relative z-10">
+                <div className="inline-block bg-primary/10 p-3 rounded-full mb-4">
+                   <Rss className="h-8 w-8 text-primary" />
+                </div>
+                <h1 className="text-5xl md:text-7xl font-black font-headline tracking-tighter text-primary-foreground uppercase">
+                  The Blog
+                </h1>
+                <p className="text-xl md:text-2xl text-muted-foreground mt-4 max-w-4xl mx-auto">
+                  Insights, stories, and thoughts on technology, design, and education.
+                </p>
+            </div>
           </div>
         </motion.header>
 
