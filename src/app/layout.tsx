@@ -103,10 +103,10 @@ export default function RootLayout({
           </Link>
         </aside>
 
-        <aside className="fixed right-4 bottom-4 z-50 hidden md:flex items-center space-x-2">
+        <aside className="fixed right-4 bottom-4 z-50 flex items-center space-x-2">
             <button onClick={toggleSound} className="text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
                 {isPlaying ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-                <span className="[writing-mode:vertical-rl] text-sm tracking-widest uppercase">
+                <span className="[writing-mode:vertical-rl] text-xs md:text-sm tracking-widest uppercase">
                     {isPlaying ? 'Sound On' : 'Sound Off'}
                 </span>
             </button>
