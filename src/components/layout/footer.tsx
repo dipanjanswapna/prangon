@@ -97,7 +97,7 @@ export function Footer() {
                 </div>
             </div>
         </div>
-        <div className="flex flex-col justify-center items-center gap-4 mt-8 text-center mb-16">
+        <div className="flex flex-col justify-center items-center gap-4 mt-8 text-center">
             <Link href="/">
                 <Image src="https://mir-s3-cdn-cf.behance.net/user/230/1eb6171863399673.6851829692324.png" alt="PRANGON CENTRE Logo" width={50} height={50} className="rounded-full" />
             </Link>
