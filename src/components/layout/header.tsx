@@ -1,10 +1,9 @@
-
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { Menu, X, Circle } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
@@ -22,15 +21,15 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const NavLinks = ({ className }: { className?: string }) => (
-    <nav className={cn('flex items-center space-x-6 text-sm font-medium', className)} style={{ color: 'rgb(184, 172, 152)' }}>
+    <nav className={cn('flex items-center space-x-8 text-sm font-medium', className)}>
       {navItems.map((item) => (
         <motion.div key={item.label} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
             <Link
               href={item.href}
               onClick={() => setIsMobileMenuOpen(false)}
               className={cn(
-                'transition-colors hover:text-primary',
-                'font-medium tracking-widest'
+                'transition-colors hover:text-primary uppercase tracking-widest',
+                 pathname === item.href ? 'text-primary' : 'text-muted-foreground'
               )}
             >
               {item.label}
@@ -48,12 +47,6 @@ export function Header() {
         </Link>
 
         <div className="hidden md:flex items-center space-x-6">
-           <motion.div
-             animate={{ rotate: 360 }}
-             transition={{ ease: "linear", duration: 10, repeat: Infinity }}
-           >
-            <Circle className="h-4 w-4 text-primary fill-current" />
-           </motion.div>
            <NavLinks />
         </div>
 
@@ -61,7 +54,7 @@ export function Header() {
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" style={{ color: 'rgb(184, 172, 152)' }}/>
+                <Menu className="h-6 w-6 text-foreground" />
                 <span className="sr-only">Open menu</span>
               </Button>
             </SheetTrigger>

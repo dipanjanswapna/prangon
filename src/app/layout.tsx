@@ -1,10 +1,9 @@
-
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { Dribbble, Instagram, Linkedin, PlayCircle } from 'lucide-react';
+import { Dribbble, Instagram, Linkedin, PlayCircle, Music2 } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 
@@ -38,7 +37,6 @@ export default function RootLayout({
         <Header />
         <main className="flex-grow relative">{children}</main>
 
-        {/* Left Social Bar */}
         <aside className="fixed left-4 bottom-4 z-50 hidden md:flex flex-col items-center space-y-4">
           <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
             <Dribbble className="h-5 w-5" />
@@ -54,11 +52,11 @@ export default function RootLayout({
           </Link>
         </aside>
 
-        {/* Right "Sound Off" Bar */}
-        <aside className="fixed right-4 bottom-4 z-50 hidden md:flex items-center">
-          <Link href="#" className="text-muted-foreground hover:text-primary transition-colors [writing-mode:vertical-rl] text-sm tracking-widest">
-            SOUND OFF
-          </Link>
+        <aside className="fixed right-4 bottom-4 z-50 hidden md:flex items-center space-x-2">
+            <Music2 className="h-4 w-4 text-muted-foreground" />
+            <Link href="#" className="text-muted-foreground hover:text-primary transition-colors [writing-mode:vertical-rl] text-sm tracking-widest uppercase">
+                Sound Off
+            </Link>
         </aside>
         
         <Footer />
