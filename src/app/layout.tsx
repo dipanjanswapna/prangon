@@ -68,9 +68,10 @@ export default function RootLayout({
   const toggleSound = () => {
     if (!hasInteracted) {
       setHasInteracted(true);
-      localStorage.setItem('musicConsent', 'true');
     }
-    setIsPlaying(currentIsPlaying => !currentIsPlaying);
+    const newIsPlaying = !isPlaying;
+    setIsPlaying(newIsPlaying);
+    localStorage.setItem('musicConsent', JSON.stringify(newIsPlaying));
   };
   
   return (
@@ -79,7 +80,6 @@ export default function RootLayout({
         <title>PRANGON CENTRE - Creative Design, EdTech, and Digital Innovation</title>
         <meta name="description" content='Welcome to PRANGON CENTRE, the home of Dipanjan "Swapna Prangon" Prangon. We specialize in creative design, EdTech innovation, branding, and digital tools for students and educators in Dhaka, Bangladesh and beyond.' />
         <meta name="keywords" content="PRANGON CENTRE, Dipanjan Swapna Prangon, EdTech, creative design, branding, web development, Bangladesh, Dhaka, student resources, educator tools" />
-        <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
