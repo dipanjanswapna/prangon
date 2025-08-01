@@ -45,7 +45,7 @@ export default function RootLayout({
   
   useEffect(() => {
     if (audioRef.current) {
-      if (isPlaying) {
+      if (isPlaying && hasInteracted) {
         audioRef.current.play().catch(e => {
             console.error("Error playing audio:", e);
             // If autoplay fails, set isPlaying to false, but only if there was no interaction yet.
