@@ -34,7 +34,7 @@ export default function BlogPage() {
   return (
     <div className="relative bg-background min-h-screen">
        <Image
-        src="https://cdna.artstation.com/p/assets/images/images/067/037/100/large/srabon-arafat-alone.jpg?1694435649"
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0qMoudagQwKZ4coizcjcaoe332UGrzJs6CA&s"
         alt="Blog background"
         fill
         className="absolute inset-0 z-0 object-cover opacity-10"
