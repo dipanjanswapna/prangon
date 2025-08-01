@@ -9,8 +9,9 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 
 export const metadata: Metadata = {
-  title: 'PortfolioPro',
-  description: 'A minimalist design portfolio website.',
+  title: 'PRANGON CENTRE - Creative Design, EdTech, and Digital Innovation',
+  description: 'Welcome to PRANGON CENTRE, the home of Dipanjan "Swapna Prangon" Prangon. We specialize in creative design, EdTech innovation, branding, and digital tools for students and educators in Dhaka, Bangladesh and beyond.',
+  keywords: 'PRANGON CENTRE, Dipanjan Swapna Prangon, EdTech, creative design, branding, web development, Bangladesh, Dhaka, student resources, educator tools',
 };
 
 export default function RootLayout({
