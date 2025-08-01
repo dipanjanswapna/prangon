@@ -19,23 +19,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
 
+  useEffect(() => {
+    // Check localStorage on mount
+    const canPlayMusic = localStorage.getItem('musicConsent') === 'true';
+    if (canPlayMusic) {
+      setIsPlaying(true);
+      setHasInteracted(true);
+    }
+  }, []);
+  
   useEffect(() => {
     const handleInteraction = () => {
       if (!hasInteracted) {
         setHasInteracted(true);
-        if (audioRef.current && audioRef.current.paused) {
-            audioRef.current.play().catch(e => console.error("Autoplay failed:", e));
-        }
+        setIsPlaying(true);
+        localStorage.setItem('musicConsent', 'true');
       }
       window.removeEventListener('click', handleInteraction);
       window.removeEventListener('keydown', handleInteraction);
     };
 
-    window.addEventListener('click', handleInteraction);
-    window.addEventListener('keydown', handleInteraction);
+    if (!hasInteracted) {
+        window.addEventListener('click', handleInteraction);
+        window.addEventListener('keydown', handleInteraction);
+    }
 
     return () => {
       window.removeEventListener('click', handleInteraction);
@@ -47,9 +57,7 @@ export default function RootLayout({
     if (audioRef.current) {
       if (isPlaying && hasInteracted) {
         audioRef.current.play().catch(e => {
-            console.error("Error playing audio:", e);
-            // If autoplay fails, set isPlaying to false, but only if there was no interaction yet.
-            if(!hasInteracted) setIsPlaying(false);
+            console.error("Audio playback failed:", e);
         });
       } else {
         audioRef.current.pause();
@@ -58,8 +66,11 @@ export default function RootLayout({
   }, [isPlaying, hasInteracted]);
 
   const toggleSound = () => {
-    if (!hasInteracted) setHasInteracted(true);
-    setIsPlaying(!isPlaying);
+    if (!hasInteracted) {
+      setHasInteracted(true);
+      localStorage.setItem('musicConsent', 'true');
+    }
+    setIsPlaying(currentIsPlaying => !currentIsPlaying);
   };
   
   return (
