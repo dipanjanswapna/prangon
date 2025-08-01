@@ -52,7 +52,7 @@ const AboutMe = () => {
     };
   
     return (
-        <div ref={aboutRef} className="min-h-screen flex items-center justify-center px-8 md:px-16 lg:px-32" style={{ backgroundColor: '#141414' }}>
+        <div ref={aboutRef} className="min-h-screen flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32" style={{ backgroundColor: '#141414' }}>
             <div className="flex flex-col md:flex-row items-center gap-12">
                 <div className="md:w-3/5">
                     <p className="text-sm tracking-[0.3em] mb-6" style={{ color: 'rgb(184, 172, 152, 0.7)' }}>ABOUT ME</p>
@@ -66,7 +66,7 @@ const AboutMe = () => {
                         alt="Dipanjan Prangon"
                         width={300}
                         height={300}
-                        className="rounded-full object-cover"
+                        className="rounded-full object-cover w-[200px] h-[200px] sm:w-[300px] sm:h-[300px]"
                         data-ai-hint="profile picture"
                     />
                 </div>
@@ -112,10 +112,10 @@ const SkillsSection = () => {
           return (
             <motion.div
               key={skill}
-              className="py-8 border-b border-gray-700"
+              className="py-4 md:py-8 border-b border-gray-700"
               style={{ opacity }}
             >
-              <h2 className="text-6xl md:text-8xl font-black uppercase text-center" style={{ color: 'rgb(184, 172, 152)' }}>
+              <h2 className="text-4xl sm:text-6xl md:text-8xl font-black uppercase text-center" style={{ color: 'rgb(184, 172, 152)' }}>
                 {skill}
               </h2>
             </motion.div>
@@ -166,11 +166,11 @@ const WhatTheySaidSection = () => {
     const currentTestimonial = testimonials[activeIndex];
   
     return (
-      <div className="min-h-screen bg-[#141414] text-white flex items-center justify-center p-8 overflow-hidden">
-        <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-12">
-          <div className="md:w-3/4">
-            <div className="relative h-64 md:h-72">
-              <span className="absolute -top-8 -left-4 text-8xl font-black" style={{color: 'rgb(235, 89, 56)'}}>“</span>
+      <div className="min-h-screen bg-[#141414] text-white flex items-center justify-center p-4 sm:p-8 overflow-hidden">
+        <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12">
+          <div className="md:w-3/4 text-center md:text-left">
+            <div className="relative h-auto md:h-72">
+              <span className="absolute -top-8 -left-4 text-8xl font-black hidden md:block" style={{color: 'rgb(235, 89, 56)'}}>“</span>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex}
@@ -178,9 +178,9 @@ const WhatTheySaidSection = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.5 }}
-                  className="absolute inset-0"
+                  className="inset-0"
                 >
-                  <h2 className="font-headline text-4xl md:text-5xl lg:text-6xl font-bold leading-tight" style={{color: 'rgb(184, 172, 152)'}}>
+                  <h2 className="font-headline text-3xl md:text-5xl lg:text-6xl font-bold leading-tight" style={{color: 'rgb(184, 172, 152)'}}>
                     {currentTestimonial.quote}
                   </h2>
                 </motion.div>
@@ -192,7 +192,7 @@ const WhatTheySaidSection = () => {
               <p className="text-lg text-gray-500">{currentTestimonial.company}</p>
             </div>
           </div>
-          <div className="md:w-1/4 flex flex-row md:flex-col items-center justify-center gap-4">
+          <div className="md:w-1/4 flex flex-row md:flex-col items-center justify-center gap-4 mt-8 md:mt-0">
             {testimonials.map((testimonial, index) => (
               <div key={index} className="relative flex items-center">
                  {index === activeIndex && (
@@ -206,7 +206,7 @@ const WhatTheySaidSection = () => {
                   width={80}
                   height={80}
                   data-ai-hint={testimonial.imageAiHint}
-                  className={`rounded-full cursor-pointer transition-all duration-300 ${
+                  className={`rounded-full cursor-pointer transition-all duration-300 w-16 h-16 sm:w-20 sm:h-20 ${
                     index === activeIndex ? 'scale-110 border-4 border-orange-500' : 'opacity-50'
                   }`}
                   onClick={() => setActiveIndex(index)}
@@ -227,7 +227,7 @@ const InfoSection = () => {
     ];
   
     return (
-      <div className="bg-[#141414] text-white p-8">
+      <div className="bg-[#141414] text-white p-4 sm:p-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           
           {/* My Reads Card */}
@@ -256,9 +256,9 @@ const InfoSection = () => {
               My Toolbox
             </h3>
             <p className="text-gray-400 mb-6">Explore the technologies and tools I use to create awesome digital experiences.</p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-2 sm:gap-4">
               {toolboxItems.map(item => (
-                <div key={item.name} className="bg-[#2a2a2a] rounded-lg px-4 py-2 text-sm flex items-center">
+                <div key={item.name} className="bg-[#2a2a2a] rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm flex items-center">
                   {item.name}
                 </div>
               ))}
@@ -266,7 +266,7 @@ const InfoSection = () => {
           </div>
   
           {/* My Hobbies Card */}
-          <div className="bg-[#1C1C1C] rounded-2xl p-6 col-span-1 lg:col-span-2 relative overflow-hidden h-64 md:h-auto">
+          <div className="bg-[#1C1C1C] rounded-2xl p-6 col-span-1 lg:col-span-2 relative overflow-hidden min-h-[200px] md:h-auto flex flex-col justify-center">
              <div className="relative z-10">
                 <h3 className="flex items-center text-xl font-bold mb-2">
                     <Sparkles className="h-5 w-5 mr-2 text-purple-400" />
@@ -318,28 +318,28 @@ const LatestVideosSection = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-4">
             <p className="text-lg" style={{ color: 'rgb(184, 172, 152)' }}>Visit and Play</p>
-            <h2 className="text-2xl md:text-3xl font-bold tracking-widest" style={{ color: 'rgb(184, 172, 152, 0.7)' }}>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-widest" style={{ color: 'rgb(184, 172, 152, 0.7)' }}>
               LATEST VIDEOS AND SUBSCRIBE
             </h2>
           </div>
   
-          <div className="bg-[#1C1C1C] rounded-2xl p-8 mb-8">
-            <div className="flex flex-col md:flex-row items-center gap-8">
+          <div className="bg-[#1C1C1C] rounded-2xl p-6 sm:p-8 mb-8">
+            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
               <div className="flex-shrink-0">
                 <Image 
                   src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg" 
                   alt="Dipanjan Swapna" 
                   width={100} 
                   height={100} 
-                  className="rounded-full"
+                  className="rounded-full w-20 h-20 sm:w-24 sm:h-24"
                   data-ai-hint="profile picture"
                 />
               </div>
-              <div>
-                <h3 className="text-2xl font-bold flex items-center gap-2">
+              <div className='text-center md:text-left'>
+                <h3 className="text-xl sm:text-2xl font-bold flex items-center justify-center md:justify-start gap-2">
                   Dipanjan Swapna <span className="text-base font-normal text-gray-400">· 100K subscribers</span>
                 </h3>
-                <p className="text-gray-400 mt-2">
+                <p className="text-gray-400 mt-2 text-sm sm:text-base">
                   As a passionate student, writer, and EdTech innovator, I founded Prangon’s Ecosystem to bridge creative design with education. I help students and educators through digital tools, branding, and movement-building learning content. With a keen eye for brand identity design, I craft logos, thumbnails, and visual stories that resonate.
                 </p>
               </div>
@@ -359,21 +359,21 @@ const LatestVideosSection = () => {
                     data-ai-hint={video.thumbnailAiHint}
                   />
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Youtube className="h-16 w-16 text-white" />
+                    <Youtube className="h-12 w-12 sm:h-16 sm:w-16 text-white" />
                   </div>
                 </div>
                 <div className="p-4">
-                  <h4 className="font-semibold text-lg mb-2" style={{ color: 'rgb(184, 172, 152)' }}>{video.title}</h4>
-                  <p className="text-sm text-gray-400">{video.author} · {video.timestamp}</p>
+                  <h4 className="font-semibold text-base sm:text-lg mb-2" style={{ color: 'rgb(184, 172, 152)' }}>{video.title}</h4>
+                  <p className="text-xs sm:text-sm text-gray-400">{video.author} · {video.timestamp}</p>
                 </div>
               </div>
             ))}
           </div>
   
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-            <Button variant="outline" className="bg-gray-700 hover:bg-gray-600 border-gray-600 text-white">Load More...</Button>
-            <a href="https://www.youtube.com/@dipanjanswapna" target="_blank" rel="noopener noreferrer">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button variant="outline" className="bg-gray-700 hover:bg-gray-600 border-gray-600 text-white w-full sm:w-auto">Load More...</Button>
+            <a href="https://www.youtube.com/@dipanjanswapna" target="_blank" rel="noopener noreferrer" className='w-full sm:w-auto'>
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full">
                 <Youtube className="mr-2 h-5 w-5" />
                 Subscribe
               </Button>
@@ -398,8 +398,8 @@ export default function Home() {
           />
         </div>
         <div className="relative z-10 text-center px-4" style={{ color: 'rgb(184, 172, 152)' }}>
-          <p className="text-sm md:text-base tracking-[0.3em] mb-4">WELCOME TO PRANGON CENTRE</p>
-          <h1 className="font-headline text-6xl md:text-8xl lg:text-9xl font-black uppercase leading-none tracking-tighter">
+          <p className="text-sm md:text-base tracking-[0.2em] md:tracking-[0.3em] mb-4">WELCOME TO PRANGON CENTRE</p>
+          <h1 className="font-headline text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase leading-none tracking-tighter">
             smile <span style={{ color: 'rgb(235, 89, 56)' }}>for</span> miles
           </h1>
         </div>

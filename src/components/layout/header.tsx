@@ -50,7 +50,7 @@ export function Header() {
 
   return (
     <header className="fixed top-0 z-50 w-full bg-transparent">
-      <div className="container mx-auto flex h-20 items-center justify-between px-4">
+      <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center space-x-2">
           <CatIcon style={{ color: 'rgb(184, 172, 152)' }}/>
         </Link>
