@@ -58,9 +58,9 @@ const AboutMe = () => {
     };
   
     return (
-      <div ref={aboutRef} className="h-screen flex flex-col justify-center items-center text-center px-4" style={{ backgroundColor: '#141414' }}>
-        <p className="text-sm md:text-base tracking-[0.3em] mb-8" style={{ color: 'rgb(184, 172, 152, 0.7)' }}>ABOUT ME</p>
-        <h2 className="font-headline text-4xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tighter">
+      <div ref={aboutRef} className="min-h-screen flex flex-col justify-center items-start px-8 md:px-16 lg:px-32" style={{ backgroundColor: '#141414' }}>
+        <p className="text-sm tracking-[0.3em] mb-6" style={{ color: 'rgb(184, 172, 152, 0.7)' }}>ABOUT ME</p>
+        <h2 className="font-sans text-xl md:text-2xl font-normal leading-relaxed text-left max-w-4xl">
             {renderText()}
         </h2>
       </div>
