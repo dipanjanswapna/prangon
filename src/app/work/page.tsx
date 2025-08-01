@@ -104,8 +104,15 @@ const SectionHeader = ({ icon, title, description }: { icon: React.ReactNode; ti
 
 export default function WorkPage() {
   return (
-    <div className="bg-background min-h-screen">
-      <div className="container mx-auto px-4 py-16 md:py-24">
+    <div className="relative bg-background min-h-screen">
+       <Image
+        src="https://cdna.artstation.com/p/assets/images/images/047/764/192/large/srabon-arafat-uploded-file.jpg?1648398231"
+        alt="Work background"
+        fill
+        className="absolute inset-0 z-0 object-cover opacity-10"
+        data-ai-hint="abstract background"
+      />
+      <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">
         <motion.header
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -132,7 +139,7 @@ export default function WorkPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {professionalProjects.map((project, index) => (
                 <motion.div key={index} variants={itemVariants}>
-                  <Card className="bg-muted/30 group overflow-hidden h-full flex flex-col">
+                  <Card className="bg-muted/30 group overflow-hidden h-full flex flex-col backdrop-blur-sm">
                     <CardHeader>
                       <div className="relative overflow-hidden rounded-lg">
                         <Image
@@ -236,7 +243,7 @@ export default function WorkPage() {
             <div className="space-y-4">
               {achievements.map((ach, index) => (
                  <motion.div key={index} variants={itemVariants}>
-                    <Card className="bg-muted/30 hover:bg-muted/50 transition-colors">
+                    <Card className="bg-muted/30 hover:bg-muted/50 transition-colors backdrop-blur-sm">
                         <CardContent className="p-4 flex items-center justify-between">
                             <div>
                                 <h4 className="font-bold text-primary-foreground">{ach.title}</h4>
