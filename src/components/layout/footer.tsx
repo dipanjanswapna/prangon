@@ -5,6 +5,7 @@ import { Github, Twitter, Linkedin, Copy, ExternalLink, Facebook } from 'lucide-
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { motion } from 'framer-motion';
 
 export function Footer() {
   const { toast } = useToast();
@@ -39,13 +40,18 @@ export function Footer() {
               </p>
             </div>
             <div className="flex-shrink-0">
-              <Button 
-                onClick={handleCopyEmail}
-                className="bg-slate-900/70 hover:bg-slate-900 text-white font-semibold py-3 px-6 rounded-lg text-lg"
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <Copy className="mr-2 h-5 w-5" />
-                Copy Email
-              </Button>
+                <Button 
+                  onClick={handleCopyEmail}
+                  className="bg-slate-900/70 hover:bg-slate-900 text-white font-semibold py-3 px-6 rounded-lg text-lg"
+                >
+                  <Copy className="mr-2 h-5 w-5" />
+                  Copy Email
+                </Button>
+              </motion.div>
             </div>
           </div>
         </div>
