@@ -64,6 +64,12 @@ const nextConfig: NextConfig = {
         hostname: 'wallpapercat.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cbx-prod.b-cdn.net',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
