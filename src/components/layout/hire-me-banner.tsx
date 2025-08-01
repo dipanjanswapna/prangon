@@ -13,7 +13,20 @@ export const HireMeBanner = () => {
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.scrollY > 500) {
+      const footer = document.getElementById('page-footer');
+      const showBanner = window.scrollY > 500;
+      let hideBanner = false;
+
+      if (footer) {
+        const footerTop = footer.offsetTop;
+        const scrollBottom = window.scrollY + window.innerHeight;
+        // Start hiding 100px before the footer comes into view
+        if (scrollBottom > footerTop - 100) {
+          hideBanner = true;
+        }
+      }
+
+      if (showBanner && !hideBanner) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -21,6 +34,9 @@ export const HireMeBanner = () => {
     };
 
     window.addEventListener('scroll', toggleVisibility);
+    
+    // Initial check in case the page loads scrolled down
+    toggleVisibility();
 
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);

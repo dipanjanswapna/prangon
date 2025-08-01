@@ -33,7 +33,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="relative bg-muted text-foreground pt-20 pb-8 overflow-hidden">
+    <footer id="page-footer" className="relative bg-muted text-foreground pt-20 pb-8 overflow-hidden">
         <Image
             src="https://cdnb.artstation.com/p/assets/images/images/047/728/841/large/srabon-arafat-uploded-file.jpg?1648297353"
             alt="Footer background"
