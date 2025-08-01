@@ -53,10 +53,10 @@ export const HireMeBanner = () => {
                     <Button 
                       size="sm" 
                       asChild
-                      className="bg-cover bg-center"
+                      className="bg-contain bg-center bg-no-repeat"
                       style={{ backgroundImage: "url('https://cbx-prod.b-cdn.net/COLOURBOX52382970.jpg?width=800&height=800&quality=70')" }}
                     >
-                        <Link href="/contact" className="font-bold" style={{ color: 'rgb(186, 7, 85)', textShadow: '1px 1px 2px rgba(0,0,0,0.7), 0 0 5px white, 0 0 10px white' }}></Link>
+                        <Link href="/contact"></Link>
                     </Button>
                     <button onClick={handleClose} className="text-primary-foreground/80 hover:text-primary-foreground p-1 rounded-full">
                         <X className="h-4 w-4" />
