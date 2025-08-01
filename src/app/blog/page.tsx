@@ -41,7 +41,7 @@ export default function BlogPage() {
           className="relative text-center mb-16 p-8 md:p-16 rounded-lg overflow-hidden"
         >
           <Image
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0qMoudagQwKZ4coizcjcaoe332UGrzJs6CA&s"
+            src="https://wallpapercat.com/w/full/d/d/f/46447-3840x2160-desktop-4k-squid-game-wallpaper.jpg"
             alt="Blog background"
             fill
             className="absolute inset-0 z-0 object-cover opacity-25"
