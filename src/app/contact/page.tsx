@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Send, Linkedin, Instagram, Twitter, Facebook, Behance, Youtube } from 'lucide-react';
+import { Send, Linkedin, Instagram, Twitter, Facebook, Youtube, Briefcase } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
@@ -38,7 +38,7 @@ const socialPlatforms = [
     { name: 'Instagram', icon: Instagram, href: '#' },
     { name: 'Twitter', icon: Twitter, href: '#' },
     { name: 'Facebook', icon: Facebook, href: '#' },
-    { name: 'Behance', icon: Behance, href: '#' },
+    { name: 'Behance', icon: Briefcase, href: '#' },
     { name: 'YouTube', icon: Youtube, href: '#' },
 ]
 
