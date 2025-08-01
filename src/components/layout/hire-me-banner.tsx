@@ -56,7 +56,7 @@ export const HireMeBanner = () => {
                       className="bg-cover bg-center"
                       style={{ backgroundImage: "url('https://cbx-prod.b-cdn.net/COLOURBOX52382970.jpg?width=800&height=800&quality=70')" }}
                     >
-                        <Link href="/contact" className="text-white font-bold" style={{ textShadow: '1px 1px 2px black' }}>Hire Dipanjan</Link>
+                        <Link href="/contact" className="text-white font-bold" style={{ textShadow: '1px 1px 3px hsl(var(--primary))' }}>Hire Dipanjan</Link>
                     </Button>
                     <button onClick={handleClose} className="text-primary-foreground/80 hover:text-primary-foreground p-1 rounded-full">
                         <X className="h-4 w-4" />
