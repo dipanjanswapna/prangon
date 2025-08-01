@@ -3,6 +3,7 @@
 
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 const AboutMe = () => {
     const text = "Hi! I’m Dipanjan “Swapna Prangon” Prangon from Dhaka, Bangladesh. As a passionate student, writer, and EdTech innovator, I founded Prangon’s Ecosystem to bridge creative design with education. I help students and educators through digital tools, branding, and movement-building learning content. With a keen eye for brand identity design, I craft logos, thumbnails, and visual stories that resonate.".split(' ');
@@ -71,6 +72,57 @@ const AboutMe = () => {
     );
   };
 
+const SkillsSection = () => {
+  const skills = ["FORD", "UFC", "LINCOLN", "ROYAL CARIBBEAN", "SLEEPIQ", "NFL"];
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+
+  const earthOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.1, 0.3, 0.1]);
+  const earthY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+
+  return (
+    <div ref={containerRef} className="relative min-h-screen bg-black text-white flex flex-col justify-center overflow-hidden">
+      <motion.div
+        className="absolute inset-0 z-0"
+        style={{
+          opacity: earthOpacity,
+          y: earthY,
+        }}
+      >
+        <Image
+          src="https://placehold.co/1920x1080.png"
+          alt="Earth"
+          layout="fill"
+          objectFit="cover"
+          data-ai-hint="dark earth globe"
+        />
+      </motion.div>
+      <div className="relative z-10 container mx-auto px-4">
+        {skills.map((skill, index) => {
+          const start = index / skills.length;
+          const end = (index + 1) / skills.length;
+          const opacity = useTransform(scrollYProgress, [start, (start + end) / 2, end], [0.2, 1, 0.2]);
+
+          return (
+            <motion.div
+              key={skill}
+              className="py-8 border-b border-gray-700"
+              style={{ opacity }}
+            >
+              <h2 className="text-6xl md:text-8xl font-black uppercase text-center" style={{ color: 'rgb(184, 172, 152)' }}>
+                {skill}
+              </h2>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
 export default function Home() {
   return (
     <>
@@ -93,6 +145,7 @@ export default function Home() {
         </div>
       </div>
       <AboutMe />
+      <SkillsSection />
     </>
   );
 }
