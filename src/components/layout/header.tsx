@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -13,6 +14,7 @@ import { motion } from 'framer-motion';
 const navItems = [
   { href: '/about', label: 'About' },
   { href: '/work', label: 'Work' },
+  { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -45,7 +47,7 @@ export function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
               className={cn(
                 'transition-colors hover:text-primary uppercase tracking-widest',
-                 pathname === item.href ? 'text-primary' : 'text-muted-foreground'
+                 pathname.startsWith(item.href) ? 'text-primary' : 'text-muted-foreground'
               )}
             >
               {item.label}
@@ -95,7 +97,7 @@ export function Header() {
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={cn(
                         'text-2xl font-bold',
-                        pathname === item.href ? 'text-primary' : 'text-foreground'
+                        pathname.startsWith(item.href) ? 'text-primary' : 'text-foreground'
                       )}
                     >
                       {item.label}
