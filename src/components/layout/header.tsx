@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -19,6 +19,22 @@ const navItems = [
 export function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setHasScrolled(true);
+      } else {
+        setHasScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const NavLinks = ({ className }: { className?: string }) => (
     <nav className={cn('flex items-center space-x-8 text-sm font-medium', className)}>
@@ -40,7 +56,10 @@ export function Header() {
   );
 
   return (
-    <header className="fixed top-0 z-50 w-full bg-transparent">
+    <header className={cn(
+        "fixed top-0 z-50 w-full transition-all duration-300 ease-in-out",
+        hasScrolled ? "bg-black/50 backdrop-blur-sm shadow-md" : "bg-transparent"
+    )}>
       <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center space-x-2">
            <Image src="https://mir-s3-cdn-cf.behance.net/user/230/1eb6171863399673.6851829692324.png" alt="PRANGON CENTRE Logo" width={40} height={40} className="rounded-full" />
