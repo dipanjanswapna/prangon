@@ -52,7 +52,7 @@ export default function BlogPage() {
                 <div className="inline-block bg-primary/10 p-3 rounded-full mb-4">
                    <Rss className="h-8 w-8 text-primary" />
                 </div>
-                <h1 className="text-5xl md:text-7xl font-black font-headline tracking-tighter text-primary-foreground uppercase">
+                <h1 className="text-5xl md:text-7xl font-black font-headline tracking-tighter text-primary uppercase">
                   The Blog
                 </h1>
                 <p className="text-xl md:text-2xl text-muted-foreground mt-4 max-w-4xl mx-auto">
