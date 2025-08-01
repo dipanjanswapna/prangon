@@ -4,7 +4,9 @@
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, ChevronsRight, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsRight, Sparkles, Youtube } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const AboutMe = () => {
     const text = "Hi! I’m Dipanjan “Swapna Prangon” Prangon from Dhaka, Bangladesh. As a passionate student, writer, and EdTech innovator, I founded Prangon’s Ecosystem to bridge creative design with education. I help students and educators through digital tools, branding, and movement-building learning content. With a keen eye for brand identity design, I craft logos, thumbnails, and visual stories that resonate.".split(' ');
@@ -287,6 +289,102 @@ const InfoSection = () => {
     );
   }
 
+const LatestVideosSection = () => {
+    const videos = [
+      {
+        title: "কে জিতবে আগামী সংসদ নির্বাচনে? Dipanjan Swapna || The Untold",
+        author: "Dipanjan Swapna",
+        timestamp: "15 hours ago",
+        thumbnail: "https://placehold.co/400x225.png",
+        thumbnailAiHint: "youtube thumbnail politics",
+      },
+      {
+        title: "ইউনুস সরকার আমেরিকার বাম্বু খাইতেছে কি? Dipanjan Swapna || The Untold",
+        author: "Dipanjan Swapna",
+        timestamp: "July 29, 2025 7:21 pm",
+        thumbnail: "https://placehold.co/400x225.png",
+        thumbnailAiHint: "youtube thumbnail news",
+      },
+      {
+        title: "বিএনপির শেষ যাত্রা — কে রুখবে এই পতন? Dipanjan Swapna || The Untold",
+        author: "Dipanjan Swapna",
+        timestamp: "July 27, 2025 7:49 pm",
+        thumbnail: "https://placehold.co/400x225.png",
+        thumbnailAiHint: "youtube thumbnail analysis",
+      },
+    ];
+  
+    return (
+      <div className="bg-[#141414] text-white p-8 md:p-16">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-4">
+            <p className="text-lg" style={{ color: 'rgb(184, 172, 152)' }}>Visit and Play</p>
+            <h2 className="text-2xl md:text-3xl font-bold tracking-widest" style={{ color: 'rgb(184, 172, 152, 0.7)' }}>
+              LATEST VIDEOS AND SUBSCRIBE
+            </h2>
+          </div>
+  
+          <div className="bg-[#1C1C1C] rounded-2xl p-8 mb-8">
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="flex-shrink-0">
+                <Image 
+                  src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg" 
+                  alt="Dipanjan Swapna" 
+                  width={100} 
+                  height={100} 
+                  className="rounded-full"
+                  data-ai-hint="profile picture"
+                />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold flex items-center gap-2">
+                  Dipanjan Swapna <span className="text-base font-normal text-gray-400">· 100K subscribers</span>
+                </h3>
+                <p className="text-gray-400 mt-2">
+                  As a passionate student, writer, and EdTech innovator, I founded Prangon’s Ecosystem to bridge creative design with education. I help students and educators through digital tools, branding, and movement-building learning content. With a keen eye for brand identity design, I craft logos, thumbnails, and visual stories that resonate.
+                </p>
+              </div>
+            </div>
+          </div>
+  
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+            {videos.map((video, index) => (
+              <div key={index} className="bg-[#1C1C1C] rounded-lg overflow-hidden group">
+                <div className="relative">
+                  <Image 
+                    src={video.thumbnail} 
+                    alt={video.title}
+                    width={400} 
+                    height={225} 
+                    className="w-full h-auto"
+                    data-ai-hint={video.thumbnailAiHint}
+                  />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Youtube className="h-16 w-16 text-white" />
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h4 className="font-semibold text-lg mb-2" style={{ color: 'rgb(184, 172, 152)' }}>{video.title}</h4>
+                  <p className="text-sm text-gray-400">{video.author} · {video.timestamp}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+  
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <Button variant="outline" className="bg-gray-700 hover:bg-gray-600 border-gray-600 text-white">Load More...</Button>
+            <a href="https://www.youtube.com/@dipanjanswapna" target="_blank" rel="noopener noreferrer">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Youtube className="mr-2 h-5 w-5" />
+                Subscribe
+              </Button>
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
 export default function Home() {
   return (
     <>
@@ -312,6 +410,7 @@ export default function Home() {
       <SkillsSection />
       <WhatTheySaidSection />
       <InfoSection />
+      <LatestVideosSection />
     </>
   );
 }
