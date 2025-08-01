@@ -40,25 +40,25 @@ export function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.8 }}
-            className="relative bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-8 md:p-12 mb-20 shadow-lg text-white"
+            className="relative p-8 md:p-12 mb-20"
         >
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 text-left">
             <div className="lg:w-2/3">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-primary-foreground">
                 Let's create something amazing together
               </h2>
-              <p className="text-md md:text-lg opacity-80">
+              <p className="text-md md:text-lg text-muted-foreground">
                 Ready to bring your next project to life? Let's connect and discuss how I can help you achieve your goals.
               </p>
             </div>
             <div className="flex-shrink-0">
               <motion.div
-                whileHover={{ scale: 1.05, boxShadow: "0px 0px 30px rgba(255, 255, 255, 0.3)"}}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <Button 
                   onClick={handleCopyEmail}
-                  className="bg-white/90 hover:bg-white text-gray-900 font-semibold py-3 px-6 rounded-lg text-lg shadow-xl"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-6 rounded-lg text-lg shadow-xl"
                 >
                   <Copy className="mr-2 h-5 w-5" />
                   Copy Email
