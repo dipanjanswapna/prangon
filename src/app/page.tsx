@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ChevronsRight } from 'lucide-react';
 
 const AboutMe = () => {
@@ -154,25 +154,35 @@ const WhatTheySaidSection = () => {
   
     const [activeIndex, setActiveIndex] = useState(0);
   
-    const nextTestimonial = () => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-    };
-  
-    const prevTestimonial = () => {
-      setActiveIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);
-    };
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+      }, 5000); // Change testimonial every 5 seconds
+      return () => clearInterval(interval);
+    }, [testimonials.length]);
   
     const currentTestimonial = testimonials[activeIndex];
   
     return (
-      <div className="min-h-screen bg-[#141414] text-white flex items-center justify-center p-8">
+      <div className="min-h-screen bg-[#141414] text-white flex items-center justify-center p-8 overflow-hidden">
         <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row gap-16">
           <div className="md:w-3/4">
-            <div className="relative">
+            <div className="relative h-64">
               <span className="absolute -top-8 -left-4 text-8xl font-black" style={{color: 'rgb(235, 89, 56)'}}>“</span>
-              <h2 className="font-headline text-6xl md:text-8xl font-bold leading-tight" style={{color: 'rgb(184, 172, 152)'}}>
-                {currentTestimonial.quote}
-              </h2>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeIndex}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0"
+                >
+                  <h2 className="font-headline text-6xl md:text-8xl font-bold leading-tight" style={{color: 'rgb(184, 172, 152)'}}>
+                    {currentTestimonial.quote}
+                  </h2>
+                </motion.div>
+              </AnimatePresence>
             </div>
             <div className="mt-8">
               <p className="text-xl font-semibold" style={{color: 'rgb(184, 172, 152)'}}>{currentTestimonial.author}</p>
