@@ -65,7 +65,7 @@ export function Header() {
     )}>
       <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center space-x-2">
-           <Image src="https://mir-s3-cdn-cf.behance.net/user/230/1eb6171863399673.6851829692324.png" alt="PRANGON CENTRE Logo" width={40} height={40} className="rounded-full" />
+           <Image src="/logo.png" alt="PRANGON CENTRE Logo" width={40} height={40} className="rounded-full" />
         </Link>
 
         <div className="hidden md:flex items-center space-x-6">
@@ -86,7 +86,7 @@ export function Header() {
                 <div className="relative z-10 flex flex-col space-y-8 p-6 h-full">
                   <div className="flex justify-between items-center">
                       <Link href="/" className="flex items-center space-x-2" onClick={() => setIsMobileMenuOpen(false)}>
-                         <Image src="https://mir-s3-cdn-cf.behance.net/user/230/1eb6171863399673.6851829692324.png" alt="PRANGON CENTRE Logo" width={40} height={40} className="rounded-full" />
+                         <Image src="/logo.png" alt="PRANGON CENTRE Logo" width={40} height={40} className="rounded-full" />
                       </Link>
                       <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
                           <X className="h-6 w-6" />
