@@ -93,7 +93,7 @@ const SkillsSection = () => {
         }}
       >
         <Image
-          src="https://placehold.co/1920x1080.png"
+          src="https://images.pond5.com/3d-animation-earth-rotation-looped-085333912_prevstill.jpeg"
           alt="Earth"
           layout="fill"
           objectFit="cover"
