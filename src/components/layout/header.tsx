@@ -14,6 +14,7 @@ import { motion } from 'framer-motion';
 const navItems = [
   { href: '/about', label: 'About' },
   { href: '/work', label: 'Work' },
+  { href: '/social-work', label: 'Social Work' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];
