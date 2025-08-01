@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Car, ArrowLeft, RefreshCw, Gamepad2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 const Game = () => {
   const [playerPos, setPlayerPos] = useState({ x: 130, y: 480 });
@@ -195,34 +196,44 @@ export default function NotFound() {
           to { background-position-y: 40px; }
         }
       `}</style>
-      <div className="min-h-screen bg-background flex flex-col md:flex-row items-center justify-center text-center md:text-left p-4 gap-16">
-        <motion.div
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="md:w-1/2"
-        >
-            <h1 className="text-8xl md:text-9xl font-black text-primary font-headline tracking-tighter">404</h1>
-            <p className="text-2xl md:text-3xl font-semibold text-primary-foreground mt-2">Page Not Found</p>
-            <p className="text-muted-foreground mt-4 max-w-md md:mx-0 mx-auto">
-              Oops! The page you are looking for does not exist. But you can play a game while you're here!
-            </p>
-            <Link href="/" passHref>
-              <Button variant="outline" className="mt-8">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Go Back Home
-              </Button>
-            </Link>
-        </motion.div>
+      <div className="relative min-h-screen bg-background flex flex-col md:flex-row items-center justify-center text-center md:text-left p-4 gap-16">
+        <Image
+            src="https://cdna.artstation.com/p/assets/images/images/047/389/466/large/srabon-arafat-uploded-file.jpg?1647467605"
+            alt="404 background"
+            layout="fill"
+            objectFit="cover"
+            className="absolute inset-0 z-0 opacity-10"
+            data-ai-hint="abstract background"
+        />
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-center w-full max-w-6xl mx-auto gap-16">
+            <motion.div
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="md:w-1/2"
+            >
+                <h1 className="text-8xl md:text-9xl font-black text-primary font-headline tracking-tighter">404</h1>
+                <p className="text-2xl md:text-3xl font-semibold text-primary-foreground mt-2">Page Not Found</p>
+                <p className="text-muted-foreground mt-4 max-w-md md:mx-0 mx-auto">
+                Oops! The page you are looking for does not exist. But you can play a game while you're here!
+                </p>
+                <Link href="/" passHref>
+                <Button variant="outline" className="mt-8">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Go Back Home
+                </Button>
+                </Link>
+            </motion.div>
 
-        <motion.div
-            className="mt-12 md:mt-0"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-        >
-            <Game />
-        </motion.div>
+            <motion.div
+                className="mt-12 md:mt-0"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+            >
+                <Game />
+            </motion.div>
+        </div>
       </div>
     </>
   );
