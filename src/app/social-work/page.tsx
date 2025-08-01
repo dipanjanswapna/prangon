@@ -89,11 +89,11 @@ export default function SocialWorkPage() {
         >
            <div className="py-16 md:py-24">
              <Image
-              src="https://placehold.co/1200x400.png"
+              src="https://cdnb.artstation.com/p/assets/images/images/060/998/715/large/srabon-arafat-53.jpg?1679785068"
               alt="Social work background"
               fill
               className="absolute inset-0 z-0 object-cover opacity-10"
-              data-ai-hint="community people"
+              data-ai-hint="abstract background"
             />
             <div className="relative z-10">
                 <div className="inline-block bg-primary/10 p-4 rounded-full mb-4">
