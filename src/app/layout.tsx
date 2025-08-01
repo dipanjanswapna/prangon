@@ -1,29 +1,75 @@
 
+'use client';
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { Dribbble, Instagram, Linkedin, PlayCircle, Music2 } from 'lucide-react';
+import { Dribbble, Instagram, Linkedin, PlayCircle, Music2, VolumeX, Volume2 } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { HireMeBanner } from '@/components/layout/hire-me-banner';
+import { useRef, useState, useEffect } from 'react';
 
-
-export const metadata: Metadata = {
-  title: 'PRANGON CENTRE - Creative Design, EdTech, and Digital Innovation',
-  description: 'Welcome to PRANGON CENTRE, the home of Dipanjan "Swapna Prangon" Prangon. We specialize in creative design, EdTech innovation, branding, and digital tools for students and educators in Dhaka, Bangladesh and beyond.',
-  keywords: 'PRANGON CENTRE, Dipanjan Swapna Prangon, EdTech, creative design, branding, web development, Bangladesh, Dhaka, student resources, educator tools',
-};
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+
+  useEffect(() => {
+    const handleInteraction = () => {
+      setHasInteracted(true);
+      window.removeEventListener('click', handleInteraction);
+      window.removeEventListener('keydown', handleInteraction);
+    };
+
+    window.addEventListener('click', handleInteraction);
+    window.addEventListener('keydown', handleInteraction);
+
+    return () => {
+      window.removeEventListener('click', handleInteraction);
+      window.removeEventListener('keydown', handleInteraction);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (hasInteracted && audioRef.current) {
+        audioRef.current.play().then(() => {
+            setIsPlaying(true);
+        }).catch(error => {
+            console.error("Audio play failed:", error);
+            setIsPlaying(false);
+        });
+    }
+  }, [hasInteracted]);
+  
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.play().catch(e => console.error("Error playing audio:", e));
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  const toggleSound = () => {
+    if (!hasInteracted) setHasInteracted(true);
+    setIsPlaying(!isPlaying);
+  };
+  
   return (
     <html lang="en" className="h-full dark">
       <head>
+        <title>PRANGON CENTRE - Creative Design, EdTech, and Digital Innovation</title>
+        <meta name="description" content='Welcome to PRANGON CENTRE, the home of Dipanjan "Swapna Prangon" Prangon. We specialize in creative design, EdTech innovation, branding, and digital tools for students and educators in Dhaka, Bangladesh and beyond.' />
+        <meta name="keywords" content="PRANGON CENTRE, Dipanjan Swapna Prangon, EdTech, creative design, branding, web development, Bangladesh, Dhaka, student resources, educator tools" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -37,6 +83,8 @@ export default function RootLayout({
           'min-h-screen bg-background flex flex-col'
         )}
       >
+        <audio ref={audioRef} src="/mixkit-relax-beat-292.mp3" loop preload="auto" />
+        
         <Header />
         <main className="flex-grow relative">{children}</main>
 
@@ -56,10 +104,12 @@ export default function RootLayout({
         </aside>
 
         <aside className="fixed right-4 bottom-4 z-50 hidden md:flex items-center space-x-2">
-            <Music2 className="h-4 w-4 text-muted-foreground" />
-            <Link href="#" className="text-muted-foreground hover:text-primary transition-colors [writing-mode:vertical-rl] text-sm tracking-widest uppercase">
-                Sound Off
-            </Link>
+            <button onClick={toggleSound} className="text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
+                {isPlaying ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                <span className="[writing-mode:vertical-rl] text-sm tracking-widest uppercase">
+                    {isPlaying ? 'Sound On' : 'Sound Off'}
+                </span>
+            </button>
         </aside>
         
         <Footer />
