@@ -73,7 +73,7 @@ const AboutMe = () => {
   };
 
 const SkillsSection = () => {
-  const skills = ["FORD", "UFC", "LINCOLN", "ROYAL CARIBBEAN", "SLEEPIQ", "NFL"];
+  const skills = ["Web Development", "Programming Languages", "Graphic Design", "UI/UX Design", "Branding", "SEO"];
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
