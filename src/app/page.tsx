@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, ChevronsRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsRight, Sparkles } from 'lucide-react';
 
 const AboutMe = () => {
     const text = "Hi! I’m Dipanjan “Swapna Prangon” Prangon from Dhaka, Bangladesh. As a passionate student, writer, and EdTech innovator, I founded Prangon’s Ecosystem to bridge creative design with education. I help students and educators through digital tools, branding, and movement-building learning content. With a keen eye for brand identity design, I craft logos, thumbnails, and visual stories that resonate.".split(' ');
@@ -218,6 +218,74 @@ const WhatTheySaidSection = () => {
     );
   };
   
+const InfoSection = () => {
+    const toolboxItems = [
+      { name: 'Express' }, { name: 'Node.js' }, { name: 'Flask' }, { name: 'Tailwind' },
+      { name: 'Mongoose' }, { name: 'jQuery' }, { name: 'MySQL' }, { name: 'PostgreSQL' }
+    ];
+  
+    return (
+      <div className="bg-[#141414] text-white p-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          
+          {/* My Reads Card */}
+          <div className="bg-[#1C1C1C] rounded-2xl p-6 flex flex-col justify-between col-span-1 row-span-2">
+            <div>
+              <h3 className="flex items-center text-xl font-bold mb-2">
+                <Sparkles className="h-5 w-5 mr-2 text-purple-400" />
+                My Reads
+              </h3>
+              <p className="text-gray-400 mb-4">Explore the books shaping my perspectives.</p>
+            </div>
+            <Image 
+              src="https://placehold.co/400x600.png" 
+              alt="Atomic Habits book cover" 
+              width={400} 
+              height={600} 
+              className="w-full h-auto rounded-lg object-cover" 
+              data-ai-hint="book cover" 
+            />
+          </div>
+  
+          {/* My Toolbox Card */}
+          <div className="bg-[#1C1C1C] rounded-2xl p-6 col-span-1 lg:col-span-2">
+            <h3 className="flex items-center text-xl font-bold mb-2">
+              <Sparkles className="h-5 w-5 mr-2 text-purple-400" />
+              My Toolbox
+            </h3>
+            <p className="text-gray-400 mb-6">Explore the technologies and tools I use to create awesome digital experiences.</p>
+            <div className="flex flex-wrap gap-4">
+              {toolboxItems.map(item => (
+                <div key={item.name} className="bg-[#2a2a2a] rounded-lg px-4 py-2 text-sm flex items-center">
+                  {item.name}
+                </div>
+              ))}
+            </div>
+          </div>
+  
+          {/* My Hobbies Card */}
+          <div className="bg-[#1C1C1C] rounded-2xl p-6 col-span-1 lg:col-span-2 relative overflow-hidden h-64 md:h-auto">
+             <div className="relative z-10">
+                <h3 className="flex items-center text-xl font-bold mb-2">
+                    <Sparkles className="h-5 w-5 mr-2 text-purple-400" />
+                    My Hobbies
+                </h3>
+                <p className="text-gray-400">Explore my interests, hobbies, and other things I enjoy doing beyond the digital realm.</p>
+             </div>
+             <Image 
+                src="https://placehold.co/800x400.png"
+                alt="Map of Dhaka"
+                layout="fill"
+                objectFit="cover"
+                className="opacity-20 z-0"
+                data-ai-hint="map Dhaka"
+             />
+          </div>
+  
+        </div>
+      </div>
+    );
+  }
 
 export default function Home() {
   return (
@@ -243,6 +311,7 @@ export default function Home() {
       <AboutMe />
       <SkillsSection />
       <WhatTheySaidSection />
+      <InfoSection />
     </>
   );
 }
