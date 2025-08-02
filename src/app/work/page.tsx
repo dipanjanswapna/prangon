@@ -2,7 +2,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Briefcase, Paintbrush, TrendingUp, Trophy, ArrowRight, ExternalLink } from 'lucide-react';
+import { Briefcase, Paintbrush, TrendingUp, Trophy, ArrowRight, ExternalLink, Shield } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -76,6 +76,14 @@ export default function WorkPage() {
           <p className="text-xl md:text-2xl text-muted-foreground mt-4 max-w-4xl mx-auto">
             A curated showcase of my professional projects, creative endeavors, experiences, and achievements.
           </p>
+           <div className="mt-8">
+                <Link href="/admin/dashboard">
+                    <Button size="lg" variant="outline">
+                        <Shield className="mr-2 h-5 w-5" />
+                        Admin Panel
+                    </Button>
+                </Link>
+            </div>
         </motion.header>
 
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-24">
