@@ -186,7 +186,7 @@ export default function WorkPage() {
               ))}
             </div>
              <motion.div variants={itemVariants} className="text-center mt-8">
-                <Link href="#">
+                <Link href="/visual-arts">
                     <Button size="lg">View Full Art Gallery</Button>
                 </Link>
             </motion.div>
