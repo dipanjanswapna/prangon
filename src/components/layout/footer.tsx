@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Github, Twitter, Linkedin, Copy, ExternalLink, Facebook, HandHeart } from 'lucide-react';
@@ -49,7 +50,7 @@ export function Footer() {
             transition={{ duration: 0.8 }}
             className="relative p-8 md:p-12 mb-20"
         >
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 text-left">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
             <div className="lg:w-2/3">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 text-primary-foreground">
                 Let's create something amazing together

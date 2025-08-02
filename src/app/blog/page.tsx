@@ -32,7 +32,7 @@ const itemVariants = {
 
 export default function BlogPage() {
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-background min-h-screen py-16 md:py-24">
       <div className="container mx-auto px-4">
         <motion.header
           initial={{ opacity: 0, y: -30 }}
@@ -52,10 +52,10 @@ export default function BlogPage() {
                 <div className="inline-block bg-primary/10 p-3 rounded-full mb-4">
                    <Rss className="h-8 w-8 text-primary" />
                 </div>
-                <h1 className="text-5xl md:text-7xl font-black font-headline tracking-tighter text-primary uppercase">
+                <h1 className="text-4xl sm:text-5xl md:text-7xl font-black font-headline tracking-tighter text-primary uppercase">
                   The Blog
                 </h1>
-                <p className="text-xl md:text-2xl text-muted-foreground mt-4 max-w-4xl mx-auto">
+                <p className="text-lg md:text-xl text-muted-foreground mt-4 max-w-4xl mx-auto">
                   Insights, stories, and thoughts on technology, design, and education.
                 </p>
             </div>

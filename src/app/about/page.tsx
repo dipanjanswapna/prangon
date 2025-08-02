@@ -84,7 +84,7 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="relative min-h-screen py-8 md:py-12">
+    <div className="relative min-h-screen py-16 md:py-24">
         <Image
             src="https://cdnb.artstation.com/p/assets/images/images/057/331/063/large/srabon-arafat-uploded-file-x.jpg?1671322270"
             alt="About background"
@@ -101,7 +101,7 @@ export default function AboutPage() {
               className="text-center"
             >
               <motion.div variants={itemVariants} className="flex justify-center mb-6">
-                <Avatar className="h-32 w-32 border-4 border-background ring-4 ring-primary">
+                <Avatar className="h-24 w-24 md:h-32 md:w-32 border-4 border-background ring-4 ring-primary">
                   <AvatarImage src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg" alt="Dipanjan Prangon" data-ai-hint="profile picture" />
                   <AvatarFallback>DP</AvatarFallback>
                 </Avatar>
@@ -109,14 +109,14 @@ export default function AboutPage() {
               <motion.h1 variants={itemVariants} className="text-4xl md:text-5xl font-bold font-headline tracking-tight text-primary-foreground">
                 Dipanjan “Swapna Prangon” Prangon
               </motion.h1>
-              <motion.p variants={itemVariants} className="text-xl text-muted-foreground mt-2 max-w-3xl mx-auto">
+              <motion.p variants={itemVariants} className="text-lg md:text-xl text-muted-foreground mt-2 max-w-3xl mx-auto">
                 A passionate student, writer, and EdTech innovator from Dhaka, Bangladesh, dedicated to bridging creative design with education.
               </motion.p>
             </motion.div>
 
             <Tabs defaultValue="academia" className="w-full mt-12">
               <motion.div variants={itemVariants} initial="hidden" animate="visible" className="flex justify-center">
-                <TabsList className="grid w-full grid-cols-2 max-w-md bg-background/80 backdrop-blur-sm">
+                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 max-w-md bg-background/80 backdrop-blur-sm">
                   <TabsTrigger value="academia">For Academia & Scholarships</TabsTrigger>
                   <TabsTrigger value="services">For Professional Services</TabsTrigger>
                 </TabsList>
@@ -207,7 +207,7 @@ export default function AboutPage() {
                     <CardTitle className="text-2xl md:text-3xl font-headline text-primary-foreground">Biography</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground leading-relaxed">
                       Everyone knows Dipanjan Swapna Prangon as Prangon. Prangon (born 10 July 2007) is a Bangladeshi student, artist. He attended Government Science College in Class 12. Prangon was born on 10 july to the Bengali Hindu "das" family of Bhandaria in Bangladesh. His father is Dipankar Das and his mother is Sabita Biswas. Prangon grew up in Bhandaria during her early childhood under the care of her mother and relatives. He has no brother and sister.
                     </p>
                   </CardContent>

@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -98,7 +99,7 @@ const SkillsSection = () => {
   const earthY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
   return (
-    <div ref={containerRef} className="relative min-h-screen bg-background text-foreground flex flex-col justify-center overflow-hidden">
+    <div ref={containerRef} className="relative min-h-screen bg-background text-foreground flex flex-col justify-center overflow-hidden py-16 px-4">
       <motion.div
         className="absolute inset-0 z-0"
         style={{ opacity: earthOpacity, y: earthY }}
@@ -265,7 +266,7 @@ const InfoSection = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
-            className="bg-muted rounded-2xl p-6 flex flex-col justify-between col-span-1 row-span-2 shadow-lg"
+            className="bg-muted rounded-2xl p-6 flex flex-col justify-between col-span-1 lg:row-span-2 shadow-lg"
           >
             <div>
               <h3 className="flex items-center text-xl font-bold mb-2">
@@ -412,7 +413,7 @@ const LatestVideosSection = () => {
                 />
               </div>
               <div className='text-center md:text-left'>
-                <h3 className="text-xl sm:text-2xl font-bold flex items-center justify-center md:justify-start gap-2">
+                <h3 className="text-xl sm:text-2xl font-bold flex flex-col sm:flex-row items-center justify-center md:justify-start gap-2">
                   Dipanjan Swapna <span className="text-base font-normal text-muted-foreground">· 100K subscribers</span>
                 </h3>
                 <p className="text-muted-foreground mt-2 text-sm sm:text-base max-w-2xl">
