@@ -18,6 +18,21 @@ if (!admin.apps.length) {
   }
 }
 
-export const firestore = admin.firestore();
-export const auth = admin.auth();
+const getFirestore = () => {
+    if (!admin.apps.length) {
+        throw new Error("Firebase Admin SDK has not been initialized.");
+    }
+    return admin.firestore();
+};
+
+const getAuth = () => {
+    if (!admin.apps.length) {
+        throw new Error("Firebase Admin SDK has not been initialized.");
+    }
+    return admin.auth();
+};
+
+
+export const firestore = getFirestore();
+export const auth = getAuth();
 export default admin;
