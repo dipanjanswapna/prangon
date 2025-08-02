@@ -92,7 +92,7 @@ export default function AchievementsPage() {
         <>
             <div className="relative bg-background min-h-screen">
                 <Image
-                    src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/b795e6123985579.6100155b16148.jpg"
+                    src="https://i.pinimg.com/736x/01/d7/fd/01d7fd28dd72179bfcc3e8cdd5806d2c.jpg"
                     alt="Achievements Background"
                     fill
                     className="absolute inset-0 z-0 object-cover opacity-10"
