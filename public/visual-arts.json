@@ -1,0 +1,81 @@
+
+[
+  {
+    "id": "va001",
+    "title": "Cosmic Dream",
+    "description": "An abstract representation of a nebula, exploring the interplay of light and shadow in the vastness of space. Created using a mix of digital painting and generative art techniques.",
+    "imageUrl": "https://cdna.artstation.com/p/assets/images/images/074/337/954/large/srabon-arafat-alone.jpg?1711648753",
+    "imageAiHint": "abstract space art",
+    "category": "Illustration",
+    "tags": ["Abstract", "Space", "Colorful"],
+    "tools": ["Procreate", "Photoshop", "Figma"],
+    "date": "2024-05-15",
+    "likes": 125,
+    "comments": []
+  },
+  {
+    "id": "va002",
+    "title": "Forest Spirit",
+    "description": "A handmade sketch capturing a mystical creature in a serene forest setting. The goal was to evoke a sense of wonder and tranquility.",
+    "imageUrl": "https://cdnb.artstation.com/p/assets/images/images/074/122/853/large/srabon-arafat-24.jpg?1711059432",
+    "imageAiHint": "fantasy sketch",
+    "category": "Handmade Art",
+    "tags": ["Fantasy", "Sketch", "Nature"],
+    "tools": ["Pencil", "Charcoal"],
+    "date": "2024-04-20",
+    "likes": 230,
+    "comments": []
+  },
+  {
+    "id": "va003",
+    "title": "City at Dusk",
+    "description": "A photograph capturing the vibrant city lights of Dhaka as evening descends. Long exposure was used to create light trails and a dynamic mood.",
+    "imageUrl": "https://cdna.artstation.com/p/assets/images/images/073/355/964/large/srabon-arafat-1.jpg?1709581023",
+    "imageAiHint": "cityscape photography",
+    "category": "Photography",
+    "tags": ["Cityscape", "Long Exposure", "Urban"],
+    "tools": ["Canon EOS 5D Mark IV", "Photoshop"],
+    "date": "2024-03-10",
+    "likes": 180,
+    "comments": []
+  },
+  {
+    "id": "va004",
+    "title": "Serenity UI Kit",
+    "description": "A clean and minimalist UI kit designed for a meditation and wellness app. The design focuses on calming colors and intuitive navigation to create a peaceful user experience.",
+    "imageUrl": "https://cdna.artstation.com/p/assets/images/images/073/355/944/large/srabon-arafat-4.jpg?1709580983",
+    "imageAiHint": "app ui design",
+    "category": "UI/UX Design",
+    "tags": ["UI", "UX", "Mobile App", "Minimalist"],
+    "tools": ["Figma", "Illustrator"],
+    "date": "2024-02-25",
+    "likes": 310,
+    "comments": []
+  },
+  {
+    "id": "va005",
+    "title": "Organic Coffee Branding",
+    "description": "Branding and packaging design for a new organic coffee brand. The design uses earthy tones and hand-drawn illustrations to emphasize the natural quality of the product.",
+    "imageUrl": "https://cdnb.artstation.com/p/assets/images/images/068/573/083/large/srabon-arafat-lost-in-space-1.jpg?1698155818",
+    "imageAiHint": "coffee packaging design",
+    "category": "Graphics Design",
+    "tags": ["Branding", "Packaging", "Illustration"],
+    "tools": ["Illustrator", "Photoshop"],
+    "date": "2024-01-30",
+    "likes": 195,
+    "comments": []
+  },
+  {
+    "id": "va006",
+    "title": "The Wanderer",
+    "description": "Digital illustration of a lone traveler exploring a vast, alien landscape. This piece plays with scale and atmosphere to tell a story of discovery.",
+    "imageUrl": "https://cdnb.artstation.com/p/assets/images/images/060/998/715/large/srabon-arafat-53.jpg?1679785068",
+    "imageAiHint": "sci-fi illustration",
+    "category": "Illustration",
+    "tags": ["Sci-Fi", "Landscape", "Storytelling"],
+    "tools": ["Procreate", "Blender"],
+    "date": "2023-12-18",
+    "likes": 420,
+    "comments": []
+  }
+]

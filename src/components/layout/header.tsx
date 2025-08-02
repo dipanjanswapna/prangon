@@ -13,6 +13,7 @@ import { motion } from 'framer-motion';
 
 const navItems = [
   { href: '/work', label: 'Work' },
+  { href: '/visual-arts', label: 'Visual Arts' },
   { href: '/about', label: 'About' },
   { href: '/social-work', label: 'Social Work' },
   { href: '/blog', label: 'Blog' },
