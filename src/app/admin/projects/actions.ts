@@ -8,7 +8,6 @@ import { redirect } from 'next/navigation';
 import slugify from 'slugify';
 
 const PROJECTS_COLLECTION = 'projects';
-const firestore = getFirestore();
 
 // Helper function to convert Firestore document to Project object
 const projectConverter = {
@@ -34,6 +33,7 @@ const projectConverter = {
 };
 
 export async function saveProject(formData: FormData) {
+    const firestore = getFirestore();
     const title = formData.get('title') as string;
     const existingId = formData.get('id') as string;
     
@@ -48,8 +48,8 @@ export async function saveProject(formData: FormData) {
         description: formData.get('description') as string,
         imageUrl: formData.get('imageUrl') as string,
         imageAiHint: (formData.get('imageAiHint') as string) || 'project image',
-        images: (formData.get('images') as string).split(',').map(url => url.trim()),
-        tags: (formData.get('tags') as string).split(',').map(tag => tag.trim()),
+        images: (formData.get('images') as string).split(',').map(url => url.trim()).filter(url => url),
+        tags: (formData.get('tags') as string).split(',').map(tag => tag.trim()).filter(tag => tag),
         updatedAt: new Date(),
     };
 
@@ -75,6 +75,7 @@ export async function saveProject(formData: FormData) {
 
 
 export async function getProjects(): Promise<Project[]> {
+    const firestore = getFirestore();
     const snapshot = await firestore.collection(PROJECTS_COLLECTION).orderBy('createdAt', 'desc').withConverter(projectConverter).get();
     if (snapshot.empty) {
         return [];
@@ -84,6 +85,7 @@ export async function getProjects(): Promise<Project[]> {
 
 
 export async function getProjectBySlug(slug: string): Promise<Project | undefined> {
+    const firestore = getFirestore();
     const doc = await firestore.collection(PROJECTS_COLLECTION).doc(slug).withConverter(projectConverter).get();
     if (!doc.exists) {
         return undefined;
@@ -93,6 +95,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | undefine
 
 
 export async function deleteProject(slug: string) {
+    const firestore = getFirestore();
     if (!slug) {
         throw new Error('Slug is required to delete a project.');
     }
