@@ -8,12 +8,12 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { projects } from '@/lib/projects';
 import { experiences } from '@/lib/experiences';
 import { achievements } from '@/lib/achievements';
+import { getProjects } from '../admin/projects/actions';
+import { useEffect, useState } from 'react';
+import type { Project } from '@/lib/projects';
 
-
-const professionalProjects = projects.slice(0, 2);
 
 const visualArts = [
   { imageUrl: 'https://placehold.co/400x400.png', imageAiHint: 'abstract art', title: 'Cosmic Dream' },
@@ -54,6 +54,16 @@ const SectionHeader = ({ icon, title, description }: { icon: React.ReactNode; ti
 );
 
 export default function WorkPage() {
+    const [professionalProjects, setProfessionalProjects] = useState<Project[]>([]);
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            const projects = await getProjects();
+            setProfessionalProjects(projects.slice(0, 2));
+        };
+        fetchProjects();
+    }, []);
+
   return (
     <div className="relative bg-background min-h-screen">
        <Image
