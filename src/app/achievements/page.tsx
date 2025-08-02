@@ -178,18 +178,18 @@ export default function AchievementsPage() {
 
                             {selectedAchievement.link && (
                                 <div className="mt-auto flex flex-col sm:flex-row gap-2">
-                                   <Link href={selectedAchievement.link} target="_blank" rel="noopener noreferrer" className="w-full">
-                                       <Button variant="outline" className="w-full">
+                                   <Button asChild variant="outline" className="w-full">
+                                       <Link href={selectedAchievement.link} target="_blank" rel="noopener noreferrer">
                                            <ExternalLink className="mr-2 h-4 w-4" />
                                            Verify
-                                       </Button>
-                                   </Link>
-                                    <a href={selectedAchievement.link} download target="_blank" rel="noopener noreferrer" className="w-full">
-                                       <Button className="w-full">
+                                       </Link>
+                                   </Button>
+                                    <Button asChild className="w-full">
+                                       <a href={selectedAchievement.link} download target="_blank" rel="noopener noreferrer">
                                            <Download className="mr-2 h-4 w-4" />
                                            Download Certificate
-                                       </Button>
-                                   </a>
+                                       </a>
+                                   </Button>
                                 </div>
                             )}
                         </div>
