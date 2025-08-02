@@ -1,4 +1,6 @@
 
+'use server';
+
 import 'dotenv/config';
 import admin from 'firebase-admin';
 
