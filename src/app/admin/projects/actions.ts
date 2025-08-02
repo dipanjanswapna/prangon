@@ -1,13 +1,14 @@
 
 'use server';
 
-import { firestore } from '@/lib/firebaseAdmin';
+import { getFirestore } from '@/lib/firebaseAdmin';
 import { Project } from '@/lib/projects';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import slugify from 'slugify';
 
 const PROJECTS_COLLECTION = 'projects';
+const firestore = getFirestore();
 
 // Helper function to convert Firestore document to Project object
 const projectConverter = {

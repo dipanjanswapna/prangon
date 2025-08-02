@@ -1,13 +1,14 @@
 
 'use server';
 
-import { firestore } from '@/lib/firebaseAdmin';
+import { getFirestore } from '@/lib/firebaseAdmin';
 import { Post } from '@/lib/blog';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import slugify from 'slugify';
 
 const POSTS_COLLECTION = 'posts';
+const firestore = getFirestore();
 
 // Helper function to convert Firestore document to Post object
 const postConverter = {
