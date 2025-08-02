@@ -13,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { projects } from '@/lib/projects';
 import { Edit, Trash2 } from 'lucide-react';
+import Link from "next/link";
 
 export function ProjectsTable() {
   return (
@@ -38,9 +39,11 @@ export function ProjectsTable() {
               </div>
             </TableCell>
             <TableCell className="text-right">
-              <Button variant="ghost" size="icon">
-                <Edit className="h-4 w-4" />
-              </Button>
+                <Button asChild variant="ghost" size="icon">
+                    <Link href={`/admin/projects/edit/${project.slug}`}>
+                        <Edit className="h-4 w-4" />
+                    </Link>
+                </Button>
               <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
                 <Trash2 className="h-4 w-4" />
               </Button>
