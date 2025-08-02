@@ -23,14 +23,14 @@ export default function RootLayout({
   const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
-    // Check localStorage on mount
+    // This effect should only run on the client
     const canPlayMusic = localStorage.getItem('musicConsent') === 'true';
     if (canPlayMusic) {
-      setIsPlaying(true);
       setHasInteracted(true);
+      setIsPlaying(true);
     }
   }, []);
-  
+
   useEffect(() => {
     const handleInteraction = () => {
       if (!hasInteracted) {
@@ -42,14 +42,17 @@ export default function RootLayout({
       window.removeEventListener('keydown', handleInteraction);
     };
 
-    if (!hasInteracted) {
+    // This effect should also only run on the client
+    if (typeof window !== 'undefined') {
         window.addEventListener('click', handleInteraction);
         window.addEventListener('keydown', handleInteraction);
     }
-
+    
     return () => {
-      window.removeEventListener('click', handleInteraction);
-      window.removeEventListener('keydown', handleInteraction);
+        if (typeof window !== 'undefined') {
+            window.removeEventListener('click', handleInteraction);
+            window.removeEventListener('keydown', handleInteraction);
+        }
     };
   }, [hasInteracted]);
   
