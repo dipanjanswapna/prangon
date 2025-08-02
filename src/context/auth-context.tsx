@@ -2,7 +2,7 @@
 'use client';
 
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { onAuthStateChanged, User, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { onAuthStateChanged, User, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '@/lib/auth';
 import { Loader2 } from 'lucide-react';
 
@@ -10,6 +10,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, pass: string) => Promise<any>;
+  loginWithGoogle: () => Promise<any>;
   logout: () => Promise<void>;
 }
 
@@ -33,6 +34,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return signInWithEmailAndPassword(auth, email, pass).finally(() => setLoading(false));
   };
 
+  const loginWithGoogle = () => {
+    setLoading(true);
+    const provider = new GoogleAuthProvider();
+    return signInWithPopup(auth, provider).finally(() => setLoading(false));
+  };
+
   const logout = () => {
     return signOut(auth);
   };
@@ -46,7 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );
