@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Briefcase, ArrowRight, Code, BarChart3, Palette, Heart } from 'lucide-react';
 import Image from 'next/image';
@@ -87,24 +87,18 @@ const techSkills = [
   }
 ];
 
-export default function ProfessionalProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [allCategories, setAllCategories] = useState<string[]>(['All']);
-  const [allTags, setAllTags] = useState<string[]>(['All']);
+const ProfessionalProjectsClient = ({ projects: initialProjects }: { projects: Project[] }) => {
+  const [projects, setProjects] = useState<Project[]>(initialProjects);
+  
+  const allCategories = useMemo(() => ['All', ...Array.from(new Set(initialProjects.map(p => p.category)))], [initialProjects]);
+  const allTags = useMemo(() => ['All', ...Array.from(new Set(initialProjects.flatMap(p => p.tags)))], [initialProjects]);
+
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedTag, setSelectedTag] = useState('All');
   const [likes, setLikes] = useState<{ [key: number]: number }>({});
   const [loved, setLoved] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
-    async function fetchProjects() {
-      const fetchedProjects = await getProjects();
-      setProjects(fetchedProjects);
-      setAllCategories(['All', ...Array.from(new Set(fetchedProjects.map(p => p.category)))]);
-      setAllTags(['All', ...Array.from(new Set(fetchedProjects.flatMap(p => p.tags)))]);
-    }
-    fetchProjects();
-
     try {
       const savedLikes = localStorage.getItem('projectLikes');
       if (savedLikes) {
@@ -135,11 +129,11 @@ export default function ProfessionalProjectsPage() {
     localStorage.setItem('projectLoves', JSON.stringify(newLoves));
   };
 
-  const filteredProjects = projects.filter(project => {
+  const filteredProjects = useMemo(() => projects.filter(project => {
     const categoryMatch = selectedCategory === 'All' || project.category === selectedCategory;
     const tagMatch = selectedTag === 'All' || project.tags.includes(selectedTag);
     return categoryMatch && tagMatch;
-  });
+  }), [projects, selectedCategory, selectedTag]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -171,6 +165,89 @@ export default function ProfessionalProjectsPage() {
     </div>
   );
 
+  return (
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="bg-muted/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl mb-12 border border-border"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FilterDropdown label="Filter by Category" options={allCategories} selected={selectedCategory} onSelect={setSelectedCategory} />
+          <FilterDropdown label="Filter by Tool/Tag" options={allTags} selected={selectedTag} onSelect={setSelectedTag} />
+        </div>
+      </motion.div>
+
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+      >
+        <AnimatePresence>
+          {filteredProjects.map((project) => (
+            <motion.div
+              key={project.id}
+              variants={itemVariants}
+              layout
+            >
+              <Card className="bg-muted/30 group overflow-hidden h-full flex flex-col backdrop-blur-sm shadow-lg hover:shadow-primary/20 transition-all duration-300 rounded-2xl">
+                 <CardHeader className="p-0">
+                    <div className="relative overflow-hidden rounded-t-2xl">
+                      <Image
+                        src={project.imageUrl}
+                        alt={project.title}
+                        width={600}
+                        height={400}
+                        data-ai-hint={project.imageAiHint}
+                        className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
+                  </CardHeader>
+                <CardContent className="p-6 flex-grow flex flex-col">
+                  <Badge variant="outline" className="mb-2 self-start">{project.category}</Badge>
+                  <CardTitle className="text-xl font-bold mb-2 text-primary-foreground group-hover:text-primary transition-colors">
+                      <Link href={`/projects/${project.slug}`}>{project.title}</Link>
+                  </CardTitle>
+                  <CardDescription className="line-clamp-3 mb-4 flex-grow">{project.description}</CardDescription>
+                   <div className="flex flex-wrap gap-2">
+                      {project.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
+                    </div>
+                </CardContent>
+                <div className="p-6 pt-0 mt-auto flex justify-between items-center">
+                  <Link href={`/projects/${project.slug}`}>
+                    <Button variant="outline" className="w-full">
+                      View Case Study <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                  <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="icon" onClick={() => handleLoveClick(project.id)}>
+                      <Heart className={`h-5 w-5 ${loved[project.id] ? 'text-red-500 fill-current' : 'text-muted-foreground'}`} />
+                    </Button>
+                    <span className="text-sm text-muted-foreground">{likes[project.id] || 0}</span>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
+    </>
+  );
+};
+
+
+export default function ProfessionalProjectsPage() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  
+  useEffect(() => {
+      async function fetchProjects() {
+          const fetchedProjects = await getProjects();
+          setProjects(fetchedProjects);
+      }
+      fetchProjects();
+  }, [])
 
   return (
     <div className="relative bg-background min-h-screen">
@@ -199,73 +276,7 @@ export default function ProfessionalProjectsPage() {
           </p>
         </motion.header>
 
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="bg-muted/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl mb-12 border border-border"
-        >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FilterDropdown label="Filter by Category" options={allCategories} selected={selectedCategory} onSelect={setSelectedCategory} />
-                <FilterDropdown label="Filter by Tool/Tag" options={allTags} selected={selectedTag} onSelect={setSelectedTag} />
-            </div>
-        </motion.div>
-
-
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          <AnimatePresence>
-            {filteredProjects.map((project) => (
-              <motion.div
-                key={project.id}
-                variants={itemVariants}
-                layout
-              >
-                <Card className="bg-muted/30 group overflow-hidden h-full flex flex-col backdrop-blur-sm shadow-lg hover:shadow-primary/20 transition-all duration-300 rounded-2xl">
-                   <CardHeader className="p-0">
-                      <div className="relative overflow-hidden rounded-t-2xl">
-                        <Image
-                          src={project.imageUrl}
-                          alt={project.title}
-                          width={600}
-                          height={400}
-                          data-ai-hint={project.imageAiHint}
-                          className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      </div>
-                    </CardHeader>
-                  <CardContent className="p-6 flex-grow flex flex-col">
-                    <Badge variant="outline" className="mb-2 self-start">{project.category}</Badge>
-                    <CardTitle className="text-xl font-bold mb-2 text-primary-foreground group-hover:text-primary transition-colors">
-                        <Link href={`/projects/${project.slug}`}>{project.title}</Link>
-                    </CardTitle>
-                    <CardDescription className="line-clamp-3 mb-4 flex-grow">{project.description}</CardDescription>
-                     <div className="flex flex-wrap gap-2">
-                        {project.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
-                      </div>
-                  </CardContent>
-                  <div className="p-6 pt-0 mt-auto flex justify-between items-center">
-                    <Link href={`/projects/${project.slug}`}>
-                      <Button variant="outline" className="w-full">
-                        View Case Study <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
-                    <div className="flex items-center gap-2">
-                      <Button variant="ghost" size="icon" onClick={() => handleLoveClick(project.id)}>
-                        <Heart className={`h-5 w-5 ${loved[project.id] ? 'text-red-500 fill-current' : 'text-muted-foreground'}`} />
-                      </Button>
-                      <span className="text-sm text-muted-foreground">{likes[project.id] || 0}</span>
-                    </div>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+        <ProfessionalProjectsClient projects={projects} />
         
         <motion.section
             initial={{ opacity: 0, y: 50 }}
@@ -284,7 +295,10 @@ export default function ProfessionalProjectsPage() {
                 {techSkills.map((category, index) => (
                     <motion.div
                         key={index}
-                        variants={itemVariants}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{ duration: 0.5 }}
                     >
                         <Card className="bg-muted/30 backdrop-blur-sm border-border shadow-lg">
                             <CardHeader className="flex flex-row items-center gap-4">

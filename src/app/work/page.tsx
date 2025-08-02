@@ -1,5 +1,4 @@
 
-'use client';
 
 import { motion } from 'framer-motion';
 import { Briefcase, Paintbrush, TrendingUp, Trophy, ArrowRight, ExternalLink, Shield } from 'lucide-react';
@@ -11,7 +10,6 @@ import { Badge } from '@/components/ui/badge';
 import { experiences } from '@/lib/experiences';
 import { achievements } from '@/lib/achievements';
 import { getProjects } from '../admin/projects/actions';
-import { useEffect, useState } from 'react';
 import type { Project } from '@/lib/projects';
 
 
@@ -53,16 +51,8 @@ const SectionHeader = ({ icon, title, description }: { icon: React.ReactNode; ti
   </motion.div>
 );
 
-export default function WorkPage() {
-    const [professionalProjects, setProfessionalProjects] = useState<Project[]>([]);
-
-    useEffect(() => {
-        const fetchProjects = async () => {
-            const projects = await getProjects();
-            setProfessionalProjects(projects.slice(0, 2));
-        };
-        fetchProjects();
-    }, []);
+export default async function WorkPage() {
+    const professionalProjects: Project[] = (await getProjects()).slice(0, 2);
 
   return (
     <div className="relative bg-background min-h-screen">
@@ -107,7 +97,7 @@ export default function WorkPage() {
             />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {professionalProjects.map((project, index) => (
-                <motion.div key={index} variants={itemVariants}>
+                <motion.div key={project.id} variants={itemVariants}>
                   <Card className="bg-muted/30 group overflow-hidden h-full flex flex-col backdrop-blur-sm shadow-lg">
                     <CardHeader className="p-0">
                       <div className="relative overflow-hidden rounded-t-lg">
@@ -186,7 +176,7 @@ export default function WorkPage() {
             />
             <div className="relative border-l-2 border-primary/20 pl-8 space-y-12">
               {homeExperiences.map((exp, index) => (
-                <motion.div key={index} variants={itemVariants} className="relative">
+                <motion.div key={exp.id} variants={itemVariants} className="relative">
                    <div className="absolute -left-[38px] top-1 h-4 w-4 rounded-full bg-primary ring-8 ring-background" />
                    <h3 className="text-xl font-bold text-primary-foreground">{exp.role}</h3>
                    <p className="text-primary font-semibold">{exp.entity}</p>
@@ -211,7 +201,7 @@ export default function WorkPage() {
             />
             <div className="space-y-4">
               {homeAchievements.map((ach, index) => (
-                 <motion.div key={index} variants={itemVariants}>
+                 <motion.div key={ach.id} variants={itemVariants}>
                     <Card className="bg-muted/30 hover:bg-muted/50 transition-colors backdrop-blur-sm">
                         <CardContent className="p-4 flex items-center justify-between">
                             <div>
