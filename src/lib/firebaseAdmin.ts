@@ -51,4 +51,4 @@ const getAuth = () => {
     return admin.auth();
 };
 
-export
+export { getFirestore, getAuth };
