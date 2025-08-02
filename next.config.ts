@@ -88,6 +88,12 @@ const nextConfig: NextConfig = {
         hostname: 'i.pinimg.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'prangonsecocentre.appspot.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
