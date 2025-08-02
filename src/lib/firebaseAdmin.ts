@@ -17,7 +17,11 @@ const initializeFirebaseAdmin = () => {
                     'The FIREBASE_SERVICE_ACCOUNT environment variable is not set.'
                 );
             }
-            const serviceAccount = JSON.parse(serviceAccountJson);
+            
+            // Decode the Base64 service account
+            const decodedServiceAccount = Buffer.from(serviceAccountJson, 'base64').toString('utf-8');
+            const serviceAccount = JSON.parse(decodedServiceAccount);
+
             admin.initializeApp({
                 credential: admin.credential.cert(serviceAccount),
             });
@@ -47,4 +51,4 @@ const getAuth = () => {
     return admin.auth();
 };
 
-export { getFirestore, getAuth };
+export
