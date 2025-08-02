@@ -1,6 +1,3 @@
-
-'use server';
-
 import 'dotenv/config';
 import admin from 'firebase-admin';
 
@@ -48,4 +45,3 @@ const getAuth = () => {
 };
 
 export { getFirestore, getAuth };
-export default admin;
