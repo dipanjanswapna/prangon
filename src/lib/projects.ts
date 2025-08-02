@@ -1,3 +1,4 @@
+
 export type Project = {
   id: number;
   slug: string;
@@ -7,6 +8,7 @@ export type Project = {
   imageUrl: string;
   imageAiHint: string;
   images: string[];
+  tags: string[];
 };
 
 export const projects: Project[] = [
@@ -19,6 +21,7 @@ export const projects: Project[] = [
     imageUrl: 'https://placehold.co/600x400.png',
     imageAiHint: 'mobile app',
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/800x600.png'],
+    tags: ['Figma', 'React Native', 'UI/UX'],
   },
   {
     id: 2,
@@ -29,6 +32,7 @@ export const projects: Project[] = [
     imageUrl: 'https://placehold.co/600x400.png',
     imageAiHint: 'brand identity',
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/800x600.png'],
+    tags: ['Illustrator', 'Photoshop', 'Branding'],
   },
   {
     id: 3,
@@ -39,16 +43,18 @@ export const projects: Project[] = [
     imageUrl: 'https://placehold.co/600x400.png',
     imageAiHint: 'website design',
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/800x600.png'],
+    tags: ['React', 'Next.js', 'Web Design'],
   },
   {
     id: 4,
     slug: 'origin-packaging',
     title: 'Origin Coffee Packaging',
-    category: 'Packaging Design',
+    category: 'Graphics Design',
     description: 'Packaging design for a premium coffee brand. The design uses earthy tones and minimalist typography to convey the brand\'s commitment to organic and high-quality beans.',
     imageUrl: 'https://placehold.co/600x400.png',
     imageAiHint: 'coffee packaging',
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/800x600.png'],
+    tags: ['Packaging', 'Illustrator', 'Graphics Design'],
   },
   {
     id: 5,
@@ -59,6 +65,7 @@ export const projects: Project[] = [
     imageUrl: 'https://placehold.co/600x400.png',
     imageAiHint: 'dashboard ui',
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/800x600.png'],
+    tags: ['Figma', 'Data Viz', 'UI/UX'],
   },
   {
     id: 6,
@@ -69,6 +76,7 @@ export const projects: Project[] = [
     imageUrl: 'https://placehold.co/600x400.png',
     imageAiHint: 'photography portfolio',
     images: ['https://placehold.co/800x600.png', 'https://placehold.co/800x600.png'],
+    tags: ['Next.js', 'Web Design', 'SEO'],
   },
 ];
 

@@ -8,26 +8,10 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { projects } from '@/lib/projects';
 
-// Dummy Data (to be replaced with Firebase data)
-const professionalProjects = [
-  {
-    title: 'Aura Health App',
-    description: 'A conceptual mobile application for mental well-being.',
-    imageUrl: 'https://placehold.co/600x400.png',
-    imageAiHint: 'mobile app',
-    slug: 'aura-app',
-    tags: ['UI/UX Design', 'React Native'],
-  },
-  {
-    title: 'Nova Branding Identity',
-    description: 'A complete branding identity for a fictional tech startup.',
-    imageUrl: 'https://placehold.co/600x400.png',
-    imageAiHint: 'brand identity',
-    slug: 'nova-branding',
-    tags: ['Branding', 'Illustrator'],
-  },
-];
+
+const professionalProjects = projects.slice(0, 2);
 
 const visualArts = [
   { imageUrl: 'https://placehold.co/400x400.png', imageAiHint: 'abstract art', title: 'Cosmic Dream' },
@@ -139,20 +123,20 @@ export default function WorkPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {professionalProjects.map((project, index) => (
                 <motion.div key={index} variants={itemVariants}>
-                  <Card className="bg-muted/30 group overflow-hidden h-full flex flex-col backdrop-blur-sm">
-                    <CardHeader>
-                      <div className="relative overflow-hidden rounded-lg">
+                  <Card className="bg-muted/30 group overflow-hidden h-full flex flex-col backdrop-blur-sm shadow-lg">
+                    <CardHeader className="p-0">
+                      <div className="relative overflow-hidden rounded-t-lg">
                         <Image
                           src={project.imageUrl}
                           alt={project.title}
                           width={600}
                           height={400}
                           data-ai-hint={project.imageAiHint}
-                          className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>
                     </CardHeader>
-                    <CardContent className="flex-grow">
+                    <CardContent className="p-6 flex-grow">
                       <CardTitle className="text-xl font-bold mb-2">{project.title}</CardTitle>
                       <CardDescription>{project.description}</CardDescription>
                       <div className="flex flex-wrap gap-2 mt-4">
@@ -171,7 +155,7 @@ export default function WorkPage() {
               ))}
             </div>
             <motion.div variants={itemVariants} className="text-center mt-8">
-                <Link href={"#"}>
+                <Link href={"/work/projects"}>
                     <Button size="lg">View Full Portfolio</Button>
                 </Link>
             </motion.div>
