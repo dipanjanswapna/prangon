@@ -1,4 +1,6 @@
 
+'use client';
+
 import { getPostBySlug, posts } from '@/lib/blog';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -8,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useState, useEffect } from 'react';
 
 type BlogPostPageProps = {
   params: {
@@ -49,12 +52,17 @@ const SocialShare = ({ postUrl, postTitle }: { postUrl: string, postTitle: strin
 
 export default function BlogPostPage({ params }: BlogPostPageProps) {
   const post = getPostBySlug(params.slug);
+  const [postUrl, setPostUrl] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPostUrl(window.location.href);
+    }
+  }, []);
 
   if (!post) {
     notFound();
   }
-
-  const postUrl = typeof window !== 'undefined' ? window.location.href : '';
 
   return (
     <div className="relative min-h-screen py-8 md:py-12 bg-background">
