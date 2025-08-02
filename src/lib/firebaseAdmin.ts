@@ -1,4 +1,5 @@
 
+'use client';
 import 'dotenv/config';
 import admin from 'firebase-admin';
 
@@ -45,6 +46,5 @@ const getAuth = () => {
     return admin.auth();
 };
 
-export const firestore = getFirestore();
-export const auth = getAuth();
+export { getFirestore, getAuth };
 export default admin;
