@@ -1,5 +1,5 @@
 
-import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter, SidebarInset, SidebarRail } from '@/components/ui/sidebar';
+import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter } from '@/components/ui/sidebar';
 import { Home, Briefcase, FileText, Settings } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -59,13 +59,13 @@ export default function AdminLayout({
                  </SidebarMenu>
             </SidebarFooter>
         </Sidebar>
-        <SidebarInset>
+        <main className="flex-1">
             <header className="flex items-center justify-between p-4 border-b">
                 <SidebarTrigger />
                 <h1 className="text-xl font-semibold">Admin Panel</h1>
             </header>
             {children}
-        </SidebarInset>
+        </main>
     </SidebarProvider>
   );
 }
