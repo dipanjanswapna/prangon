@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { projects } from '@/lib/projects';
+import { experiences } from '@/lib/experiences';
+import { achievements } from '@/lib/achievements';
 
 
 const professionalProjects = projects.slice(0, 2);
@@ -19,44 +21,9 @@ const visualArts = [
   { imageUrl: 'https://placehold.co/400x400.png', imageAiHint: 'landscape illustration', title: 'Silent Valley' },
 ];
 
-const experiences = [
-  {
-    role: 'Founder & Lead Designer',
-    entity: 'Prangon’s Ecosystem',
-    period: '2021 - Present',
-    description: 'Leading a team to develop EdTech tools and creative learning content for students and educators globally.',
-  },
-  {
-    role: 'Freelance UI/UX Designer',
-    entity: 'Upwork & Fiverr',
-    period: '2019 - Present',
-    description: 'Delivered over 50+ projects for international clients, focusing on user-centric design and branding.',
-  },
-  {
-    role: 'YouTube Content Creator',
-    entity: 'The Untold',
-    period: '2020 - Present',
-    description: 'Creating educational and thought-provoking content on socio-political issues, reaching thousands of viewers.',
-  },
-];
+const homeExperiences = experiences.slice(0, 3);
+const homeAchievements = achievements.slice(0, 3);
 
-const achievements = [
-  {
-    title: 'National Science Fair Winner',
-    date: '2018',
-    description: 'Awarded for an innovative project on renewable energy solutions.',
-  },
-  {
-    title: 'Inter-University Debate Champion',
-    date: '2019',
-    description: 'Recognized for outstanding performance and critical thinking skills.',
-  },
-  {
-    title: 'Google Certified UX Designer',
-    date: '2022',
-    description: 'Completed the professional certificate for UX Design from Google.',
-  },
-];
 
 // Animation Variants
 const containerVariants = {
@@ -200,13 +167,13 @@ export default function WorkPage() {
                 description="A timeline of my professional journey, including freelance work, teaching, and leadership roles."
             />
             <div className="relative border-l-2 border-primary/20 pl-8 space-y-12">
-              {experiences.map((exp, index) => (
+              {homeExperiences.map((exp, index) => (
                 <motion.div key={index} variants={itemVariants} className="relative">
                    <div className="absolute -left-[38px] top-1 h-4 w-4 rounded-full bg-primary ring-8 ring-background" />
                    <h3 className="text-xl font-bold text-primary-foreground">{exp.role}</h3>
                    <p className="text-primary font-semibold">{exp.entity}</p>
                    <p className="text-sm text-muted-foreground mb-2">{exp.period}</p>
-                   <p className="text-muted-foreground">{exp.description}</p>
+                   <p className="text-muted-foreground">{exp.description[0]}</p>
                 </motion.div>
               ))}
             </div>
@@ -225,13 +192,13 @@ export default function WorkPage() {
                 description="A collection of my awards, certifications, and other notable recognitions."
             />
             <div className="space-y-4">
-              {achievements.map((ach, index) => (
+              {homeAchievements.map((ach, index) => (
                  <motion.div key={index} variants={itemVariants}>
                     <Card className="bg-muted/30 hover:bg-muted/50 transition-colors backdrop-blur-sm">
                         <CardContent className="p-4 flex items-center justify-between">
                             <div>
                                 <h4 className="font-bold text-primary-foreground">{ach.title}</h4>
-                                <p className="text-sm text-muted-foreground">{ach.description}</p>
+                                <p className="text-sm text-muted-foreground">{ach.issuer}</p>
                             </div>
                             <Badge variant="outline">{ach.date}</Badge>
                         </CardContent>
@@ -240,7 +207,7 @@ export default function WorkPage() {
               ))}
             </div>
              <motion.div variants={itemVariants} className="text-center mt-8">
-                <Link href="#">
+                <Link href="/achievements">
                     <Button size="lg">View Full Achievements</Button>
                 </Link>
             </motion.div>

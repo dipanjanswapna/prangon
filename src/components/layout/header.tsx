@@ -15,6 +15,7 @@ const navItems = [
   { href: '/work', label: 'Work' },
   { href: '/about', label: 'About' },
   { href: '/experiences', label: 'Experiences' },
+  { href: '/achievements', label: 'Achievements' },
   { href: '/social-work', label: 'Social Work' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
