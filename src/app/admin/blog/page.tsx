@@ -1,12 +1,13 @@
 
-'use client';
-
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
 import { BlogPostsTable } from '@/components/admin/blog-posts-table';
 import Link from 'next/link';
+import { getPosts } from './actions';
 
-export default function AdminBlogPage() {
+export default async function AdminBlogPage() {
+    const posts = await getPosts();
+
     return (
         <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
             <div className="flex items-center justify-between space-y-2">
@@ -20,7 +21,7 @@ export default function AdminBlogPage() {
                     </Button>
                 </div>
             </div>
-            <BlogPostsTable />
+            <BlogPostsTable posts={posts} />
         </div>
     );
 }

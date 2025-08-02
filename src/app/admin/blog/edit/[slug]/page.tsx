@@ -1,11 +1,10 @@
-'use client';
 
 import { BlogPostForm } from '@/components/admin/blog-post-form';
-import { getPostBySlug } from '@/lib/blog';
+import { getPostBySlug } from '@/app/admin/blog/actions';
 import { notFound } from 'next/navigation';
 
-export default function EditBlogPostPage({ params }: { params: { slug: string } }) {
-    const post = getPostBySlug(params.slug);
+export default async function EditBlogPostPage({ params }: { params: { slug: string } }) {
+    const post = await getPostBySlug(params.slug);
 
     if (!post) {
         notFound();

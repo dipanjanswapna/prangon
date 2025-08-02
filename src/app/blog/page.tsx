@@ -8,8 +8,10 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { posts } from '@/lib/blog';
+import { Post } from '@/lib/blog';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { useEffect, useState } from 'react';
+import { getPosts } from '../admin/blog/actions';
 
 
 const containerVariants = {
@@ -31,6 +33,16 @@ const itemVariants = {
 
 
 export default function BlogPage() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  
+  useEffect(() => {
+    async function fetchPosts() {
+      const fetchedPosts = await getPosts();
+      setPosts(fetchedPosts);
+    }
+    fetchPosts();
+  }, []);
+
   return (
     <div className="bg-background min-h-screen py-16 md:py-24">
       <div className="container mx-auto px-4">

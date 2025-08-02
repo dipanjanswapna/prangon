@@ -1,137 +1,79 @@
+
 'use client';
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { useFormStatus } from 'react-dom';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Post } from '@/lib/blog';
-
-const formSchema = z.object({
-  title: z.string().min(2, 'Title must be at least 2 characters.'),
-  description: z.string().min(10, 'Description must be at least 10 characters.'),
-  coverImage: z.string().url('Please enter a valid image URL.'),
-  tags: z.string().min(1, 'Please enter at least one tag, comma separated.'),
-  content: z.string().min(50, 'Content must be at least 50 characters.'),
-});
-
-type BlogPostFormValues = z.infer<typeof formSchema>;
+import { savePost } from '@/app/admin/blog/actions';
+import { useToast } from '@/hooks/use-toast';
 
 interface BlogPostFormProps {
     post?: Post;
 }
 
+function SubmitButton({ isEditing }: { isEditing: boolean }) {
+    const { pending } = useFormStatus();
+    return (
+        <Button type="submit" disabled={pending}>
+            {pending ? (isEditing ? 'Updating...' : 'Creating...') : (isEditing ? 'Update Post' : 'Create Post')}
+        </Button>
+    );
+}
+
 export function BlogPostForm({ post }: BlogPostFormProps) {
-  const { toast } = useToast();
-  const form = useForm<BlogPostFormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: post?.title || '',
-      description: post?.description || '',
-      coverImage: post?.coverImage || '',
-      tags: post?.tags.join(', ') || '',
-      content: post?.content || '',
-    },
-  });
+    const { toast } = useToast();
+    const isEditing = !!post;
 
-  function onSubmit(data: BlogPostFormValues) {
-    // In a real app, you'd handle form submission here (e.g., API call)
-    console.log(data);
-    toast({
-      title: `Post ${post ? 'Updated' : 'Created'}!`,
-      description: `The blog post "${data.title}" has been successfully saved.`,
-    });
-  }
+    const handleSubmit = async (formData: FormData) => {
+        await savePost(formData);
+        toast({
+            title: `Post ${post ? 'Updated' : 'Created'}!`,
+            description: `The blog post "${formData.get('title')}" has been successfully saved.`,
+        });
+    };
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{post ? 'Edit Post' : 'Create a new post'}</CardTitle>
-        <CardDescription>Fill out the form below to {post ? 'update the' : 'add a new'} blog post.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Blog Post Title" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="A brief description of the post" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="coverImage"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Cover Image URL</FormLabel>
-                  <FormControl>
-                    <Input placeholder="https://example.com/image.png" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="tags"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tags (comma-separated)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="EdTech, Design, Innovation" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="content"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Content (HTML supported)</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Write your post content here..." className="min-h-[300px]" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">{post ? 'Update' : 'Create'} Post</Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
-  );
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>{post ? 'Edit Post' : 'Create a new post'}</CardTitle>
+                <CardDescription>Fill out the form below to {post ? 'update the' : 'add a new'} blog post.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form action={handleSubmit} className="space-y-8">
+                    {isEditing && <input type="hidden" name="slug" value={post.slug} />}
+                    
+                    <div className="space-y-2">
+                        <Label htmlFor="title">Title</Label>
+                        <Input id="title" name="title" placeholder="Blog Post Title" defaultValue={post?.title} required />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="description">Description</Label>
+                        <Textarea id="description" name="description" placeholder="A brief description of the post" defaultValue={post?.description} required />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="coverImage">Cover Image URL</Label>
+                        <Input id="coverImage" name="coverImage" placeholder="https://example.com/image.png" defaultValue={post?.coverImage} required />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="tags">Tags (comma-separated)</Label>
+                        <Input id="tags" name="tags" placeholder="EdTech, Design, Innovation" defaultValue={post?.tags.join(', ')} required />
+                    </div>
+                    
+                    <div className="space-y-2">
+                        <Label htmlFor="content">Content (HTML supported)</Label>
+                        <Textarea id="content" name="content" placeholder="Write your post content here..." className="min-h-[300px]" defaultValue={post?.content} required />
+                    </div>
+
+                    <SubmitButton isEditing={isEditing} />
+                </form>
+            </CardContent>
+        </Card>
+    );
 }
