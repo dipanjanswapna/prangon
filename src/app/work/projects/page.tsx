@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { projects } from '@/lib/projects';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 
 const allCategories = ['All', ...Array.from(new Set(projects.map(p => p.category)))];
 const allTags = ['All', ...Array.from(new Set(projects.flatMap(p => p.tags)))];
@@ -38,25 +40,22 @@ export default function ProfessionalProjectsPage() {
     exit: { y: -20, opacity: 0, scale: 0.95 }
   };
 
-  const FilterControls = ({ title, options, selected, setSelected }: { title: string, options: string[], selected: string, setSelected: (value: string) => void }) => (
-    <div className="mb-4">
-      <h3 className="text-sm font-semibold mb-3 text-muted-foreground uppercase tracking-wider">{title}</h3>
-      <div className="flex flex-wrap gap-2">
-        {options.map(option => (
-          <motion.div key={option} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button
-              size="sm"
-              variant={selected === option ? 'default' : 'outline'}
-              onClick={() => setSelected(option)}
-              className="rounded-full transition-all duration-200"
-            >
-              {option}
-            </Button>
-          </motion.div>
-        ))}
-      </div>
+  const FilterDropdown = ({ label, options, selected, onSelect }: { label: string, options: string[], selected: string, onSelect: (value: string) => void }) => (
+    <div className="grid w-full items-center gap-1.5">
+        <Label htmlFor={label.toLowerCase()} className="text-sm font-semibold text-muted-foreground">{label}</Label>
+        <Select value={selected} onValueChange={onSelect}>
+            <SelectTrigger id={label.toLowerCase()} className="w-full bg-background/50">
+                <SelectValue placeholder={`Select ${label}`} />
+            </SelectTrigger>
+            <SelectContent>
+                {options.map(option => (
+                    <SelectItem key={option} value={option}>{option}</SelectItem>
+                ))}
+            </SelectContent>
+        </Select>
     </div>
   );
+
 
   return (
     <div className="relative bg-background min-h-screen">
@@ -91,9 +90,9 @@ export default function ProfessionalProjectsPage() {
             transition={{ delay: 0.2, duration: 0.5 }}
             className="bg-muted/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl mb-12 border border-border"
         >
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-6">
-                <FilterControls title="Filter by Category" options={allCategories} selected={selectedCategory} setSelected={setSelectedCategory} />
-                <FilterControls title="Filter by Technology / Tool" options={allTags} selected={selectedTag} setSelected={setSelectedTag} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FilterDropdown label="Filter by Category" options={allCategories} selected={selectedCategory} onSelect={setSelectedCategory} />
+                <FilterDropdown label="Filter by Tool/Tag" options={allTags} selected={selectedTag} onSelect={setSelectedTag} />
             </div>
         </motion.div>
 
