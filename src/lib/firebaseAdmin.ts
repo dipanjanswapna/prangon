@@ -1,4 +1,6 @@
 
+'use server';
+
 import 'dotenv/config';
 import admin from 'firebase-admin';
 
@@ -21,7 +23,7 @@ const initializeFirebaseAdmin = () => {
             });
             appInitialized = true;
         } catch (error) {
-            console.error('Firebase Admin Initialization Error', error);
+            console.error('Firebase Admin Initialization Error:', error);
             // We don't set appInitialized to true if there's an error
         }
     } else {
