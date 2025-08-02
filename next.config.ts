@@ -76,6 +76,12 @@ const nextConfig: NextConfig = {
         hostname: 'c4.wallpaperflare.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.shutterstock.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },

@@ -110,12 +110,12 @@ export default function VisualArtsPage() {
   return (
     <div className="relative min-h-screen bg-gray-900 text-white overflow-hidden">
         <Image
-            src="https://c4.wallpaperflare.com/wallpaper/529/888/855/squid-game-tv-hd-wallpaper-preview.jpg"
+            src="https://www.shutterstock.com/image-vector/colorful-illustration-glowing-astronaut-made-600nw-2238305553.jpg"
             alt="Visual Arts background"
             layout="fill"
             objectFit="cover"
             className="fixed inset-0 z-0 opacity-20"
-            data-ai-hint="squid game background"
+            data-ai-hint="glowing astronaut"
         />
       
       <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">
