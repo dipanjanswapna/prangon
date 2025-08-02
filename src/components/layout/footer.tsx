@@ -1,17 +1,19 @@
 
 'use client';
 
-import { Github, Twitter, Linkedin, Copy, ExternalLink, Facebook, HandHeart } from 'lucide-react';
+import { Github, Twitter, Linkedin, Copy, ExternalLink, Facebook, HandHeart, LogIn, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useAuth } from '@/hooks/use-auth';
 
 export function Footer() {
   const { toast } = useToast();
   const [showSalute, setShowSalute] = useState(false);
+  const { user } = useAuth();
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText('your-email@example.com');
@@ -82,6 +84,21 @@ export function Footer() {
                     &copy; {new Date().getFullYear()} All rights reserved by PRANGON CENTRE
                 </p>
                 <div className="flex items-center space-x-4 md:space-x-6">
+                    {user ? (
+                      <Link href="/logout">
+                        <Button variant="ghost" size="sm">
+                          <LogOut className="mr-2 h-4 w-4" />
+                          Logout
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Link href="/login">
+                         <Button variant="ghost" size="sm">
+                           <LogIn className="mr-2 h-4 w-4" />
+                          Admin Login
+                        </Button>
+                      </Link>
+                    )}
                     {socialLinks.map((link, index) => (
                         <motion.div
                             key={link.name}
