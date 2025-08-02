@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Star, Target, BrainCircuit, Users, Lightbulb, GraduationCap, Briefcase, Award, MessageSquare, Handshake, DollarSign, Clock } from 'lucide-react';
+import { Star, Target, BrainCircuit, Users, Lightbulb, GraduationCap, Briefcase, Award, MessageSquare, Handshake, DollarSign, Clock, UserCircle } from 'lucide-react';
 import Image from 'next/image';
 
 
@@ -194,6 +194,26 @@ export default function AboutPage() {
                 </motion.div>
               </TabsContent>
             </Tabs>
+
+             <motion.div
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                className="mt-12"
+              >
+                <Card className="bg-muted/30 mt-6 border-border shadow-lg backdrop-blur-sm">
+                  <CardHeader className="flex flex-row items-center gap-4">
+                     <UserCircle className="h-8 w-8 text-primary" />
+                    <CardTitle className="text-2xl md:text-3xl font-headline text-primary-foreground">Biography</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">
+                      Everyone knows Dipanjan Swapna Prangon as Prangon. Prangon (born 10 July 2007) is a Bangladeshi student, artist. He attended Government Science College in Class 12. Prangon was born on 10 july to the Bengali Hindu "das" family of Bhandaria in Bangladesh. His father is Dipankar Das and his mother is Sabita Biswas. Prangon grew up in Bhandaria during her early childhood under the care of her mother and relatives. He has no brother and sister.
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
           </div>
       </div>
     </div>
