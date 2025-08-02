@@ -184,12 +184,12 @@ export default function AchievementsPage() {
                                            Verify
                                        </Button>
                                    </Link>
-                                    <Link href={selectedAchievement.link} download target="_blank" rel="noopener noreferrer" className="w-full">
+                                    <a href={selectedAchievement.link} download target="_blank" rel="noopener noreferrer" className="w-full">
                                        <Button className="w-full">
                                            <Download className="mr-2 h-4 w-4" />
-                                           Download
+                                           Download Certificate
                                        </Button>
-                                   </Link>
+                                   </a>
                                 </div>
                             )}
                         </div>
