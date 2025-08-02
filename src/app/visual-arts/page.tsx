@@ -109,20 +109,14 @@ export default function VisualArtsPage() {
 
   return (
     <div className="relative min-h-screen bg-gray-900 text-white overflow-hidden">
-      <div className="absolute inset-0 z-0 opacity-50">
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 animate-[gradient-animation_15s_ease_infinite]" />
-      </div>
-
-      <style jsx global>{`
-        @keyframes gradient-animation {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        body {
-            background-size: 200% 200%;
-        }
-      `}</style>
+        <Image
+            src="https://c4.wallpaperflare.com/wallpaper/529/888/855/squid-game-tv-hd-wallpaper-preview.jpg"
+            alt="Visual Arts background"
+            layout="fill"
+            objectFit="cover"
+            className="fixed inset-0 z-0 opacity-20"
+            data-ai-hint="squid game background"
+        />
       
       <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">
         <motion.header

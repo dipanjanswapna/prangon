@@ -70,6 +70,12 @@ const nextConfig: NextConfig = {
         hostname: 'cbx-prod.b-cdn.net',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'c4.wallpaperflare.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
