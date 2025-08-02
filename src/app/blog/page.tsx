@@ -1,6 +1,4 @@
 
-'use client';
-
 import { motion } from 'framer-motion';
 import { Rss, Calendar, User, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
@@ -10,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Badge } from '@/components/ui/badge';
 import { Post } from '@/lib/blog';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { useEffect, useState } from 'react';
 import { getPosts } from '../admin/blog/actions';
 
 
@@ -32,16 +29,8 @@ const itemVariants = {
 };
 
 
-export default function BlogPage() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  
-  useEffect(() => {
-    async function fetchPosts() {
-      const fetchedPosts = await getPosts();
-      setPosts(fetchedPosts);
-    }
-    fetchPosts();
-  }, []);
+export default async function BlogPage() {
+  const posts = await getPosts();
 
   return (
     <div className="bg-background min-h-screen py-16 md:py-24">

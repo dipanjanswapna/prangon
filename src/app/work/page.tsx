@@ -97,7 +97,7 @@ export default async function WorkPage() {
             />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {professionalProjects.map((project, index) => (
-                <motion.div key={project.id} variants={itemVariants}>
+                <motion.div key={project.slug} variants={itemVariants}>
                   <Card className="bg-muted/30 group overflow-hidden h-full flex flex-col backdrop-blur-sm shadow-lg">
                     <CardHeader className="p-0">
                       <div className="relative overflow-hidden rounded-t-lg">

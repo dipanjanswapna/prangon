@@ -1,6 +1,4 @@
 
-'use client';
-
 import { getPostBySlug } from '@/app/admin/blog/actions';
 import { Post } from '@/lib/blog';
 import { notFound } from 'next/navigation';
@@ -11,8 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { useState, useEffect } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
+import { SocialShareButtons } from '@/components/social-share-buttons';
+
 
 type BlogPostPageProps = {
   params: {
@@ -20,117 +18,12 @@ type BlogPostPageProps = {
   };
 };
 
-const SocialShare = ({ postUrl, postTitle }: { postUrl: string, postTitle: string}) => {
-    if (!postUrl) return null;
 
-    const encodedUrl = encodeURIComponent(postUrl);
-    const encodedTitle = encodeURIComponent(postTitle);
-
-    return (
-        <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold">Share:</span>
-            <Button variant="outline" size="icon" asChild>
-                <Link href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`} target="_blank">
-                    <Twitter className="h-4 w-4" />
-                </Link>
-            </Button>
-            <Button variant="outline" size="icon" asChild>
-                 <Link href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`} target="_blank">
-                    <Linkedin className="h-4 w-4" />
-                </Link>
-            </Button>
-            <Button variant="outline" size="icon" asChild>
-                <Link href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`} target="_blank">
-                    <Facebook className="h-4 w-4" />
-                </Link>
-            </Button>
-        </div>
-    )
-}
-
-const LoadingSkeleton = () => (
-  <div className="max-w-4xl mx-auto">
-    <div className="mb-8">
-      <Skeleton className="h-6 w-32" />
-    </div>
-    <main>
-      <article>
-        <header className="mb-8">
-          <div className="flex flex-wrap gap-2 mb-4">
-            <Skeleton className="h-6 w-20 rounded-full" />
-            <Skeleton className="h-6 w-24 rounded-full" />
-          </div>
-          <Skeleton className="h-12 w-full mb-4" />
-          <Skeleton className="h-8 w-3/4" />
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-4">
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-8 w-8 rounded-full" />
-              <Skeleton className="h-4 w-24" />
-            </div>
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-4 w-4" />
-              <Skeleton className="h-4 w-32" />
-            </div>
-          </div>
-        </header>
-        <Card className="bg-muted/20 backdrop-blur-sm">
-          <CardContent className="p-0">
-            <Skeleton className="w-full h-[400px] rounded-t-lg" />
-            <div className="p-6 md:p-8 space-y-4">
-              <Skeleton className="h-6 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-3/4" />
-            </div>
-          </CardContent>
-        </Card>
-      </article>
-    </main>
-  </div>
-);
-
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-  const [post, setPost] = useState<Post | null>(null);
-  const [postUrl, setPostUrl] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchPost() {
-      try {
-        const fetchedPost = await getPostBySlug(params.slug);
-        if (fetchedPost) {
-          setPost(fetchedPost);
-        } else {
-          notFound();
-        }
-      } catch (error) {
-        console.error("Failed to fetch post", error);
-        // Handle error state if necessary
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchPost();
-
-    if (typeof window !== 'undefined') {
-      setPostUrl(window.location.href);
-    }
-  }, [params.slug]);
-
-
-  if (loading) {
-    return (
-      <div className="relative min-h-screen py-8 md:py-12 bg-background">
-        <div className="relative z-10 container mx-auto px-4">
-          <LoadingSkeleton />
-        </div>
-      </div>
-    );
-  }
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const post = await getPostBySlug(params.slug);
 
   if (!post) {
-    // This will be handled by notFound() in useEffect, but as a fallback
-    return notFound();
+    notFound();
   }
 
   return (
@@ -196,7 +89,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                             <span className="text-sm font-semibold">Tags:</span>
                              {post.tags.map(tag => <Badge key={tag} variant="outline">{tag}</Badge>)}
                         </div>
-                       <SocialShare postUrl={postUrl} postTitle={post.title} />
+                       <SocialShareButtons postTitle={post.title} />
                     </Card>
                 </footer>
                 </article>
