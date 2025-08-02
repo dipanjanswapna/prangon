@@ -1,12 +1,14 @@
 
-'use client';
 
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
 import { ProjectsTable } from '@/components/admin/projects-table';
 import Link from 'next/link';
+import { getProjects } from './actions';
 
-export default function AdminProjectsPage() {
+export default async function AdminProjectsPage() {
+    const projects = await getProjects();
+    
     return (
         <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
             <div className="flex items-center justify-between space-y-2">
@@ -20,7 +22,7 @@ export default function AdminProjectsPage() {
                     </Button>
                 </div>
             </div>
-            <ProjectsTable />
+            <ProjectsTable projects={projects} />
         </div>
     );
 }

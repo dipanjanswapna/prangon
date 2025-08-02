@@ -1,12 +1,11 @@
 
-'use client';
 
 import { ProjectForm } from '@/components/admin/project-form';
-import { getProjectBySlug } from '@/lib/projects';
+import { getProjectBySlug } from '@/app/admin/projects/actions';
 import { notFound } from 'next/navigation';
 
-export default function EditProjectPage({ params }: { params: { slug: string } }) {
-    const project = getProjectBySlug(params.slug);
+export default async function EditProjectPage({ params }: { params: { slug: string } }) {
+    const project = await getProjectBySlug(params.slug);
 
     if (!project) {
         notFound();

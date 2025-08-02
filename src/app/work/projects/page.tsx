@@ -10,12 +10,10 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { projects } from '@/lib/projects';
+import { Project } from '@/lib/projects';
+import { getProjects } from '@/app/admin/projects/actions';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-
-const allCategories = ['All', ...Array.from(new Set(projects.map(p => p.category)))];
-const allTags = ['All', ...Array.from(new Set(projects.flatMap(p => p.tags)))];
 
 const techSkills = [
   {
@@ -90,12 +88,23 @@ const techSkills = [
 ];
 
 export default function ProfessionalProjectsPage() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [allCategories, setAllCategories] = useState<string[]>(['All']);
+  const [allTags, setAllTags] = useState<string[]>(['All']);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedTag, setSelectedTag] = useState('All');
   const [likes, setLikes] = useState<{ [key: number]: number }>({});
   const [loved, setLoved] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
+    async function fetchProjects() {
+      const fetchedProjects = await getProjects();
+      setProjects(fetchedProjects);
+      setAllCategories(['All', ...Array.from(new Set(fetchedProjects.map(p => p.category)))]);
+      setAllTags(['All', ...Array.from(new Set(fetchedProjects.flatMap(p => p.tags)))]);
+    }
+    fetchProjects();
+
     try {
       const savedLikes = localStorage.getItem('projectLikes');
       if (savedLikes) {
@@ -313,4 +322,3 @@ export default function ProfessionalProjectsPage() {
     </div>
   );
 }
-

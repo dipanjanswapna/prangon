@@ -1,6 +1,8 @@
 
+
 'use client';
 
+import React from 'react';
 import {
   Table,
   TableBody,
@@ -11,11 +13,77 @@ import {
 } from "@/components/ui/table"
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { projects } from '@/lib/projects';
+import { Project } from '@/lib/projects';
 import { Edit, Trash2 } from 'lucide-react';
 import Link from "next/link";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useToast } from '@/hooks/use-toast';
+import { deleteProject } from '@/app/admin/projects/actions';
 
-export function ProjectsTable() {
+function DeleteProjectButton({ slug }: { slug: string }) {
+    const { toast } = useToast();
+
+    const handleDelete = async () => {
+        try {
+            await deleteProject(slug);
+            toast({
+                title: "Project Deleted",
+                description: "The project has been successfully deleted.",
+            });
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Failed to delete the project. Please try again.",
+            });
+        }
+    };
+
+    return (
+        <AlertDialog>
+            <AlertDialogTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
+                    <Trash2 className="h-4 w-4" />
+                </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete this project
+                        from the database.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90">
+                        Delete
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+    );
+}
+
+export function ProjectsTable({ projects }: { projects: Project[] }) {
+  if (projects.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-40 border rounded-md">
+        <p className="text-muted-foreground">No projects found.</p>
+      </div>
+    );
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -44,9 +112,7 @@ export function ProjectsTable() {
                         <Edit className="h-4 w-4" />
                     </Link>
                 </Button>
-              <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
-                <Trash2 className="h-4 w-4" />
-              </Button>
+              <DeleteProjectButton slug={project.slug} />
             </TableCell>
           </TableRow>
         ))}
