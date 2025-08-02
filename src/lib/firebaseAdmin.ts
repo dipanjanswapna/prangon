@@ -1,37 +1,49 @@
+
 import 'dotenv/config';
 import admin from 'firebase-admin';
 
-if (!admin.apps.length) {
-  try {
-    const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT;
-    if (!serviceAccountJson) {
-      throw new Error(
-        'The FIREBASE_SERVICE_ACCOUNT environment variable is not set.'
-      );
+let appInitialized = false;
+
+const initializeFirebaseAdmin = () => {
+    if (appInitialized) return;
+
+    if (admin.apps.length === 0) {
+        try {
+            const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT;
+            if (!serviceAccountJson) {
+                throw new Error(
+                    'The FIREBASE_SERVICE_ACCOUNT environment variable is not set.'
+                );
+            }
+            const serviceAccount = JSON.parse(serviceAccountJson);
+            admin.initializeApp({
+                credential: admin.credential.cert(serviceAccount),
+            });
+            appInitialized = true;
+        } catch (error) {
+            console.error('Firebase Admin Initialization Error', error);
+            // We don't set appInitialized to true if there's an error
+        }
+    } else {
+        appInitialized = true;
     }
-    const serviceAccount = JSON.parse(serviceAccountJson);
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-    });
-  } catch (error) {
-    console.error('Firebase Admin Initialization Error', error);
-  }
-}
+};
 
 const getFirestore = () => {
+    initializeFirebaseAdmin();
     if (!admin.apps.length) {
-        throw new Error("Firebase Admin SDK has not been initialized.");
+        throw new Error("Firebase Admin SDK could not be initialized.");
     }
     return admin.firestore();
 };
 
 const getAuth = () => {
+    initializeFirebaseAdmin();
     if (!admin.apps.length) {
-        throw new Error("Firebase Admin SDK has not been initialized.");
+        throw new Error("Firebase Admin SDK could not be initialized.");
     }
     return admin.auth();
 };
-
 
 export const firestore = getFirestore();
 export const auth = getAuth();
