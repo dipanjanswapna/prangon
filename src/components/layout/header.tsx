@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 const navItems = [
+  { href: '/work', label: 'Work' },
   { href: '/about', label: 'About' },
   { href: '/social-work', label: 'Social Work' },
   { href: '/blog', label: 'Blog' },
