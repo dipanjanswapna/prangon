@@ -12,6 +12,7 @@ import { Footer } from '@/components/layout/footer';
 import { HireMeBanner } from '@/components/layout/hire-me-banner';
 import { useRef, useState, useEffect } from 'react';
 import { AuthProvider } from '@/context/auth-context';
+import { usePathname } from 'next/navigation';
 
 
 export default function RootLayout({
@@ -22,6 +23,8 @@ export default function RootLayout({
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const pathname = usePathname();
+  const isAdminPage = pathname.startsWith('/admin');
 
   useEffect(() => {
     // This effect should only run on the client
@@ -94,42 +97,52 @@ export default function RootLayout({
       <body
         className={cn(
           'font-body antialiased',
-          'min-h-screen bg-background flex flex-col'
+          isAdminPage ? 'bg-background' : 'min-h-screen bg-background flex flex-col'
         )}
       >
         <AuthProvider>
-          <audio ref={audioRef} src="/mixkit-relax-beat-292.mp3" loop preload="auto" />
+          {!isAdminPage && (
+             <audio ref={audioRef} src="/mixkit-relax-beat-292.mp3" loop preload="auto" />
+          )}
           
-          <Header />
-          <main className="flex-grow relative">{children}</main>
-
-          <aside className="fixed left-4 bottom-4 z-50 hidden md:flex flex-col items-center space-y-4">
-            <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-              <Dribbble className="h-5 w-5" />
-            </Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-              <Instagram className="h-5 w-5" />
-            </Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-              <PlayCircle className="h-5 w-5" />
-            </Link>
-            <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-              <Linkedin className="h-5 w-5" />
-            </Link>
-          </aside>
-
-          <aside className="fixed right-4 bottom-4 z-50 flex items-center space-x-2">
-              <button onClick={toggleSound} className="text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
-                  {isPlaying ? <Volume2 className="h-4 w-4 md:h-5 md:w-5" /> : <VolumeX className="h-4 w-4 md:h-5 md:w-5" />}
-                  <span className="[writing-mode:vertical-rl] text-xs md:text-sm tracking-widest uppercase">
-                      {isPlaying ? 'Sound On' : 'Sound Off'}
-                  </span>
-              </button>
-          </aside>
+          {!isAdminPage && <Header />}
           
-          <Footer />
+          <main className={cn(isAdminPage ? '' : 'flex-grow relative')}>
+            {children}
+          </main>
+
+          {!isAdminPage && (
+            <>
+              <aside className="fixed left-4 bottom-4 z-50 hidden md:flex flex-col items-center space-y-4">
+                <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Dribbble className="h-5 w-5" />
+                </Link>
+                <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Instagram className="h-5 w-5" />
+                </Link>
+                <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                  <PlayCircle className="h-5 w-5" />
+                </Link>
+                <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Linkedin className="h-5 w-5" />
+                </Link>
+              </aside>
+
+              <aside className="fixed right-4 bottom-4 z-50 flex items-center space-x-2">
+                  <button onClick={toggleSound} className="text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
+                      {isPlaying ? <Volume2 className="h-4 w-4 md:h-5 md:w-5" /> : <VolumeX className="h-4 w-4 md:h-5 md:w-5" />}
+                      <span className="[writing-mode:vertical-rl] text-xs md:text-sm tracking-widest uppercase">
+                          {isPlaying ? 'Sound On' : 'Sound Off'}
+                      </span>
+                  </button>
+              </aside>
+              
+              <Footer />
+              <HireMeBanner />
+            </>
+          )}
+
           <Toaster />
-          <HireMeBanner />
         </AuthProvider>
       </body>
     </html>

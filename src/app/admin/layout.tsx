@@ -33,6 +33,7 @@ export default function AdminLayout({
 
   return (
     <SidebarProvider>
+      <div className="flex min-h-screen">
         <Sidebar>
             <SidebarHeader>
                 <div className="flex items-center gap-2 p-2">
@@ -81,13 +82,16 @@ export default function AdminLayout({
                  </SidebarMenu>
             </SidebarFooter>
         </Sidebar>
-        <main className="flex-1">
+        <main className="flex-1 flex flex-col">
             <header className="flex items-center justify-between p-4 border-b">
                 <SidebarTrigger />
                 <h1 className="text-xl font-semibold">Admin Panel</h1>
             </header>
-            {children}
+            <div className="flex-1">
+              {children}
+            </div>
         </main>
+      </div>
     </SidebarProvider>
   );
 }
