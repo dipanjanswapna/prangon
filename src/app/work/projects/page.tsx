@@ -2,9 +2,9 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Briefcase, ArrowRight, Code, BarChart3, Palette } from 'lucide-react';
+import { Briefcase, ArrowRight, Code, BarChart3, Palette, Heart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -92,6 +92,39 @@ const techSkills = [
 export default function ProfessionalProjectsPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedTag, setSelectedTag] = useState('All');
+  const [likes, setLikes] = useState<{ [key: number]: number }>({});
+  const [loved, setLoved] = useState<{ [key: number]: boolean }>({});
+
+  useEffect(() => {
+    try {
+      const savedLikes = localStorage.getItem('projectLikes');
+      if (savedLikes) {
+        setLikes(JSON.parse(savedLikes));
+      }
+      const savedLoves = localStorage.getItem('projectLoves');
+      if (savedLoves) {
+        setLoved(JSON.parse(savedLoves));
+      }
+    } catch (error) {
+      console.error("Failed to parse from localStorage", error);
+    }
+  }, []);
+
+  const handleLoveClick = (projectId: number) => {
+    const newLovedState = !loved[projectId];
+    const newLikesCount = newLovedState
+      ? (likes[projectId] || 0) + 1
+      : (likes[projectId] || 1) - 1;
+
+    const newLikes = { ...likes, [projectId]: newLikesCount };
+    const newLoves = { ...loved, [projectId]: newLovedState };
+    
+    setLikes(newLikes);
+    setLoved(newLoves);
+    
+    localStorage.setItem('projectLikes', JSON.stringify(newLikes));
+    localStorage.setItem('projectLoves', JSON.stringify(newLoves));
+  };
 
   const filteredProjects = projects.filter(project => {
     const categoryMatch = selectedCategory === 'All' || project.category === selectedCategory;
@@ -206,12 +239,18 @@ export default function ProfessionalProjectsPage() {
                         {project.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
                       </div>
                   </CardContent>
-                  <div className="p-6 pt-0 mt-auto">
+                  <div className="p-6 pt-0 mt-auto flex justify-between items-center">
                     <Link href={`/projects/${project.slug}`}>
                       <Button variant="outline" className="w-full">
                         View Case Study <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
+                    <div className="flex items-center gap-2">
+                      <Button variant="ghost" size="icon" onClick={() => handleLoveClick(project.id)}>
+                        <Heart className={`h-5 w-5 ${loved[project.id] ? 'text-red-500 fill-current' : 'text-muted-foreground'}`} />
+                      </Button>
+                      <span className="text-sm text-muted-foreground">{likes[project.id] || 0}</span>
+                    </div>
                   </div>
                 </Card>
               </motion.div>
@@ -274,3 +313,4 @@ export default function ProfessionalProjectsPage() {
     </div>
   );
 }
+
