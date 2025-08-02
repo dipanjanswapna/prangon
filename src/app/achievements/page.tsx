@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Award, GraduationCap, Users, ExternalLink, Certificate } from 'lucide-react';
+import { Trophy, Award, GraduationCap, Users, ExternalLink, Verified } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -16,7 +16,7 @@ const categoryFilters = ['All', ...Array.from(new Set(achievements.map(e => e.ca
 
 const categoryStyles = {
     Award: { icon: Trophy, color: 'text-yellow-500' },
-    Certification: { icon: Certificate, color: 'text-green-500' },
+    Certification: { icon: Verified, color: 'text-green-500' },
     Academic: { icon: GraduationCap, color: 'text-blue-500' },
     Leadership: { icon: Users, color: 'text-purple-500' },
 };
