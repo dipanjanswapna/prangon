@@ -40,17 +40,19 @@ export default function ProfessionalProjectsPage() {
 
   const FilterControls = ({ title, options, selected, setSelected }: { title: string, options: string[], selected: string, setSelected: (value: string) => void }) => (
     <div className="mb-4">
-      <h3 className="text-lg font-semibold mb-2 text-primary-foreground">{title}</h3>
+      <h3 className="text-sm font-semibold mb-3 text-muted-foreground uppercase tracking-wider">{title}</h3>
       <div className="flex flex-wrap gap-2">
         {options.map(option => (
-          <Button
-            key={option}
-            variant={selected === option ? 'default' : 'secondary'}
-            onClick={() => setSelected(option)}
-            className="rounded-full"
-          >
-            {option}
-          </Button>
+          <motion.div key={option} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button
+              size="sm"
+              variant={selected === option ? 'default' : 'outline'}
+              onClick={() => setSelected(option)}
+              className="rounded-full transition-all duration-200"
+            >
+              {option}
+            </Button>
+          </motion.div>
         ))}
       </div>
     </div>
@@ -83,12 +85,18 @@ export default function ProfessionalProjectsPage() {
           </p>
         </motion.header>
 
-        <Card className="bg-muted/30 backdrop-blur-sm p-6 rounded-2xl mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FilterControls title="Filter by Category" options={allCategories} selected={selectedCategory} setSelected={setSelectedCategory} />
-            <FilterControls title="Filter by Technology/Tool" options={allTags} selected={selectedTag} setSelected={setSelectedTag} />
-          </div>
-        </Card>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="bg-muted/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl mb-12 border border-border"
+        >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-6">
+                <FilterControls title="Filter by Category" options={allCategories} selected={selectedCategory} setSelected={setSelectedCategory} />
+                <FilterControls title="Filter by Technology / Tool" options={allTags} selected={selectedTag} setSelected={setSelectedTag} />
+            </div>
+        </motion.div>
+
 
         <motion.div
           variants={containerVariants}
