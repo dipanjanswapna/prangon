@@ -69,7 +69,7 @@ export function PrangonsLikhaForm({ postToEdit }: { postToEdit?: PrangonsLikhaPo
             {postToEdit ? (
                 <Button variant="outline" size="icon"><Edit className="h-4 w-4"/></Button>
             ) : (
-                <Card>
+                <Card className="cursor-pointer hover:bg-muted" onClick={() => setIsOpen(true)}>
                     <CardHeader>
                         <CardTitle>Add New Post</CardTitle>
                         <CardDescription>Create a new literary piece for your collection.</CardDescription>

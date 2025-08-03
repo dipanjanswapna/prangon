@@ -45,6 +45,7 @@ export default async function AdminPrangonsLikhaPage() {
                                     width={150}
                                     height={100}
                                     className="rounded-md object-cover w-full md:w-[150px] h-auto"
+                                    data-ai-hint={post.imageAiHint}
                                 />
                                 <div className="flex-grow">
                                     <h3 className="font-bold text-lg">{post.title}</h3>
