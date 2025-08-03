@@ -1,0 +1,21 @@
+
+{
+  "card": {
+    "enabled": true
+  },
+  "paypal": {
+    "enabled": true
+  },
+  "mobile": {
+    "enabled": true
+  },
+  "bkash": {
+    "enabled": true
+  },
+  "nagad": {
+    "enabled": true
+  },
+  "upi": {
+    "enabled": false
+  }
+}

@@ -14,10 +14,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { getSubscriptionPlans } from '@/app/admin/subscriptions/actions';
-import { SubscriptionPlan } from '@/lib/types';
+import { getPaymentSettings } from '@/app/admin/settings/actions';
+import { SubscriptionPlan, PaymentSettings } from '@/lib/types';
 import { useState, useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const paymentSchema = z.object({
   nameOnCard: z.string().min(3, 'Name must be at least 3 characters.'),
@@ -26,10 +28,15 @@ const paymentSchema = z.object({
   cvc: z.string().refine((value) => /^\d{3,4}$/.test(value), 'Please enter a valid CVC.'),
 });
 
+const PaypalIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" {...props}><path fill="#003087" d="M10.232 21.002c-1.12.01-2.22-.19-3.28-.59a.526.526 0 0 1-.36-.61L7.542 9.77c.07-.28.32-.48.6-.48h3.33c4.68 0 6.13 2.05 5.34 6.2c-.65 3.42-3.02 5.49-7.58 5.51z"/><path fill="#009cde" d="M12.442 2.772c-1.39.02-2.73.3-3.99.87a.526.526 0 0 0-.37.6L9.612 11h3.11c4.2 0 6.02-1.68 6.57-5.52c.46-3.2-1.39-4.71-5.85-4.71z"/><path fill="#012169" d="M8.412 12.182c-1.28.01-2.54-.19-3.75-.6c-.3-.1-.58-.02-.78.2L2.742 13.5c-.2.23-.2.56-.01.82c1.32 1.83 3.38 2.94 5.62 3.23c.3.04.57-.16.63-.45l.95-4.4c.06-.27-.12-.52-.39-.52z"/></svg>
+)
+
 function CheckoutForm() {
     const searchParams = useSearchParams();
     const { toast } = useToast();
     const [plan, setPlan] = useState<SubscriptionPlan | null>(null);
+    const [paymentSettings, setPaymentSettings] = useState<PaymentSettings | null>(null);
     const [loading, setLoading] = useState(true);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
 
@@ -37,15 +44,28 @@ function CheckoutForm() {
     const billingCycle = searchParams.get('billing') as 'monthly' | 'yearly' | null;
 
     useEffect(() => {
-        if(planId) {
-            getSubscriptionPlans().then(plans => {
-                const foundPlan = plans.find(p => p.id === planId);
-                setPlan(foundPlan || null);
-            }).finally(() => setLoading(false));
-        } else {
-            setLoading(false);
+        async function loadData() {
+            try {
+                const [plans, settings] = await Promise.all([
+                    getSubscriptionPlans(),
+                    getPaymentSettings()
+                ]);
+                
+                if(planId) {
+                    const foundPlan = plans.find(p => p.id === planId);
+                    setPlan(foundPlan || null);
+                }
+                setPaymentSettings(settings);
+
+            } catch (error) {
+                console.error("Failed to load checkout data", error);
+                toast({ variant: 'destructive', title: 'Error', description: 'Could not load checkout information.' });
+            } finally {
+                setLoading(false);
+            }
         }
-    }, [planId]);
+        loadData();
+    }, [planId, toast]);
 
     const form = useForm<z.infer<typeof paymentSchema>>({
         resolver: zodResolver(paymentSchema),
@@ -119,73 +139,111 @@ function CheckoutForm() {
          )
     }
 
+    const availableGateways = paymentSettings 
+        ? Object.entries(paymentSettings).filter(([_, value]) => value.enabled).map(([key]) => key)
+        : [];
+    
+    const defaultTab = availableGateways.includes('card') ? 'card' : availableGateways[0];
+
     return (
         <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="lg:col-span-1">
-                <Card>
+                 <Card>
                     <CardHeader>
                         <CardTitle>Payment Details</CardTitle>
-                        <CardDescription>Enter your payment information below. All transactions are secure.</CardDescription>
+                        <CardDescription>Select a payment method. All transactions are secure.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                                <FormField name="nameOnCard" control={form.control} render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Name on Card</FormLabel>
-                                        <FormControl>
-                                            <div className="relative">
-                                                 <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                                <Input placeholder="John Doe" {...field} className="pl-9" />
+                        <Tabs defaultValue={defaultTab} className="w-full">
+                            <TabsList className="grid w-full grid-cols-3">
+                                {availableGateways.includes('card') && <TabsTrigger value="card">Card</TabsTrigger>}
+                                {availableGateways.includes('paypal') && <TabsTrigger value="paypal">PayPal</TabsTrigger>}
+                                {availableGateways.includes('mobile') && <TabsTrigger value="mobile">Mobile</TabsTrigger>}
+                            </TabsList>
+                            {availableGateways.includes('card') && 
+                                <TabsContent value="card">
+                                    <Form {...form}>
+                                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-4">
+                                            <FormField name="nameOnCard" control={form.control} render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Name on Card</FormLabel>
+                                                    <FormControl>
+                                                        <div className="relative">
+                                                            <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                                            <Input placeholder="John Doe" {...field} className="pl-9" />
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}/>
+                                            <FormField name="cardNumber" control={form.control} render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Card Number</FormLabel>
+                                                    <FormControl>
+                                                        <div className="relative">
+                                                            <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                                            <Input placeholder="0000 0000 0000 0000" {...field} className="pl-9" />
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}/>
+                                            <div className="flex gap-4">
+                                                <FormField name="expiryDate" control={form.control} render={({ field }) => (
+                                                    <FormItem className="flex-1">
+                                                        <FormLabel>Expiry Date</FormLabel>
+                                                        <FormControl>
+                                                            <div className="relative">
+                                                                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                                                <Input placeholder="MM/YY" {...field} className="pl-9" />
+                                                            </div>
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}/>
+                                                <FormField name="cvc" control={form.control} render={({ field }) => (
+                                                    <FormItem className="flex-1">
+                                                        <FormLabel>CVC</FormLabel>
+                                                        <FormControl>
+                                                            <div className="relative">
+                                                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                                                <Input placeholder="123" {...field} className="pl-9" />
+                                                            </div>
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}/>
                                             </div>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}/>
-                                <FormField name="cardNumber" control={form.control} render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Card Number</FormLabel>
-                                        <FormControl>
-                                            <div className="relative">
-                                                <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                                <Input placeholder="0000 0000 0000 0000" {...field} className="pl-9" />
-                                            </div>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}/>
-                                <div className="flex gap-4">
-                                    <FormField name="expiryDate" control={form.control} render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                            <FormLabel>Expiry Date</FormLabel>
-                                            <FormControl>
-                                                <div className="relative">
-                                                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                                    <Input placeholder="MM/YY" {...field} className="pl-9" />
-                                                </div>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}/>
-                                    <FormField name="cvc" control={form.control} render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                            <FormLabel>CVC</FormLabel>
-                                            <FormControl>
-                                                 <div className="relative">
-                                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                                                    <Input placeholder="123" {...field} className="pl-9" />
-                                                </div>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}/>
-                                </div>
-                                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                                    {form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Lock className="mr-2 h-4 w-4" />}
-                                    Confirm Payment
-                                </Button>
-                            </form>
-                        </Form>
+                                            <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                                                {form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Lock className="mr-2 h-4 w-4" />}
+                                                Confirm Payment
+                                            </Button>
+                                        </form>
+                                    </Form>
+                                </TabsContent>
+                            }
+                            {availableGateways.includes('paypal') &&
+                                <TabsContent value="paypal">
+                                    <div className="pt-4 text-center space-y-4">
+                                        <p className="text-muted-foreground">You will be redirected to PayPal to complete your purchase securely.</p>
+                                        <Button className="w-full bg-[#009cde] hover:bg-[#0079b1] text-white">
+                                           <PaypalIcon className="mr-2"/> Continue with PayPal
+                                        </Button>
+                                    </div>
+                                </TabsContent>
+                            }
+                             {availableGateways.includes('mobile') &&
+                                <TabsContent value="mobile">
+                                    <div className="pt-4 space-y-4">
+                                         <p className="text-muted-foreground text-center">Select your mobile banking provider.</p>
+                                         <div className="grid grid-cols-2 gap-4">
+                                            {paymentSettings?.bkash?.enabled && <Button variant="outline" className="h-16">bKash</Button>}
+                                            {paymentSettings?.nagad?.enabled && <Button variant="outline" className="h-16">Nagad</Button>}
+                                         </div>
+                                    </div>
+                                </TabsContent>
+                             }
+                        </Tabs>
                     </CardContent>
                 </Card>
             </div>
@@ -232,7 +290,7 @@ export default function CheckoutPage() {
             <h1 className="text-4xl font-bold font-headline">Complete Your Subscription</h1>
             <p className="text-muted-foreground mt-2">You're one step away from unlocking premium content.</p>
         </div>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div className="text-center"><Loader2 className="h-8 w-8 animate-spin mx-auto"/></div>}>
             <CheckoutForm />
         </Suspense>
     </div>

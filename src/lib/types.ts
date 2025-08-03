@@ -81,7 +81,7 @@ export const libraryItemSchema = z.object({
     coverImage: z.string().url('Must be a valid URL.'),
     imageAiHint: z.string().optional().default('book cover'),
     content: z.string().optional(),
-    pdfUrl: z.string().url().optional(),
+    pdfUrl: z.string().url().optional().or(z.literal('')),
     documentAiHint: z.string().optional().default('document screenshot'),
     tags: z.array(z.string().min(1, 'Tag cannot be empty.')),
     isFeatured: z.boolean().default(false),
@@ -89,3 +89,19 @@ export const libraryItemSchema = z.object({
 });
 
 export type LibraryItem = z.infer<typeof libraryItemSchema>;
+
+
+const gatewaySetting = z.object({
+  enabled: z.boolean()
+});
+
+export const paymentSettingsSchema = z.object({
+  card: gatewaySetting,
+  paypal: gatewaySetting,
+  mobile: gatewaySetting, // Main toggle for the mobile banking tab
+  bkash: gatewaySetting,
+  nagad: gatewaySetting,
+  upi: gatewaySetting,
+});
+
+export type PaymentSettings = z.infer<typeof paymentSettingsSchema>;
