@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Github, Twitter, Linkedin, Copy, ExternalLink, Facebook, HandHeart, LogIn, LogOut, LayoutDashboard, Shield } from 'lucide-react';
+import { Github, Twitter, Linkedin, Copy, ExternalLink, Facebook, HandHeart, LogIn, LogOut, LayoutDashboard, Shield, Download } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -61,10 +61,10 @@ export function Footer() {
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
             <div className="lg:w-2/3">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 text-primary-foreground">
-                Let's create something amazing together
+                Download My CV
               </h2>
               <p className="text-md md:text-lg text-muted-foreground">
-                Ready to bring your next project to life? Let's connect and discuss how I can help you achieve your goals.
+                Interested in my profile? Get a detailed overview of my skills, experience, and projects by downloading my CV.
               </p>
             </div>
             <div className="flex-shrink-0">
@@ -73,11 +73,13 @@ export function Footer() {
                 whileTap={{ scale: 0.95 }}
               >
                 <Button 
-                  onClick={handleCopyEmail}
+                  asChild
                   className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-6 rounded-lg text-lg shadow-xl"
                 >
-                  <Copy className="mr-2 h-5 w-5" />
-                  Copy Email
+                  <a href="/cv.pdf" download>
+                    <Download className="mr-2 h-5 w-5" />
+                    Download CV
+                  </a>
                 </Button>
               </motion.div>
             </div>
