@@ -99,6 +99,7 @@ export default function LibraryPage() {
     const books = useMemo(() => items.filter(i => i.category === 'Book'), [items]);
     const weeklyMagazines = useMemo(() => items.filter(i => i.category === 'Weekly Magazine'), [items]);
     const monthlyMagazines = useMemo(() => items.filter(i => i.category === 'Monthly Magazine'), [items]);
+    const comicBooks = useMemo(() => items.filter(i => i.category === 'Comic Book'), [items]);
 
   return (
     <div className="bg-background min-h-screen py-16 md:py-24">
@@ -167,6 +168,7 @@ export default function LibraryPage() {
         )}
 
         <Section title="Books" items={books} />
+        <Section title="Comic Books" items={comicBooks} />
         <Section title="Weekly Magazines" items={weeklyMagazines} />
         <Section title="Monthly Magazines" items={monthlyMagazines} />
         

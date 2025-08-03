@@ -1,73 +1,87 @@
 
 [
   {
-    "id": "sonnet-collection-1",
-    "slug": "sonnet-collection",
-    "title": "A Collection of Sonnets",
-    "author": "William Shakespeare",
-    "category": "Book",
-    "coverImage": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385l/40121378.jpg",
-    "imageAiHint": "old book cover",
-    "content": "Sonnet 1: From fairest creatures we desire increase,\nThat thereby beauty's rose might never die,\nBut as the riper should by time decease,\nHis tender heir might bear his memory:\nBut thou, contracted to thine own bright eyes,\nFeed'st thy light's flame with self-substantial fuel,\nMaking a famine where abundance lies,\nThyself thy foe, to thy sweet self too cruel.\nThou that art now the world's fresh ornament\nAnd only herald to the gaudy spring,\nWithin thine own bud buriest thy content\nAnd, tender churl, mak'st waste in niggarding.\nPity the world, or else this glutton be,\nTo eat the world's due, by the grave and thee.\n\n\nSonnet 18: Shall I compare thee to a summer’s day?\nThou art more lovely and more temperate:\nRough winds do shake the darling buds of May,\nAnd summer’s lease hath all too short a date;\nSometime too hot the eye of heaven shines,\nAnd often is his gold complexion dimm'd;\nAnd every fair from fair sometime declines,\nBy chance or nature’s changing course untrimm'd;\nBut thy eternal summer shall not fade,\nNor lose possession of that fair thou ow’st;\nNor shall death brag thou wander’st in his shade,\nWhen in eternal lines to time thou grow’st:\nSo long as men can breathe or eyes can see,\nSo long lives this, and this gives life to thee.\n\n\nSonnet 29: When, in disgrace with fortune and men's eyes,\nI all alone beweep my outcast state,\nAnd trouble deaf heaven with my bootless cries,\nAnd look upon myself and curse my fate,\nWishing me like to one more rich in hope,\nFeatured like him, like him with friends possessed,\nDesiring this man's art and that man's scope,\nWith what I most enjoy contented least;\nYet in these thoughts myself almost despising,\nHaply I think on thee, and then my state,\n(Like to the lark at break of day arising\nFrom sullen earth) sings hymns at heaven's gate;\nFor thy sweet love remembered such wealth brings\nThat then I scorn to change my state with kings.\n\n\nSonnet 116: Let me not to the marriage of true minds\nAdmit impediments. Love is not love\nWhich alters when it alteration finds,\nOr bends with the remover to remove:\nO no! it is an ever-fixed mark\nThat looks on tempests and is never shaken;\nIt is the star to every wandering bark,\nWhose worth's unknown, although his height be taken.\nLove's not Time's fool, though rosy lips and cheeks\nWithin his bending sickle's compass come:\nLove alters not with his brief hours and weeks,\nBut bears it out even to the edge of doom.\nIf this be error and upon me proved,\nI never writ, nor no man ever loved.\n\n\nSonnet 130: My mistress' eyes are nothing like the sun;\nCoral is far more red than her lips' red;\nIf snow be white, why then her breasts are dun;\nIf hairs be wires, black wires grow on her head.\nI have seen roses damasked, red and white,\nBut no such roses see I in her cheeks;\nAnd in some perfumes is there more delight\nThan in the breath that from my mistress reeks.\nI love to hear her speak, yet well I know\nThat music hath a far more pleasing sound;\nI grant I never saw a goddess go;\nMy mistress, when she walks, treads on the ground:\nAnd yet, by heaven, I think my love as rare\nAs any she belied with false compare.",
-    "pdfUrl": "https://www.google.com/books/edition/Shakespeare_s_Sonnets/sK9-AAAAIAAJ?hl=en&gbpv=1&printsec=frontcover",
-    "documentAiHint": "document screenshot",
-    "tags": [
-      "Poetry",
-      "Classic",
-      "Sonnets"
-    ],
-    "isFeatured": true,
-    "isPremium": false
-  },
-  {
     "id": "1",
     "slug": "atomic-habits",
     "title": "Atomic Habits",
     "author": "James Clear",
     "category": "Book",
-    "coverImage": "https://placehold.co/600x800.png",
-    "imageAiHint": "book cover self help",
-    "content": "Tiny Changes, Remarkable Results. An Easy & Proven Way to Build Good Habits & Break Bad Ones.",
-    "tags": [
-      "Self-Help",
-      "Productivity",
-      "Psychology"
-    ],
+    "coverImage": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385l/40121378.jpg",
+    "imageAiHint": "book cover",
+    "content": "An atomic habit is a regular practice or routine that is not only small and easy to do but is also the source of incredible power; a component of the system of compound growth. Bad habits repeat themselves again and again not because you don’t want to change, but because you have the wrong system for change.",
+    "pdfUrl": "https://prangonsecocentre.appspot.com/prangon-centre-documents/atomic-habits.pdf",
+    "documentAiHint": "pdf document",
+    "tags": ["Self-help", "Productivity", "Habits"],
+    "isFeatured": true,
+    "isPremium": false
+  },
+  {
+    "id": "2",
+    "slug": "tech-today-weekly",
+    "title": "Tech Today Weekly",
+    "author": "Future Publishing",
+    "category": "Weekly Magazine",
+    "coverImage": "https://placehold.co/400x600.png",
+    "imageAiHint": "tech magazine cover",
+    "content": "This week's issue covers the latest breakthroughs in AI, the future of quantum computing, and a review of the newest smartphones on the market. Stay ahead of the curve with our in-depth analysis.",
+    "tags": ["Technology", "AI", "Gadgets"],
     "isFeatured": true,
     "isPremium": true
   },
   {
-    "id": "2",
-    "slug": "prothom-alo-weekly-1",
-    "title": "Weekly Prothom Alo",
-    "author": "Prothom Alo",
-    "category": "Weekly Magazine",
-    "coverImage": "https://placehold.co/600x800.png",
-    "imageAiHint": "magazine cover design",
-    "content": "Latest news and analysis from Bangladesh and around the world.",
-    "tags": [
-      "News",
-      "Current Affairs",
-      "Bangladesh"
-    ],
+    "id": "3",
+    "slug": "design-digest-monthly",
+    "title": "Design Digest Monthly",
+    "author": "Creative Minds Inc.",
+    "category": "Monthly Magazine",
+    "coverImage": "https://placehold.co/400x600.png",
+    "imageAiHint": "design magazine",
+    "content": "Explore the world of design with our monthly digest. This issue features interviews with leading designers, tutorials on the latest design software, and a showcase of award-winning projects.",
+    "tags": ["Design", "UI/UX", "Creativity"],
     "isFeatured": false,
     "isPremium": false
   },
   {
-    "id": "3",
-    "slug": "anondolok-monthly-1",
-    "title": "Monthly Anondolok",
-    "author": "Anondolok",
-    "category": "Monthly Magazine",
-    "coverImage": "https://placehold.co/600x800.png",
-    "imageAiHint": "entertainment magazine cover",
-    "content": "Entertainment news, celebrity interviews, and lifestyle articles.",
-    "tags": [
-      "Entertainment",
-      "Celebrity",
-      "Lifestyle"
-    ],
+    "id": "4",
+    "slug": "the-alchemist",
+    "title": "The Alchemist",
+    "author": "Paulo Coelho",
+    "category": "Book",
+    "coverImage": "https://placehold.co/400x600.png",
+    "imageAiHint": "fantasy book cover",
+    "content": "The story of Santiago, an Andalusian shepherd boy who dreams of a treasure in the Egyptian pyramids. A classic novel about following your dreams.",
+    "tags": ["Fiction", "Fantasy", "Adventure"],
+    "isFeatured": false,
+    "isPremium": false
+  },
+   {
+    "id": "5",
+    "slug": "sonnet-collection",
+    "title": "A Collection of Sonnets",
+    "author": "William Shakespeare",
+    "category": "Book",
+    "coverImage": "https://placehold.co/400x600.png",
+    "imageAiHint": "classic poetry book",
+    "content": "Shall I compare thee to a summer’s day? Thou art more lovely and more temperate: Rough winds do shake the darling buds of May, And summer’s lease hath all too short a date; Sometime too hot the eye of heaven shines, And often is his gold complexion dimm'd; And every fair from fair sometime declines, By chance or nature’s changing course untrimm'd; But thy eternal summer shall not fade, Nor lose possession of that fair thou ow’st; Nor shall death brag thou wander’st in his shade, When in eternal lines to time thou grow’st: So long as men can breathe or eyes can see, So long lives this, and this gives life to thee. My mistress' eyes are nothing like the sun; Coral is far more red than her lips' red; If snow be white, why then her breasts are dun; If hairs be wires, black wires grow on her head. I have seen roses damask'd, red and white, But no such roses see I in her cheeks; And in some perfumes is there more delight Than in the breath that from my mistress reeks. I love to hear her speak, yet well I know That music hath a far more pleasing sound; I grant I never saw a goddess go; My mistress, when she walks, treads on the ground. And yet, by heaven, I think my love as rare As any she belied with false compare. Let me not to the marriage of true minds Admit impediments. Love is not love Which alters when it alteration finds, Or bends with the remover to remove. O no! it is an ever-fixed mark That looks on tempests and is never shaken; It is the star to every wand'ring bark, Whose worth's unknown, although his height be taken. Love's not Time's fool, though rosy lips and cheeks Within his bending sickle's compass come; Love alters not with his brief hours and weeks, But bears it out even to the edge of doom. If this be error and upon me prov'd, I never writ, nor no man ever lov'd. Two households, both alike in dignity, In fair Verona, where we lay our scene, From ancient grudge break to new mutiny, Where civil blood makes civil hands unclean. From forth the fatal loins of these two foes A pair of star-cross'd lovers take their life; Whose misadventur'd piteous overthrows Doth with their death bury their parents' strife. The fearful passage of their death-mark'd love, And the continuance of their parents' rage, Which, but their children's end, naught could remove, Is now the two hours' traffic of our stage; The which if you with patient ears attend, What here shall miss, our toil shall strive to mend.",
+    "tags": ["Poetry", "Classic", "Sonnets"],
     "isFeatured": true,
-    "isPremium": true
+    "isPremium": false
+  },
+  {
+    "id": "6",
+    "slug": "cosmic-adventures",
+    "title": "Cosmic Adventures",
+    "author": "AI Comics",
+    "category": "Comic Book",
+    "coverImage": "https://placehold.co/400x600.png",
+    "imageAiHint": "sci-fi comic cover",
+    "content": "In a galaxy far away, a hero emerges to fight the forces of evil. Follow the thrilling journey of Captain Starblaze as he navigates asteroid fields, battles alien monsters, and saves civilizations. This is the first issue of an epic saga.",
+    "tags": [
+      "Sci-Fi",
+      "Adventure",
+      "Space Opera"
+    ],
+    "isFeatured": false,
+    "isPremium": false
   }
 ]

@@ -77,7 +77,7 @@ export const libraryItemSchema = z.object({
     slug: z.string(),
     title: z.string().min(1, 'Title is required.'),
     author: z.string().min(1, 'Author or publisher is required.'),
-    category: z.enum(['Book', 'Weekly Magazine', 'Monthly Magazine']),
+    category: z.enum(['Book', 'Weekly Magazine', 'Monthly Magazine', 'Comic Book']),
     coverImage: z.string().url('Must be a valid URL.'),
     imageAiHint: z.string().optional().default('book cover'),
     content: z.string().optional(),
