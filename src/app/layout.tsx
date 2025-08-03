@@ -24,6 +24,7 @@ export default function RootLayout({
   const [hasInteracted, setHasInteracted] = useState(false);
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith('/admin');
+  const isAuthPage = pathname === '/login' || pathname === '/logout';
 
   useEffect(() => {
     // This effect should only run on the client
@@ -96,7 +97,8 @@ export default function RootLayout({
       <body
         className={cn(
           'font-body antialiased',
-          isAdminPage ? 'bg-background' : 'min-h-screen bg-background flex flex-col'
+          !isAdminPage && !isAuthPage && 'min-h-screen bg-background flex flex-col',
+          (isAdminPage || isAuthPage) && 'bg-background'
         )}
       >
         <ThemeProvider
@@ -106,17 +108,17 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            {!isAdminPage && (
+            {!isAdminPage && !isAuthPage && (
                <audio ref={audioRef} src="/mixkit-relax-beat-292.mp3" loop preload="auto" />
             )}
             
-            {!isAdminPage && <Header />}
+            {!isAdminPage && !isAuthPage && <Header />}
             
-            <main className={cn(isAdminPage ? '' : 'flex-grow relative')}>
+            <main className={cn(!isAdminPage && !isAuthPage ? 'flex-grow relative' : '')}>
               {children}
             </main>
 
-            {!isAdminPage && (
+            {!isAdminPage && !isAuthPage && (
               <>
                 <aside className="fixed left-4 bottom-4 z-50 hidden md:flex flex-col items-center space-y-4">
                   <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
