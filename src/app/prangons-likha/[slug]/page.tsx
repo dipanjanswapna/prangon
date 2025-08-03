@@ -26,6 +26,8 @@ export default async function PrangonsLikhaPostPage({ params }: { params: { slug
     notFound();
   }
 
+  const isSubscribed = true; // Placeholder for premium user
+
   return (
     <div className="relative bg-background min-h-screen py-16 md:py-24">
        <Image
@@ -58,7 +60,7 @@ export default async function PrangonsLikhaPostPage({ params }: { params: { slug
             </div>
           </header>
           
-          {post.isPremium ? (
+          {post.isPremium && !isSubscribed ? (
              <Card className="bg-muted/30 border-primary/20 text-center p-8 backdrop-blur-sm">
                 <CardHeader>
                     <div className="mx-auto bg-primary/10 text-primary w-fit p-3 rounded-full mb-4">

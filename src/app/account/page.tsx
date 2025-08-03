@@ -4,7 +4,7 @@
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Loader2, User, Mail, LogOut, ShieldCheck } from 'lucide-react';
+import { Loader2, User, Mail, LogOut, ShieldCheck, Gem } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -99,11 +99,11 @@ export default function AccountPage() {
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <p className="font-medium">Current Plan</p>
-                                        <p className="text-sm text-muted-foreground">You are on the Free plan.</p>
+                                        <p className="text-sm text-muted-foreground">You are a valued premium member.</p>
                                     </div>
-                                    <Badge variant="secondary">Free Tier</Badge>
+                                    <Badge variant="default" className="gap-1"><Gem className="h-3 w-3"/>Premium</Badge>
                                 </div>
-                                <Button className="mt-4 w-full" onClick={() => router.push('/subscribe')}>Upgrade to Premium</Button>
+                                <Button className="mt-4 w-full" variant="outline" onClick={() => router.push('/subscribe')}>Manage Subscription</Button>
                              </Card>
                         </motion.div>
 

@@ -113,7 +113,7 @@ export default function LibraryItemPage() {
     notFound();
   }
 
-  const isSubscribed = false; // Placeholder
+  const isSubscribed = true; // Placeholder for premium user
 
   const getEmbedUrl = (url: string): string => {
     try {
