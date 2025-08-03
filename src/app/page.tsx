@@ -14,45 +14,21 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
   const words = text.split(' ');
-  const [visibleWords, setVisibleWords] = useState<string[]>([]);
   const aboutRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-           words.forEach((word, i) => {
-              setTimeout(() => {
-                  setVisibleWords(prev => [...prev, words.slice(0, i + 1).join(' ')]);
-              }, i * 100);
-           });
-           observer.disconnect();
-        }
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
       },
-      { threshold: 0.1 }
-    );
+    },
+  };
 
-    if (aboutRef.current) {
-      observer.observe(aboutRef.current);
-    }
-
-    return () => {
-      if(aboutRef.current) {
-          observer.unobserve(aboutRef.current);
-      }
-    };
-  }, [words]);
-
-  const renderText = () => {
-      const animatedText = visibleWords[visibleWords.length - 1] || "";
-      const remainingText = words.join(' ').substring(animatedText.length);
-
-      return (
-          <>
-              <span className="text-primary-foreground/80">{animatedText}</span>
-              <span className="text-primary-foreground/20">{remainingText}</span>
-          </>
-      );
+  const wordVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 },
   };
 
   return (
@@ -66,9 +42,19 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
                   className="md:w-3/5"
               >
                   <p className="text-sm tracking-[0.3em] mb-6 text-muted-foreground uppercase">About Me</p>
-                  <h2 className="font-sans text-xl md:text-2xl font-normal leading-relaxed text-left max-w-2xl">
-                      {renderText()}
-                  </h2>
+                  <motion.h2 
+                      className="font-sans text-xl md:text-2xl font-normal leading-relaxed text-left max-w-2xl text-primary-foreground/80"
+                      variants={containerVariants}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.2 }}
+                  >
+                      {words.map((word, index) => (
+                          <motion.span key={index} variants={wordVariants} className="inline-block mr-[0.25em]">
+                              {word}
+                          </motion.span>
+                      ))}
+                  </motion.h2>
               </motion.div>
               <motion.div 
                   initial={{ opacity: 0, scale: 0.8 }}
