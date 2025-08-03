@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { getSubscriptionPlans } from '@/app/admin/subscriptions/actions';
 import { SubscriptionPlan } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Badge } from '@/components/ui/badge';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -119,7 +120,7 @@ export default function SubscribePage() {
                             <motion.div key={plan.id} variants={itemVariants}>
                                 <Card className={cn("bg-muted/30 flex flex-col h-full", plan.isPopular && "border-primary shadow-primary/20")}>
                                     {plan.isPopular && (
-                                        <div className="bg-primary text-primary-foreground text-center py-1.5 px-4 text-sm font-bold rounded-t-lg">
+                                        <div className="bg-primary text-primary-foreground text-center py-1.5 px-4 text-sm font-bold">
                                             Most Popular
                                         </div>
                                     )}
