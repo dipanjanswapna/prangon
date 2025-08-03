@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence, animate } from 'framer-motion';
 import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -168,7 +168,27 @@ const SkillsSection = ({ skills } : { skills: string[] }) => {
   );
 };
 
-const StatsSection = ({ happyCustomers, servicesProvided }: { happyCustomers: string, servicesProvided: string }) => {
+function AnimatedCounter({ to, suffix }: { to: number, suffix?: string }) {
+    const nodeRef = useRef<HTMLParagraphElement>(null);
+  
+    useEffect(() => {
+      const node = nodeRef.current;
+      if (!node) return;
+  
+      const controls = animate(0, to, {
+        duration: 2,
+        onUpdate(value) {
+          node.textContent = Math.round(value).toString() + (suffix || '');
+        },
+      });
+  
+      return () => controls.stop();
+    }, [to, suffix]);
+  
+    return <p ref={nodeRef} className="text-4xl font-extrabold text-primary-foreground" />;
+  }
+
+const StatsSection = ({ happyCustomers, servicesProvided }: { happyCustomers: number, servicesProvided: number }) => {
     const [libraryItems, setLibraryItems] = useState<LibraryItem[]>([]);
     const [prangonLikhaItems, setPrangonLikhaItems] = useState<PrangonsLikhaPost[]>([]);
     const [subscriptionPlans, setSubscriptionPlans] = useState<SubscriptionPlan[]>([]);
@@ -197,10 +217,10 @@ const StatsSection = ({ happyCustomers, servicesProvided }: { happyCustomers: st
     const totalWritings = libraryItems.length + prangonLikhaItems.length;
 
     const stats = [
-        { name: 'Happy Customers', value: happyCustomers, icon: <Heart className="h-8 w-8 text-red-400" />, href: null },
-        { name: 'Services Provided', value: servicesProvided, icon: <Briefcase className="h-8 w-8 text-blue-400" />, href: null },
-        { name: 'Books & Writings', value: loading ? '...' : `${totalWritings}+`, icon: <BookCopy className="h-8 w-8 text-green-400" />, href: null },
-        { name: 'Subscription Packages', value: loading ? '...' : `${subscriptionPlans.length}+`, icon: <Star className="h-8 w-8 text-yellow-400" />, href: '/subscribe' },
+        { name: 'Happy Customers', value: happyCustomers, suffix: '+', icon: <Heart className="h-8 w-8 text-red-400" />, href: null },
+        { name: 'Services Provided', value: servicesProvided, suffix: '+', icon: <Briefcase className="h-8 w-8 text-blue-400" />, href: null },
+        { name: 'Books & Writings', value: loading ? 0 : totalWritings, suffix: '+', icon: <BookCopy className="h-8 w-8 text-green-400" />, href: null },
+        { name: 'Subscription Packages', value: loading ? 0 : subscriptionPlans.length, suffix: '+', icon: <Star className="h-8 w-8 text-yellow-400" />, href: '/subscribe' },
     ];
 
     const containerVariants = {
@@ -230,7 +250,7 @@ const StatsSection = ({ happyCustomers, servicesProvided }: { happyCustomers: st
                                     <div className="flex justify-center items-center mb-4 bg-primary/10 w-16 h-16 mx-auto rounded-full">
                                         {stat.icon}
                                     </div>
-                                    <p className="text-4xl font-extrabold text-primary-foreground">{stat.value}</p>
+                                    <AnimatedCounter to={stat.value} suffix={stat.suffix} />
                                     <p className="text-muted-foreground mt-1">{stat.name}</p>
                                 </Card>
                             </motion.div>

@@ -222,7 +222,7 @@ export function HomePageForm({ initialData }: { initialData: HomePageData }) {
                             <FormItem>
                             <FormLabel>Happy Customers</FormLabel>
                             <FormControl>
-                                <Input {...field} placeholder="e.g., 500+" />
+                                <Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} />
                             </FormControl>
                             <FormMessage />
                             </FormItem>
@@ -235,7 +235,7 @@ export function HomePageForm({ initialData }: { initialData: HomePageData }) {
                             <FormItem>
                             <FormLabel>Services Provided</FormLabel>
                             <FormControl>
-                                <Input {...field} placeholder="e.g., 20+" />
+                               <Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} />
                             </FormControl>
                             <FormMessage />
                             </FormItem>

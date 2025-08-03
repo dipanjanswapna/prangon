@@ -22,8 +22,8 @@ const videoSchema = z.object({
 });
 
 const statsSchema = z.object({
-  happyCustomers: z.string().min(1, 'Happy customers stat is required.'),
-  servicesProvided: z.string().min(1, 'Services provided stat is required.'),
+  happyCustomers: z.number().int().positive('Must be a positive number.'),
+  servicesProvided: z.number().int().positive('Must be a positive number.'),
 });
 
 
