@@ -1,0 +1,45 @@
+
+[
+  {
+    "id": "1",
+    "slug": "getting-started-with-react-hooks",
+    "title": "Getting Started with React Hooks",
+    "author": "Dipanjan Prangon",
+    "category": "Web Development",
+    "coverImage": "https://placehold.co/800x400.png",
+    "imageAiHint": "react code abstract",
+    "content": "React Hooks have revolutionized how we write components. In this post, we'll explore the basics of useState and useEffect, and see how they can simplify your code and state management. No more class components! This is a deep dive into functional components with hooks, showing practical examples and common pitfalls to avoid. We'll build a simple to-do list application from scratch to demonstrate these concepts in a real-world scenario.",
+    "tags": ["React", "JavaScript", "Web Dev", "Hooks"],
+    "isFeatured": true,
+    "isPremium": false,
+    "date": "2024-05-10"
+  },
+  {
+    "id": "2",
+    "slug": "the-art-of-ui-ux-design",
+    "title": "The Art of UI/UX Design: A Beginner's Guide",
+    "author": "Dipanjan Prangon",
+    "category": "Design",
+    "coverImage": "https://placehold.co/800x400.png",
+    "imageAiHint": "ui design sketch",
+    "content": "UI/UX design is more than just making things look pretty. It's about creating intuitive, efficient, and enjoyable experiences for the user. This guide will walk you through the fundamental principles of user interface and user experience design, from user research and wireframing to prototyping and usability testing. We will also look at some case studies of successful products and analyze what makes their design great.",
+    "tags": ["UI", "UX", "Design", "Beginner"],
+    "isFeatured": false,
+    "isPremium": true,
+    "date": "2024-05-15"
+  },
+  {
+    "id": "3",
+    "slug": "mastering-tailwind-css",
+    "title": "Mastering Tailwind CSS for Rapid Development",
+    "author": "Dipanjan Prangon",
+    "category": "Web Development",
+    "coverImage": "https://placehold.co/800x400.png",
+    "imageAiHint": "tailwind css code",
+    "content": "Tailwind CSS is a utility-first CSS framework that allows for rapid UI development without ever leaving your HTML. In this post, we will cover the core concepts of Tailwind, how to set it up in a Next.js project, and how to use its utility classes to build complex components. We'll also explore customization, theming, and plugins to extend its functionality.",
+    "tags": ["CSS", "TailwindCSS", "Frontend", "Web Dev"],
+    "isFeatured": false,
+    "isPremium": false,
+    "date": "2024-05-20"
+  }
+]

@@ -186,3 +186,20 @@ export const visualArtSchema = z.object({
 });
 
 export type VisualArt = z.infer<typeof visualArtSchema>;
+
+export const blogPostSchema = z.object({
+    id: z.string(),
+    slug: z.string(),
+    title: z.string().min(1, 'Title is required.'),
+    author: z.string().min(1, 'Author is required.'),
+    category: z.string().min(1, 'Category is required.'),
+    coverImage: z.string().url('Must be a valid URL.'),
+    imageAiHint: z.string().optional().default('blog post cover'),
+    content: z.string().min(10, 'Content must be at least 10 characters.'),
+    tags: z.array(z.string().min(1, 'Tag cannot be empty.')),
+    isFeatured: z.boolean().default(false),
+    isPremium: z.boolean().default(false),
+    date: z.string().min(1, "Date is required."),
+});
+
+export type BlogPost = z.infer<typeof blogPostSchema>;
