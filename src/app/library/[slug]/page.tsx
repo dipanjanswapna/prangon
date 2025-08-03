@@ -13,11 +13,15 @@ import { motion } from 'framer-motion';
 import { getLibraryItems } from '../actions';
 import { useState, useEffect, useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
 
 // E-book Reader Component
 const EbookReader = ({ content }: { content: string }) => {
     const [currentPage, setCurrentPage] = useState(0);
+    const [pageInput, setPageInput] = useState("");
     const charsPerPage = 1500; // Approximate characters per page
+    const { toast } = useToast();
 
     const pages = useMemo(() => {
         const p = [];
@@ -28,6 +32,10 @@ const EbookReader = ({ content }: { content: string }) => {
     }, [content]);
 
     const totalPages = pages.length;
+    
+    useEffect(() => {
+        setPageInput((currentPage + 1).toString());
+    }, [currentPage]);
 
     const handleNextPage = () => {
         if (currentPage < totalPages - 2) {
@@ -42,6 +50,23 @@ const EbookReader = ({ content }: { content: string }) => {
             setCurrentPage(prev => prev - 2);
         } else if (currentPage > 0) {
             setCurrentPage(prev => prev - 1)
+        }
+    };
+    
+    const handlePageSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            const pageNum = parseInt(pageInput, 10);
+            if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
+                // Adjust for 0-based index and ensure we land on an odd page for the left side of the spread
+                const targetPage = pageNum % 2 === 0 ? pageNum - 2 : pageNum - 1;
+                setCurrentPage(targetPage < 0 ? 0 : targetPage);
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: "Invalid Page Number",
+                    description: `Please enter a number between 1 and ${totalPages}.`
+                })
+            }
         }
     };
 
@@ -78,9 +103,16 @@ const EbookReader = ({ content }: { content: string }) => {
                 <Button onClick={handlePrevPage} disabled={currentPage === 0}>
                     <ArrowLeft className="mr-2 h-4 w-4" /> Previous
                 </Button>
-                <span className="text-muted-foreground">
-                    Pages {currentPage + 1}{rightPageContent ? `-${currentPage + 2}` : ''} of {totalPages}
-                </span>
+                 <div className="flex items-center gap-2 text-muted-foreground">
+                    <Input 
+                        type="text" 
+                        className="w-16 text-center" 
+                        value={pageInput}
+                        onChange={(e) => setPageInput(e.target.value)}
+                        onKeyDown={handlePageSearch}
+                    />
+                    <span>/ {totalPages}</span>
+                </div>
                 <Button onClick={handleNextPage} disabled={currentPage >= totalPages - 2}>
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
