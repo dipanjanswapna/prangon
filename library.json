@@ -1,4 +1,3 @@
-
 [
   {
     "id": "1",
@@ -14,11 +13,13 @@
       "Productivity"
     ],
     "isFeatured": true,
-    "isPremium": false
+    "isPremium": false,
+    "pdfUrl": "https://drive.google.com/drive/folders/1iNqT0R75fYmK-lpuyMwxbmeX92-A96Kg",
+    "documentAiHint": "document screenshot"
   },
   {
     "id": "2",
-    "slug": "scifi-weekly-issue-1",
+    "slug": "sci-fi-weekly-issue-1",
     "title": "Sci-Fi Weekly - Issue #1",
     "author": "Various Authors",
     "category": "Weekly Magazine",
@@ -30,7 +31,9 @@
       "Magazine"
     ],
     "isFeatured": true,
-    "isPremium": true
+    "isPremium": false,
+    "pdfUrl": "https://drive.google.com/drive/folders/1lTxIwKoLeLVJz7zLfNDEGqIEJc2KQO5X",
+    "documentAiHint": "document screenshot"
   },
   {
     "id": "3",

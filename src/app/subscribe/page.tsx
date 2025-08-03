@@ -15,6 +15,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import Image from 'next/image';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -71,8 +72,16 @@ export default function SubscribePage() {
     }, []);
 
     return (
-        <div className="bg-background min-h-screen py-16 md:py-24">
-            <div className="container mx-auto px-4">
+        <div className="bg-background min-h-screen py-16 md:py-24 relative">
+             <Image
+                src="https://i.pinimg.com/1200x/a9/d8/46/a9d846d03604c81f09ec1f49914df77f.jpg"
+                alt="Subscribe background"
+                layout="fill"
+                objectFit="cover"
+                className="absolute inset-0 z-0 opacity-10"
+                data-ai-hint="abstract background"
+            />
+            <div className="container mx-auto px-4 relative z-10">
                 <motion.header
                     initial={{ opacity: 0, y: -30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -120,9 +129,9 @@ export default function SubscribePage() {
                     >
                         {plans.map((plan, index) => (
                             <motion.div key={plan.id} variants={itemVariants}>
-                                <Card className={cn("bg-muted/30 flex flex-col h-full", plan.isPopular && "border-primary shadow-primary/20")}>
+                                <Card className={cn("bg-muted/30 backdrop-blur-sm flex flex-col h-full", plan.isPopular && "border-primary shadow-primary/20")}>
                                     {plan.isPopular && (
-                                        <div className="bg-primary text-primary-foreground text-center py-1.5 px-4 text-sm font-bold">
+                                        <div className="bg-primary text-primary-foreground text-center py-1.5 px-4 text-sm font-bold rounded-t-lg">
                                             Most Popular
                                         </div>
                                     )}
@@ -166,7 +175,7 @@ export default function SubscribePage() {
                     transition={{ delay: 0.6, duration: 0.7 }}
                     className="text-center mt-16 max-w-xl mx-auto"
                 >
-                    <Card className="bg-muted/30">
+                    <Card className="bg-muted/30 backdrop-blur-sm">
                         <CardHeader>
                             <CardTitle className="flex items-center justify-center gap-2 font-headline text-primary-foreground">
                                 <Percent className="h-6 w-6 text-primary"/> Have a Promo Code?
