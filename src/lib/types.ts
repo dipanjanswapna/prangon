@@ -30,6 +30,7 @@ const statsSchema = z.object({
 export const homePageSchema = z.object({
   heroWelcomeText: z.string().min(1, 'Welcome text is required.'),
   heroTitle: z.string().min(1, 'Title is required.'),
+  heroAnimatedTexts: z.array(z.string().min(1, 'Animated text cannot be empty.')).min(1, 'At least one animated text is required.'),
   heroBackgroundImageUrl: z.string().url('Must be a valid URL.'),
   aboutMeText: z.string().min(1, 'About me text is required.'),
   aboutMeImageUrl: z.string().url('Must be a valid URL.'),

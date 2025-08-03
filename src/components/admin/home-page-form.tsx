@@ -22,6 +22,11 @@ export function HomePageForm({ initialData }: { initialData: HomePageData }) {
     defaultValues: initialData,
   });
 
+  const { fields: animatedTextFields, append: appendAnimatedText, remove: removeAnimatedText } = useFieldArray({
+    control: form.control,
+    name: 'heroAnimatedTexts',
+  });
+
   const { fields: skillFields, append: appendSkill, remove: removeSkill } = useFieldArray({
     control: form.control,
     name: 'skills',
@@ -109,6 +114,32 @@ export function HomePageForm({ initialData }: { initialData: HomePageData }) {
                 </FormItem>
               )}
             />
+             <Separator />
+             <div>
+              <h4 className="font-semibold mb-2">Animated Typing Texts</h4>
+              {animatedTextFields.map((field, index) => (
+                <motion.div key={field.id} variants={itemVariants} initial="hidden" animate="visible" className="flex items-center gap-2 mb-2">
+                  <FormField
+                    control={form.control}
+                    name={`heroAnimatedTexts.${index}`}
+                    render={({ field }) => (
+                      <FormItem className="flex-grow">
+                        <FormControl>
+                          <Input {...field} placeholder={`Animated text #${index + 1}`} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="button" variant="destructive" size="icon" onClick={() => removeAnimatedText(index)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </motion.div>
+              ))}
+              <Button type="button" variant="outline" size="sm" onClick={() => appendAnimatedText('')}>
+                <PlusCircle className="mr-2 h-4 w-4" /> Add Text
+              </Button>
+            </div>
           </CardContent>
         </Card>
 

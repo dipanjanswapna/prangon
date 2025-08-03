@@ -16,35 +16,37 @@ import { getSubscriptionPlans } from './admin/subscriptions/actions';
 import { Card } from '@/components/ui/card';
 
 
-const TypingAnimation = ({ text }: { text: string }) => {
+const TypingAnimation = ({ texts }: { texts: string[] }) => {
+  const [textIndex, setTextIndex] = useState(0);
   const [typedText, setTypedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [loopNum, setLoopNum] = useState(0);
   const typingSpeed = 150;
   const deletingSpeed = 100;
   const delay = 2000;
 
   useEffect(() => {
+    if (texts.length === 0) return;
+
     const handleTyping = () => {
-      const fullText = text;
+      const currentText = texts[textIndex];
       const updatedText = isDeleting
-        ? fullText.substring(0, typedText.length - 1)
-        : fullText.substring(0, typedText.length + 1);
+        ? currentText.substring(0, typedText.length - 1)
+        : currentText.substring(0, typedText.length + 1);
       
       setTypedText(updatedText);
 
-      if (!isDeleting && updatedText === fullText) {
+      if (!isDeleting && updatedText === currentText) {
         setTimeout(() => setIsDeleting(true), delay);
       } else if (isDeleting && updatedText === '') {
         setIsDeleting(false);
-        setLoopNum(loopNum + 1);
+        setTextIndex((prevIndex) => (prevIndex + 1) % texts.length);
       }
     };
     
     const typingTimeout = setTimeout(handleTyping, isDeleting ? deletingSpeed : typingSpeed);
     
     return () => clearTimeout(typingTimeout);
-  }, [typedText, isDeleting, text]);
+  }, [typedText, isDeleting, texts, textIndex]);
 
   return (
     <div className="mt-4 h-8">
@@ -626,7 +628,7 @@ export default function Home() {
             </span>
            ))}
           </motion.h1>
-          <TypingAnimation text="smile for miles" />
+          <TypingAnimation texts={content.heroAnimatedTexts} />
         </div>
       </div>
       <AboutMe text={content.aboutMeText} imageUrl={content.aboutMeImageUrl}/>
