@@ -7,68 +7,33 @@ import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Star, Target, BrainCircuit, Users, Lightbulb, GraduationCap, Briefcase, Award, MessageSquare, Handshake, DollarSign, Clock, UserCircle } from 'lucide-react';
+import { Star, Target, BrainCircuit, Users, Lightbulb, GraduationCap, Briefcase, Award, MessageSquare, Handshake, DollarSign, Clock, UserCircle, Loader2 } from 'lucide-react';
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
+import { getAboutPageContent } from '../admin/about/actions';
+import { AboutPageData } from '@/lib/types';
 
 
-const UniversityFeatures = [
-    { 
-        title: "Academic Excellence", 
-        description: "Achieved a CGPA of 3.9/4.0, complemented by multiple academic awards and honors for outstanding performance.",
-        icon: <GraduationCap className="h-6 w-6 text-primary" />
-    },
-    { 
-        title: "Research & Innovation", 
-        description: "Contributed to a significant research project on [Your Research Topic], leading to [Outcome or Publication].",
-        icon: <Lightbulb className="h-6 w-6 text-primary" />
-    },
-    { 
-        title: "Leadership & Teamwork", 
-        description: "Led a team of 5 in [Project Name], fostering collaboration and achieving our goals ahead of schedule.",
-        icon: <Users className="h-6 w-6 text-primary" />
-    },
-    { 
-        title: "Problem-Solving & Adaptability", 
-        description: "Developed a novel solution for [A Specific Problem], demonstrating adaptability in a fast-paced environment.",
-        icon: <BrainCircuit className="h-6 w-6 text-primary" />
-    },
-    { 
-        title: "Future Goals & Motivation", 
-        description: "Aiming to pursue a PhD in [Your Field] to contribute to [Your Ultimate Goal], driven by a passion for discovery.",
-        icon: <Target className="h-6 w-6 text-primary" />
-    },
-     { 
-        title: "Awards & Recognition", 
-        description: "Recipient of the 'Innovator of the Year' award for developing a groundbreaking EdTech tool.",
-        icon: <Award className="h-6 w-6 text-primary" />
-    },
-];
-
-const ClientFeatures = [
-    {
-        title: "Client Testimonials",
-        description: "My clients consistently praise my work for its quality, creativity, and impact on their business.",
-        icon: <MessageSquare className="h-6 w-6 text-primary" />
-    },
-    {
-        title: "Efficient Working Process",
-        description: "I follow a streamlined process: Discovery > Strategy > Design > Feedback > Delivery, ensuring clarity and quality.",
-        icon: <Handshake className="h-6 w-6 text-primary" />
-    },
-    {
-        title: "Transparent Pricing",
-        description: "Clear and upfront pricing with no hidden fees. I offer packages tailored to your specific needs and budget.",
-        icon: <DollarSign className="h-6 w-6 text-primary" />
-    },
-    {
-        title: "Timely Delivery",
-        description: "I am committed to delivering high-quality work on time, every time, helping you meet your launch deadlines.",
-        icon: <Clock className="h-6 w-6 text-primary" />
-    },
-]
+const iconMap: { [key: string]: React.ReactElement } = {
+    "Academic Excellence": <GraduationCap className="h-6 w-6 text-primary" />,
+    "Research & Innovation": <Lightbulb className="h-6 w-6 text-primary" />,
+    "Leadership & Teamwork": <Users className="h-6 w-6 text-primary" />,
+    "Problem-Solving & Adaptability": <BrainCircuit className="h-6 w-6 text-primary" />,
+    "Future Goals & Motivation": <Target className="h-6 w-6 text-primary" />,
+    "Awards & Recognition": <Award className="h-6 w-6 text-primary" />,
+    "Client Testimonials": <MessageSquare className="h-6 w-6 text-primary" />,
+    "Efficient Working Process": <Handshake className="h-6 w-6 text-primary" />,
+    "Transparent Pricing": <DollarSign className="h-6 w-6 text-primary" />,
+    "Timely Delivery": <Clock className="h-6 w-6 text-primary" />,
+};
 
 
 export default function AboutPage() {
+  const [data, setData] = useState<AboutPageData | null>(null);
+
+  useEffect(() => {
+      getAboutPageContent().then(setData);
+  }, [])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -82,11 +47,19 @@ export default function AboutPage() {
     hidden: { y: 20, opacity: 0 },
     visible: { y: 0, opacity: 1 }
   };
+  
+  if (!data) {
+    return (
+        <div className="flex h-screen items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen py-16 md:py-24">
         <Image
-            src="https://cdnb.artstation.com/p/assets/images/images/057/331/063/large/srabon-arafat-uploded-file-x.jpg?1671322270"
+            src={data.backgroundImageUrl}
             alt="About background"
             fill
             className="absolute inset-0 z-0 object-cover opacity-20"
@@ -102,15 +75,15 @@ export default function AboutPage() {
             >
               <motion.div variants={itemVariants} className="flex justify-center mb-6">
                 <Avatar className="h-24 w-24 md:h-32 md:w-32 border-4 border-background ring-4 ring-primary">
-                  <AvatarImage src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg" alt="Dipanjan Prangon" data-ai-hint="profile picture" />
-                  <AvatarFallback>DP</AvatarFallback>
+                  <AvatarImage src={data.profileImageUrl} alt={data.name} data-ai-hint="profile picture" />
+                  <AvatarFallback>{data.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                 </Avatar>
               </motion.div>
               <motion.h1 variants={itemVariants} className="text-4xl md:text-5xl font-bold font-headline tracking-tight text-primary-foreground">
-                Dipanjan “Swapna Prangon” Prangon
+                {data.name}
               </motion.h1>
               <motion.p variants={itemVariants} className="text-lg md:text-xl text-muted-foreground mt-2 max-w-3xl mx-auto">
-                A passionate student, writer, and EdTech innovator from Dhaka, Bangladesh, dedicated to bridging creative design with education.
+                {data.tagline}
               </motion.p>
             </motion.div>
 
@@ -126,15 +99,15 @@ export default function AboutPage() {
                 <motion.div variants={containerVariants} initial="hidden" animate="visible">
                   <Card className="bg-muted/30 mt-6 border-border shadow-lg backdrop-blur-sm">
                     <CardHeader>
-                      <CardTitle className="text-2xl md:text-3xl text-center font-headline text-primary-foreground">Why I'm a Strong Candidate for Your University</CardTitle>
-                       <CardDescription className="text-center text-muted-foreground">My goal is to leverage higher education to create impactful technological solutions for the developing world. </CardDescription>
+                      <CardTitle className="text-2xl md:text-3xl text-center font-headline text-primary-foreground">{data.academia.title}</CardTitle>
+                       <CardDescription className="text-center text-muted-foreground">{data.academia.description}</CardDescription>
                     </CardHeader>
                     <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
-                      {UniversityFeatures.map((feature, index) => (
+                      {data.academia.features.map((feature) => (
                         <motion.div key={feature.title} variants={itemVariants}>
                             <Card className="h-full bg-background/50 hover:shadow-primary/20 hover:shadow-lg transition-shadow duration-300">
                                 <CardHeader className="flex flex-row items-center gap-4">
-                                    {feature.icon}
+                                    {iconMap[feature.title] || <Star className="h-6 w-6 text-primary" />}
                                     <CardTitle className="text-lg font-semibold">{feature.title}</CardTitle>
                                 </CardHeader>
                                 <CardContent>
@@ -152,34 +125,26 @@ export default function AboutPage() {
                  <motion.div variants={containerVariants} initial="hidden" animate="visible">
                      <Card className="bg-muted/30 mt-6 border-border shadow-lg backdrop-blur-sm">
                         <CardHeader>
-                            <CardTitle className="text-2xl md:text-3xl text-center font-headline text-primary-foreground">How I Deliver Value to My Clients</CardTitle>
-                             <CardDescription className="text-center text-muted-foreground">I combine creative design with strategic thinking to help brands and educators make a lasting impact.</CardDescription>
+                            <CardTitle className="text-2xl md:text-3xl text-center font-headline text-primary-foreground">{data.services.title}</CardTitle>
+                             <CardDescription className="text-center text-muted-foreground">{data.services.description}</CardDescription>
                         </CardHeader>
                         <CardContent className="pt-6">
                             <Accordion type="single" collapsible className="w-full">
-                               <motion.div variants={itemVariants}>
-                                  <AccordionItem value="item-1">
-                                    <AccordionTrigger className="font-semibold text-lg">Portfolio & Past Projects</AccordionTrigger>
-                                    <AccordionContent>
-                                      I have successfully completed over 50 projects ranging from brand identity design to web development for clients worldwide. You can view my selected works on the "Work" page to see the quality and creativity I bring to the table.
-                                    </AccordionContent>
-                                  </AccordionItem>
-                               </motion.div>
-                               <motion.div variants={itemVariants}>
-                                  <AccordionItem value="item-2">
-                                    <AccordionTrigger className="font-semibold text-lg">Unique Selling Proposition (USP)</AccordionTrigger>
-                                    <AccordionContent>
-                                      My key differentiator is the blend of educational insight with design excellence. I don't just create visuals; I create learning experiences and brand stories that educate, engage, and inspire action.
-                                    </AccordionContent>
-                                  </AccordionItem>
-                               </motion.div>
+                               {data.services.accordionItems.map((item, index) => (
+                                 <motion.div key={index} variants={itemVariants}>
+                                    <AccordionItem value={`item-${index+1}`}>
+                                        <AccordionTrigger className="font-semibold text-lg">{item.title}</AccordionTrigger>
+                                        <AccordionContent>{item.content}</AccordionContent>
+                                    </AccordionItem>
+                                 </motion.div>
+                               ))}
                             </Accordion>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                                {ClientFeatures.map((feature, index) => (
+                                {data.services.features.map((feature) => (
                                     <motion.div key={feature.title} variants={itemVariants}>
                                         <Card className="h-full bg-background/50 hover:shadow-primary/20 hover:shadow-lg transition-shadow duration-300">
                                             <CardHeader className="flex flex-row items-center gap-4">
-                                                {feature.icon}
+                                                {iconMap[feature.title] || <Star className="h-6 w-6 text-primary" />}
                                                 <CardTitle className="text-lg font-semibold">{feature.title}</CardTitle>
                                             </CardHeader>
                                             <CardContent>
@@ -208,7 +173,7 @@ export default function AboutPage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-muted-foreground leading-relaxed">
-                      Everyone knows Dipanjan Swapna Prangon as Prangon. Prangon (born 10 July 2007) is a Bangladeshi student, artist. He attended Government Science College in Class 12. Prangon was born on 10 july to the Bengali Hindu "das" family of Bhandaria in Bangladesh. His father is Dipankar Das and his mother is Sabita Biswas. Prangon grew up in Bhandaria during her early childhood under the care of her mother and relatives. He has no brother and sister.
+                      {data.biography}
                     </p>
                   </CardContent>
                 </Card>

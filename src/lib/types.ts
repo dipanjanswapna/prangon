@@ -134,3 +134,35 @@ export const experienceSchema = z.object({
 });
 
 export type Experience = z.infer<typeof experienceSchema>;
+
+
+const aboutPageFeatureSchema = z.object({
+  title: z.string().min(1, 'Title is required.'),
+  description: z.string().min(1, 'Description is required.'),
+});
+
+const aboutPageAccordionItemSchema = z.object({
+  title: z.string().min(1, 'Title is required.'),
+  content: z.string().min(1, 'Content is required.'),
+});
+
+export const aboutPageSchema = z.object({
+  name: z.string().min(1, 'Name is required.'),
+  tagline: z.string().min(1, 'Tagline is required.'),
+  profileImageUrl: z.string().url('Must be a valid URL.'),
+  backgroundImageUrl: z.string().url('Must be a valid URL.'),
+  academia: z.object({
+    title: z.string().min(1, 'Title is required.'),
+    description: z.string().min(1, 'Description is required.'),
+    features: z.array(aboutPageFeatureSchema),
+  }),
+  services: z.object({
+    title: z.string().min(1, 'Title is required.'),
+    description: z.string().min(1, 'Description is required.'),
+    accordionItems: z.array(aboutPageAccordionItemSchema),
+    features: z.array(aboutPageFeatureSchema),
+  }),
+  biography: z.string().min(1, 'Biography is required.'),
+});
+
+export type AboutPageData = z.infer<typeof aboutPageSchema>;
