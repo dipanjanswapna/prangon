@@ -9,11 +9,12 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Trash2, PlusCircle, Loader2, Edit, X } from 'lucide-react';
+import { Trash2, PlusCircle, Loader2, Edit, X, Percent } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from 'react';
+import { Separator } from '../ui/separator';
 
 type FormValues = Omit<SubscriptionPlan, 'id'>;
 
@@ -28,6 +29,7 @@ export function SubscriptionPlanForm({ planToEdit }: { planToEdit?: Subscription
     priceYearly: planToEdit?.priceYearly || 0,
     features: planToEdit?.features || [],
     isPopular: planToEdit?.isPopular || false,
+    promoCodes: planToEdit?.promoCodes || [],
   };
 
   const form = useForm<FormValues>({
@@ -35,9 +37,14 @@ export function SubscriptionPlanForm({ planToEdit }: { planToEdit?: Subscription
     defaultValues,
   });
   
-  const { fields, append, remove } = useFieldArray({
+  const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
     control: form.control,
     name: "features",
+  });
+  
+  const { fields: promoCodeFields, append: appendPromoCode, remove: removePromoCode } = useFieldArray({
+      control: form.control,
+      name: "promoCodes",
   });
 
   const onSubmit = async (data: FormValues) => {
@@ -131,7 +138,7 @@ export function SubscriptionPlanForm({ planToEdit }: { planToEdit?: Subscription
                     <div>
                         <FormLabel>Features</FormLabel>
                         <div className="space-y-2 mt-2">
-                        {fields.map((field, index) => (
+                        {featureFields.map((field, index) => (
                             <div key={field.id} className="flex items-center gap-2">
                             <FormField
                                 control={form.control}
@@ -142,14 +149,55 @@ export function SubscriptionPlanForm({ planToEdit }: { planToEdit?: Subscription
                                 </FormItem>
                                 )}
                             />
-                            <Button type="button" variant="destructive" size="icon" onClick={() => remove(index)}>
+                            <Button type="button" variant="destructive" size="icon" onClick={() => removeFeature(index)}>
                                 <Trash2 className="h-4 w-4" />
                             </Button>
                             </div>
                         ))}
                         </div>
-                        <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => append('')}>
+                        <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendFeature('')}>
                            <PlusCircle className="mr-2 h-4 w-4" /> Add Feature
+                        </Button>
+                    </div>
+
+                    <Separator />
+
+                    <div>
+                        <FormLabel>Promo Codes</FormLabel>
+                        <div className="space-y-2 mt-2">
+                            {promoCodeFields.map((field, index) => (
+                                <div key={field.id} className="flex items-center gap-2 p-2 border rounded-md">
+                                    <FormField
+                                        control={form.control}
+                                        name={`promoCodes.${index}.code`}
+                                        render={({ field }) => (
+                                            <FormItem className="flex-grow">
+                                                <FormControl><Input {...field} placeholder="Code (e.g., EARLYBIRD)" /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name={`promoCodes.${index}.discount`}
+                                        render={({ field }) => (
+                                            <FormItem className="w-32">
+                                                <div className="relative">
+                                                    <Input type="number" {...field} placeholder="Discount" onChange={e => field.onChange(parseInt(e.target.value, 10))} className="pr-6"/>
+                                                    <Percent className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                                </div>
+                                                 <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <Button type="button" variant="destructive" size="icon" onClick={() => removePromoCode(index)}>
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                        <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => appendPromoCode({ code: '', discount: 10 })}>
+                           <PlusCircle className="mr-2 h-4 w-4" /> Add Promo Code
                         </Button>
                     </div>
 

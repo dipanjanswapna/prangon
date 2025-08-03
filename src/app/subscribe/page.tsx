@@ -2,7 +2,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Check, Crown, Star } from 'lucide-react';
+import { Check, Crown, Star, Ticket, Percent } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { useState, useEffect, useMemo } from 'react';
@@ -13,6 +13,8 @@ import { getSubscriptionPlans } from '@/app/admin/subscriptions/actions';
 import { SubscriptionPlan } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -162,14 +164,61 @@ export default function SubscribePage() {
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6, duration: 0.7 }}
-                    className="text-center mt-16"
+                    className="text-center mt-16 max-w-xl mx-auto"
                 >
-                    <h3 className="text-xl font-bold text-primary-foreground mb-4">Have a promo code?</h3>
-                    <div className="flex justify-center max-w-sm mx-auto">
-                        <input type="text" placeholder="Enter code" className="bg-input border border-border rounded-l-md px-4 py-2 w-full focus:ring-primary focus:border-primary" />
-                        <Button className="rounded-l-none">Apply</Button>
-                    </div>
+                    <Card className="bg-muted/30">
+                        <CardHeader>
+                            <CardTitle className="flex items-center justify-center gap-2 font-headline text-primary-foreground">
+                                <Percent className="h-6 w-6 text-primary"/> Have a Promo Code?
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex justify-center max-w-sm mx-auto">
+                                <Input type="text" placeholder="Enter code" className="bg-input border-r-0 rounded-r-none" />
+                                <Button className="rounded-l-none">
+                                    <Ticket className="mr-2 h-4 w-4"/>
+                                    Apply
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8, duration: 0.7 }}
+                    className="mt-16 max-w-3xl mx-auto"
+                >
+                    <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 font-headline text-primary-foreground">Frequently Asked Questions</h2>
+                    <Accordion type="single" collapsible className="w-full">
+                        <AccordionItem value="item-1">
+                            <AccordionTrigger>What payment methods do you accept?</AccordionTrigger>
+                            <AccordionContent>
+                                We plan to accept all major credit cards (Visa, MasterCard, American Express), PayPal, and other popular digital wallets. All payments are processed securely.
+                            </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="item-2">
+                            <AccordionTrigger>Can I cancel my subscription anytime?</AccordionTrigger>
+                            <AccordionContent>
+                                Yes, you can cancel your subscription at any time from your account page. Your access will continue until the end of the current billing period.
+                            </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="item-3">
+                            <AccordionTrigger>What happens if I cancel?</AccordionTrigger>
+                            <AccordionContent>
+                                If you cancel, you will retain access to all premium features until your current subscription period ends. After that, your account will be downgraded to the free plan.
+                            </AccordionContent>
+                        </AccordionItem>
+                         <AccordionItem value="item-4">
+                            <AccordionTrigger>Do you offer refunds?</AccordionTrigger>
+                            <AccordionContent>
+                                Due to the nature of digital content, we generally do not offer refunds. However, if you have a special circumstance, please contact our support team.
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
+                </motion.div>
+
             </div>
         </div>
     );
