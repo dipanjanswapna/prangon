@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { getExperiences } from '@/app/admin/experiences/actions';
-import { getAchievements } from '@/app/admin/achievements/actions';
+import { getAchievements } from '@/app/achievements/actions';
 import { Experience, Achievement } from '@/lib/types';
 import { useState, useEffect } from 'react';
 
