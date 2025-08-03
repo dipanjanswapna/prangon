@@ -37,3 +37,18 @@ export const homePageSchema = z.object({
 });
 
 export type HomePageData = z.infer<typeof homePageSchema>;
+
+export const prangonsLikhaPostSchema = z.object({
+    id: z.string(),
+    slug: z.string(),
+    title: z.string().min(1, 'Title is required.'),
+    author: z.string().min(1, 'Author is required.'),
+    category: z.string().min(1, 'Category is required.'),
+    coverImage: z.string().url('Must be a valid URL.'),
+    imageAiHint: z.string().optional().default('book cover'),
+    content: z.string().min(10, 'Content must be at least 10 characters.'),
+    tags: z.array(z.string().min(1, 'Tag cannot be empty.')),
+    isPremium: z.boolean().default(false),
+});
+
+export type PrangonsLikhaPost = z.infer<typeof prangonsLikhaPostSchema>;

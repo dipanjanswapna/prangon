@@ -1,0 +1,73 @@
+
+import { getPrangonsLikhaPosts } from '@/app/admin/prangons-likha/actions';
+import { notFound } from 'next/navigation';
+import Image from 'next/image';
+import { Badge } from '@/components/ui/badge';
+import { Calendar, User, Tag } from 'lucide-react';
+import { SocialShareButtons } from '@/components/social-share-buttons';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+
+export async function generateStaticParams() {
+  const posts = await getPrangonsLikhaPosts();
+  return posts.map(post => ({
+    slug: post.slug,
+  }));
+}
+
+export default async function PrangonsLikhaPostPage({ params }: { params: { slug: string } }) {
+  const posts = await getPrangonsLikhaPosts();
+  const post = posts.find(p => p.slug === params.slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  return (
+    <div className="relative bg-background min-h-screen py-16 md:py-24">
+       <Image
+          src={post.coverImage}
+          alt={post.title}
+          fill
+          className="absolute inset-0 z-0 object-cover opacity-10"
+          data-ai-hint={post.imageAiHint}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-0"/>
+
+      <div className="relative z-10 container mx-auto px-4">
+        <article className="max-w-4xl mx-auto">
+          <header className="text-center mb-12">
+            <Badge variant="secondary" className="mb-4">{post.category}</Badge>
+            <h1 className="text-4xl md:text-6xl font-black font-headline tracking-tighter text-primary-foreground uppercase mb-4">
+              {post.title}
+            </h1>
+            <div className="flex justify-center items-center gap-6 text-muted-foreground">
+                <div className="flex items-center gap-2">
+                    <Avatar className="h-8 w-8">
+                        <AvatarImage src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg" alt={post.author} />
+                        <AvatarFallback>{post.author.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <span>{post.author}</span>
+                </div>
+            </div>
+          </header>
+
+          <div className="prose prose-invert prose-lg max-w-none mx-auto leading-relaxed whitespace-pre-line text-foreground/90">
+            {post.content}
+          </div>
+
+          <footer className="mt-12 pt-8 border-t border-border/20">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+               <div className="flex flex-wrap items-center gap-2">
+                 <Tag className="h-4 w-4 text-muted-foreground" />
+                 {post.tags.map(tag => (
+                   <Badge key={tag} variant="outline">{tag}</Badge>
+                 ))}
+               </div>
+               <SocialShareButtons postTitle={post.title} />
+            </div>
+          </footer>
+        </article>
+      </div>
+    </div>
+  );
+}

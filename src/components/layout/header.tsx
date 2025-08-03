@@ -15,6 +15,7 @@ const navItems = [
   { href: '/work', label: 'Work' },
   { href: '/about', label: 'About' },
   { href: '/social-work', label: 'Social Work' },
+  { href: '/prangons-likha', label: 'Prangons Likha'},
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];
