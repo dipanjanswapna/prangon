@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -158,8 +159,10 @@ export default function SubscribePage() {
                                         </ul>
                                     </CardContent>
                                     <CardFooter>
-                                        <Button className="w-full" variant={plan.isPopular ? 'default' : 'outline'}>
-                                            Subscribe
+                                        <Button className="w-full" variant={plan.isPopular ? 'default' : 'outline'} asChild>
+                                            <Link href={`/checkout?planId=${plan.id}&billing=${billingCycle}`}>
+                                                Subscribe
+                                            </Link>
                                         </Button>
                                     </CardFooter>
                                 </Card>
