@@ -68,18 +68,23 @@ const defaultHomePageData: HomePageData = {
 };
 
 export async function getHomePageContent(): Promise<HomePageData> {
-  const db = getFirestore();
-  const docRef = db.collection('pages').doc('home');
-  const doc = await docRef.get();
+  try {
+    const db = getFirestore();
+    const docRef = db.collection('pages').doc('home');
+    const doc = await docRef.get();
 
-  if (!doc.exists) {
-    // If the document doesn't exist, create it with default data
-    await docRef.set(defaultHomePageData);
+    if (!doc.exists) {
+      // If the document doesn't exist, create it with default data
+      await docRef.set(defaultHomePageData);
+      return defaultHomePageData;
+    }
+
+    // merge with default data to avoid missing fields issues
+    return { ...defaultHomePageData, ...doc.data() as HomePageData };
+  } catch (error) {
+    console.warn('Failed to fetch home page content from Firestore, returning default data.', error);
     return defaultHomePageData;
   }
-
-  // merge with default data to avoid missing fields issues
-  return { ...defaultHomePageData, ...doc.data() as HomePageData };
 }
 
 export async function updateHomePageContent(data: HomePageData) {
@@ -89,16 +94,15 @@ export async function updateHomePageContent(data: HomePageData) {
     return { success: false, error: validation.error.flatten() };
   }
 
-  const db = getFirestore();
-  const docRef = db.collection('pages').doc('home');
-
   try {
+    const db = getFirestore();
+    const docRef = db.collection('pages').doc('home');
     await docRef.set(validation.data, { merge: true });
     revalidatePath('/');
     revalidatePath('/admin/home');
     return { success: true };
   } catch (error) {
     console.error('Error updating home page content:', error);
-    return { success: false, error: 'Failed to update content in database.' };
+    return { success: false, error: 'Failed to update content in database. Admin SDK might not be configured.' };
   }
 }
