@@ -1,5 +1,7 @@
 
-import { notFound } from 'next/navigation';
+'use client';
+
+import { notFound, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Lock, Tag, Star } from 'lucide-react';
@@ -9,18 +11,27 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LibraryItem } from '@/lib/types';
 import { motion } from 'framer-motion';
 import { getLibraryItems } from '../actions';
+import { useState, useEffect } from 'react';
 
 
-export async function generateStaticParams() {
-  const items = await getLibraryItems();
-  return items.map(item => ({
-    slug: item.slug,
-  }));
-}
+export default function LibraryItemPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  const [item, setItem] = useState<LibraryItem | null | undefined>(undefined);
 
-export default async function LibraryItemPage({ params }: { params: { slug: string } }) {
-  const items = await getLibraryItems();
-  const item = items.find(p => p.slug === params.slug);
+  useEffect(() => {
+    async function fetchItem() {
+      const items = await getLibraryItems();
+      const foundItem = items.find(p => p.slug === slug);
+      setItem(foundItem);
+    }
+    fetchItem();
+  }, [slug]);
+
+  if (item === undefined) {
+    // Loading state
+    return <div className="flex h-screen items-center justify-center">Loading...</div>;
+  }
 
   if (!item) {
     notFound();
