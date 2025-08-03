@@ -588,7 +588,10 @@ export default function Home() {
             </span>
            ))}
           </motion.h1>
-            <p className="text-lg mt-4 text-primary-foreground/80">smile for miles</p>
+             <div className="animated-text-container">
+                <p className="animated-text-bg">smile for miles</p>
+                <p className="animated-text-fg">smile for miles</p>
+            </div>
         </div>
       </div>
       <AboutMe text={content.aboutMeText} imageUrl={content.aboutMeImageUrl}/>

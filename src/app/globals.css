@@ -70,3 +70,61 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes roll {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  5%, 20% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  25%, 100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes bg {
+  0%, 100% {
+    background: #e6194b;
+  }
+  25% {
+    background: #3cb44b;
+  }
+  50% {
+    background: #ffe119;
+  }
+  75% {
+    background: #4363d8;
+  }
+}
+
+.animated-text-container {
+  display: grid;
+  place-content: center;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.animated-text-bg, .animated-text-fg {
+  grid-area: 1 / 1 / 2 / 2;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.animated-text-bg {
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(90deg, #e6194b, #3cb44b, #ffe119, #4363d8);
+  animation: bg 20s linear infinite;
+}
+
+.animated-text-fg {
+  color: white;
+  animation: roll 4s ease-in-out infinite alternate;
+}
