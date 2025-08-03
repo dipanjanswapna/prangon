@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Home, Settings, Loader2, Feather, Palette, Star, UserCircle } from 'lucide-react';
+import { Home, Settings, Loader2, Feather, Palette, Star, UserCircle, Library } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
@@ -24,6 +24,7 @@ const adminNavItems = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: <Home /> },
     { href: '/admin/home', label: 'Home Page', icon: <Home /> },
     { href: '/admin/prangons-likha', label: 'Prangons Likha', icon: <Feather /> },
+    { href: '/admin/library', label: 'Library', icon: <Library /> },
     { href: '/admin/subscriptions', label: 'Subscriptions', icon: <Star /> },
     { href: '/admin/visual-arts', label: 'Visual Arts', icon: <Palette /> },
     { href: '/admin/settings', label: 'Settings', icon: <Settings /> },

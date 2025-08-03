@@ -5,7 +5,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { LibraryItem } from '@/lib/types';
 
-const dataFilePath = path.join(process.cwd(), 'public/library.json');
+const dataFilePath = path.join(process.cwd(), 'library.json');
 
 export async function getLibraryItems(): Promise<LibraryItem[]> {
   try {
