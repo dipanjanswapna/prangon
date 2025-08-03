@@ -51,6 +51,14 @@ export default function AdminLayout({
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
+                     <SidebarMenuItem>
+                        <SidebarMenuButton asChild>
+                            <Link href="/admin/home">
+                                <Home />
+                                <span>Home Page</span>
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarContent>
             <SidebarFooter>

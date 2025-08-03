@@ -4,12 +4,16 @@
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Youtube, Sparkles, ChevronsRight } from 'lucide-react';
+import { Youtube, Sparkles, ChevronsRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { getHomePageContent } from './admin/home/actions';
+import { HomePageData } from '@/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const AboutMe = () => {
-  const text = "Hi! I’m Dipanjan “Swapna Prangon” Prangon from Dhaka, Bangladesh. As a passionate student, writer, and EdTech innovator, I founded Prangon’s Ecosystem to bridge creative design with education. I help students and educators through digital tools, branding, and movement-building learning content. With a keen eye for brand identity design, I craft logos, thumbnails, and visual stories that resonate.".split(' ');
+
+const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
+  const words = text.split(' ');
   const [visibleWords, setVisibleWords] = useState<string[]>([]);
   const aboutRef = useRef<HTMLDivElement>(null);
 
@@ -17,9 +21,9 @@ const AboutMe = () => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-           text.forEach((word, i) => {
+           words.forEach((word, i) => {
               setTimeout(() => {
-                  setVisibleWords(prev => [...prev, text.slice(0, i + 1).join(' ')]);
+                  setVisibleWords(prev => [...prev, words.slice(0, i + 1).join(' ')]);
               }, i * 100);
            });
            observer.disconnect();
@@ -37,11 +41,11 @@ const AboutMe = () => {
           observer.unobserve(aboutRef.current);
       }
     };
-  }, []);
+  }, [words]);
 
   const renderText = () => {
       const animatedText = visibleWords[visibleWords.length - 1] || "";
-      const remainingText = text.join(' ').substring(animatedText.length);
+      const remainingText = words.join(' ').substring(animatedText.length);
 
       return (
           <>
@@ -74,7 +78,7 @@ const AboutMe = () => {
                   className="md:w-2/5 flex justify-center"
               >
                   <Image
-                      src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg"
+                      src={imageUrl}
                       alt="Dipanjan Prangon"
                       width={300}
                       height={300}
@@ -87,8 +91,7 @@ const AboutMe = () => {
   );
 };
 
-const SkillsSection = () => {
-  const skills = ["Web Development", "Programming Languages", "Graphic Design", "UI/UX Design", "Branding", "SEO"];
+const SkillsSection = ({ skills } : { skills: string[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -135,31 +138,7 @@ const SkillsSection = () => {
   );
 };
 
-const WhatTheySaidSection = () => {
-  const testimonials = [
-    {
-      quote: "Dipanjan's branding work took our EdTech startup to the next level. The logo and visual identity perfectly capture our mission.",
-      author: "Aarav Sharma",
-      title: "CEO, Edufy",
-      image: "https://placehold.co/100x100.png",
-      imageAiHint: "man face",
-    },
-    {
-      quote: "The learning materials designed by Prangon’s Ecosystem are both beautiful and effective. Our student engagement has skyrocketed.",
-      author: "Nadia Islam",
-      title: "Head of Curriculum, Shikho",
-      image: "https://placehold.co/100x100.png",
-      imageAiHint: "woman face",
-    },
-    {
-      quote: "As a student, the digital tools he developed have been a game-changer for my study routine. Incredibly intuitive and helpful.",
-      author: "Priya Das",
-      title: "Student, University of Dhaka",
-      image: "https://placehold.co/100x100.png",
-      imageAiHint: "woman smiling",
-    },
-  ];
-
+const WhatTheySaidSection = ({ testimonials }: { testimonials: any[] }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -168,6 +147,8 @@ const WhatTheySaidSection = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, [testimonials.length]);
+
+  if (testimonials.length === 0) return null;
 
   const currentTestimonial = testimonials[activeIndex];
 
@@ -241,12 +222,7 @@ const WhatTheySaidSection = () => {
   );
 };
   
-const InfoSection = () => {
-    const toolboxItems = [
-      { name: 'Express' }, { name: 'Node.js' }, { name: 'Flask' }, { name: 'Tailwind' },
-      { name: 'Mongoose' }, { name: 'jQuery' }, { name: 'MySQL' }, { name: 'PostgreSQL' }
-    ];
-  
+const InfoSection = ({ toolboxItems, readsImage, hobbiesImage } : { toolboxItems: {name: string}[], readsImage: string, hobbiesImage: string }) => {
     const cardVariants = {
         hidden: { opacity: 0, y: 50 },
         visible: (i: number) => ({ 
@@ -276,7 +252,7 @@ const InfoSection = () => {
               <p className="text-muted-foreground mb-4">Explore the books shaping my perspectives.</p>
             </div>
             <Image 
-              src="https://placehold.co/400x600.png" 
+              src={readsImage}
               alt="Atomic Habits book cover" 
               width={400} 
               height={600} 
@@ -330,7 +306,7 @@ const InfoSection = () => {
                 <p className="text-muted-foreground">Explore my interests, hobbies, and other things I enjoy doing beyond the digital realm.</p>
              </div>
              <Image 
-                src="https://placehold.co/800x400.png"
+                src={hobbiesImage}
                 alt="Map of Dhaka"
                 className="object-cover opacity-10 z-0"
                 data-ai-hint="map Dhaka"
@@ -343,31 +319,7 @@ const InfoSection = () => {
     );
 }
 
-const LatestVideosSection = () => {
-    const videos = [
-      {
-        title: "কে জিতবে আগামী সংসদ নির্বাচনে? Dipanjan Swapna || The Untold",
-        author: "Dipanjan Swapna",
-        timestamp: "15 hours ago",
-        thumbnail: "https://placehold.co/400x225.png",
-        thumbnailAiHint: "youtube thumbnail politics",
-      },
-      {
-        title: "ইউনুস সরকার আমেরিকার বাম্বু খাইতেছে কি? Dipanjan Swapna || The Untold",
-        author: "Dipanjan Swapna",
-        timestamp: "July 29, 2025 7:21 pm",
-        thumbnail: "https://placehold.co/400x225.png",
-        thumbnailAiHint: "youtube thumbnail news",
-      },
-      {
-        title: "বিএনপির শেষ যাত্রা — কে রুখবে এই পতন? Dipanjan Swapna || The Untold",
-        author: "Dipanjan Swapna",
-        timestamp: "July 27, 2025 7:49 pm",
-        thumbnail: "https://placehold.co/400x225.png",
-        thumbnailAiHint: "youtube thumbnail analysis",
-      },
-    ];
-
+const LatestVideosSection = ({ videos }: { videos: any[] }) => {
     const cardVariants = {
         hidden: { opacity: 0, y: 50 },
         visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.2 } }
@@ -476,8 +428,34 @@ const LatestVideosSection = () => {
   };
 
 export default function Home() {
+  const [content, setContent] = useState<HomePageData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const title = "SMILE FOR MILES".split(" ");
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const homePageData = await getHomePageContent();
+        setContent(homePageData);
+      } catch (error) {
+        console.error("Failed to fetch home page content:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContent();
+  }, []);
+
+  if (loading || !content) {
+    return (
+        <div className="w-full h-screen flex flex-col items-center justify-center gap-4">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="text-muted-foreground">Loading Prangon Centre...</p>
+        </div>
+    );
+  }
+
+  const titleWords = content.heroTitle.split(" ");
 
   const titleContainer = {
     hidden: { opacity: 0 },
@@ -505,7 +483,7 @@ export default function Home() {
       <div className="relative w-full h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://scontent.fdac138-1.fna.fbcdn.net/v/t39.30808-6/489643954_1207618031366053_6391368232504397889_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=bybr_YZJzsUQ7kNvwFkUVAN&_nc_oc=AdknBg_ukuAGHBLRTJ3Z23JbDfxZOAVYo6-Kh_2pziZc2q3gqRlUagLlkiogSv0V5dU&_nc_zt=23&_nc_ht=scontent.fdac138-1.fna&_nc_gid=Ep4pWuNIWrzdeH-MHntHnw&oh=00_AfR85qb8KAeVlYCXXzNw4eT8e7SX-_Hejf8RFCRoD84ZFA&oe=6892201F"
+            src={content.heroBackgroundImageUrl}
             alt="Minh Pham"
             className="object-cover opacity-30"
             priority
@@ -521,7 +499,7 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-sm md:text-base tracking-[0.2em] md:tracking-[0.3em] mb-4 uppercase"
           >
-            WELCOME TO PRANGON CENTRE
+            {content.heroWelcomeText}
           </motion.p>
           <motion.h1 
             variants={titleContainer}
@@ -529,7 +507,7 @@ export default function Home() {
             animate="visible"
             className="font-headline text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase leading-none tracking-tighter"
           >
-           {title.map((word, index) => (
+           {titleWords.map((word, index) => (
              <span key={index} className="inline-block">
                 {word === "FOR" ? (
                     <motion.span variants={titleItem} className="text-primary">FOR&nbsp;</motion.span>
@@ -540,17 +518,17 @@ export default function Home() {
                         </motion.span>
                     ))
                 )}
-                {index < title.length -1 && <span>&nbsp;</span>}
+                {index < titleWords.length -1 && <span>&nbsp;</span>}
             </span>
            ))}
           </motion.h1>
         </div>
       </div>
-      <AboutMe />
-      <SkillsSection />
-      <WhatTheySaidSection />
-      <InfoSection />
-      <LatestVideosSection />
+      <AboutMe text={content.aboutMeText} imageUrl={content.aboutMeImageUrl}/>
+      <SkillsSection skills={content.skills} />
+      <WhatTheySaidSection testimonials={content.testimonials}/>
+      <InfoSection toolboxItems={content.toolboxItems} readsImage={content.readsImage} hobbiesImage={content.hobbiesImage} />
+      <LatestVideosSection videos={content.videos} />
     </>
   );
 }
