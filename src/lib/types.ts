@@ -53,3 +53,15 @@ export const prangonsLikhaPostSchema = z.object({
 });
 
 export type PrangonsLikhaPost = z.infer<typeof prangonsLikhaPostSchema>;
+
+export const subscriptionPlanSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, 'Plan name is required.'),
+  description: z.string().min(1, 'Description is required.'),
+  priceMonthly: z.number().positive('Monthly price must be positive.'),
+  priceYearly: z.number().positive('Yearly price must be positive.'),
+  features: z.array(z.string().min(1, 'Feature cannot be empty.')),
+  isPopular: z.boolean().default(false),
+});
+
+export type SubscriptionPlan = z.infer<typeof subscriptionPlanSchema>;

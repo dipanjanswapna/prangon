@@ -5,69 +5,13 @@ import { motion } from 'framer-motion';
 import { Check, Crown, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-
-const plans = {
-    monthly: [
-        {
-            name: 'Reader',
-            price: '$5',
-            period: '/month',
-            description: 'Access to all premium articles and our community.',
-            features: [
-                'Unlimited premium articles',
-                'Join the community forum',
-                'Monthly newsletter',
-                'Cancel anytime'
-            ],
-            isPopular: false,
-        },
-        {
-            name: 'Patron',
-            price: '$10',
-            period: '/month',
-            description: 'Support our work and get exclusive benefits.',
-            features: [
-                'All features from Reader plan',
-                'Early access to new content',
-                'Monthly Q&A with authors',
-                'Your name in our patrons list'
-            ],
-            isPopular: true,
-        },
-    ],
-    yearly: [
-        {
-            name: 'Reader',
-            price: '$50',
-            period: '/year',
-            description: 'Get 2 months free with our annual plan.',
-            features: [
-                'Unlimited premium articles',
-                'Join the community forum',
-                'Monthly newsletter',
-                'Cancel anytime'
-            ],
-            isPopular: false,
-        },
-        {
-            name: 'Patron',
-            price: '$100',
-            period: '/year',
-            description: 'Maximum savings for our biggest supporters.',
-            features: [
-                'All features from Reader plan',
-                'Early access to new content',
-                'Monthly Q&A with authors',
-                'Your name in our patrons list'
-            ],
-            isPopular: true,
-        },
-    ]
-};
+import { getSubscriptionPlans } from '@/app/admin/subscriptions/actions';
+import { SubscriptionPlan } from '@/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -86,10 +30,42 @@ const itemVariants = {
     },
 };
 
+const PlanCardSkeleton = () => (
+    <Card className="bg-muted/30 flex flex-col h-full">
+        <CardHeader className="text-center">
+            <Skeleton className="h-6 w-24 mx-auto" />
+            <Skeleton className="h-4 w-48 mx-auto mt-2" />
+        </CardHeader>
+        <CardContent className="flex-grow">
+            <div className="text-center mb-6">
+                <Skeleton className="h-10 w-20 mx-auto" />
+                <Skeleton className="h-4 w-16 mx-auto mt-1" />
+            </div>
+            <ul className="space-y-3">
+                {[...Array(4)].map((_, i) => (
+                    <li key={i} className="flex items-center gap-3">
+                        <Skeleton className="h-5 w-5 rounded-full" />
+                        <Skeleton className="h-4 w-full" />
+                    </li>
+                ))}
+            </ul>
+        </CardContent>
+        <CardFooter>
+            <Skeleton className="h-10 w-full" />
+        </CardFooter>
+    </Card>
+)
+
 export default function SubscribePage() {
     const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+    const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const activePlans = plans[billingCycle];
+    useEffect(() => {
+        getSubscriptionPlans()
+            .then(setPlans)
+            .finally(() => setLoading(false));
+    }, []);
 
     return (
         <div className="bg-background min-h-screen py-16 md:py-24">
@@ -126,48 +102,60 @@ export default function SubscribePage() {
                     <Label htmlFor="billing-cycle" className={cn("font-medium", billingCycle === 'yearly' && 'text-primary')}>Yearly</Label>
                     <Badge variant="secondary" className="bg-green-500/20 text-green-400 border-green-500/30">Save 20%</Badge>
                 </motion.div>
+                
+                {loading ? (
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                        <PlanCardSkeleton />
+                        <PlanCardSkeleton />
+                    </div>
+                ) : (
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"
+                    >
+                        {plans.map((plan, index) => (
+                            <motion.div key={plan.id} variants={itemVariants}>
+                                <Card className={cn("bg-muted/30 flex flex-col h-full", plan.isPopular && "border-primary shadow-primary/20")}>
+                                    {plan.isPopular && (
+                                        <div className="bg-primary text-primary-foreground text-center py-1.5 px-4 text-sm font-bold rounded-t-lg">
+                                            Most Popular
+                                        </div>
+                                    )}
+                                    <CardHeader className="text-center">
+                                        <CardTitle className="text-2xl font-bold font-headline text-primary-foreground">{plan.name}</CardTitle>
+                                        <CardDescription>{plan.description}</CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="flex-grow">
+                                        <div className="text-center mb-6">
+                                            <span className="text-4xl font-extrabold text-primary-foreground">
+                                                ${billingCycle === 'monthly' ? plan.priceMonthly : plan.priceYearly}
+                                            </span>
+                                            <span className="text-muted-foreground">
+                                                /{billingCycle === 'monthly' ? 'month' : 'year'}
+                                            </span>
+                                        </div>
+                                        <ul className="space-y-3 text-muted-foreground">
+                                            {plan.features.map((feature, i) => (
+                                                <li key={i} className="flex items-center gap-3">
+                                                    <Check className="h-5 w-5 text-green-500" />
+                                                    <span>{feature}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </CardContent>
+                                    <CardFooter>
+                                        <Button className="w-full" variant={plan.isPopular ? 'default' : 'outline'}>
+                                            Subscribe
+                                        </Button>
+                                    </CardFooter>
+                                </Card>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                )}
 
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                    className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"
-                >
-                    {activePlans.map((plan, index) => (
-                        <motion.div key={plan.name} variants={itemVariants}>
-                            <Card className={cn("bg-muted/30 flex flex-col h-full", plan.isPopular && "border-primary shadow-primary/20")}>
-                                {plan.isPopular && (
-                                    <div className="bg-primary text-primary-foreground text-center py-1.5 px-4 text-sm font-bold rounded-t-lg">
-                                        Most Popular
-                                    </div>
-                                )}
-                                <CardHeader className="text-center">
-                                    <CardTitle className="text-2xl font-bold font-headline text-primary-foreground">{plan.name}</CardTitle>
-                                    <CardDescription>{plan.description}</CardDescription>
-                                </CardHeader>
-                                <CardContent className="flex-grow">
-                                    <div className="text-center mb-6">
-                                        <span className="text-4xl font-extrabold text-primary-foreground">{plan.price}</span>
-                                        <span className="text-muted-foreground">{plan.period}</span>
-                                    </div>
-                                    <ul className="space-y-3 text-muted-foreground">
-                                        {plan.features.map((feature, i) => (
-                                            <li key={i} className="flex items-center gap-3">
-                                                <Check className="h-5 w-5 text-green-500" />
-                                                <span>{feature}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </CardContent>
-                                <CardFooter>
-                                    <Button className="w-full" variant={plan.isPopular ? 'default' : 'outline'}>
-                                        Subscribe
-                                    </Button>
-                                </CardFooter>
-                            </Card>
-                        </motion.div>
-                    ))}
-                </motion.div>
 
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}

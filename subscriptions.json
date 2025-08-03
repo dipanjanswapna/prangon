@@ -1,0 +1,31 @@
+
+[
+  {
+    "id": "1",
+    "name": "Reader",
+    "description": "Access to all premium articles and our community.",
+    "priceMonthly": 5,
+    "priceYearly": 50,
+    "features": [
+      "Unlimited premium articles",
+      "Join the community forum",
+      "Monthly newsletter",
+      "Cancel anytime"
+    ],
+    "isPopular": false
+  },
+  {
+    "id": "2",
+    "name": "Patron",
+    "description": "Support our work and get exclusive benefits.",
+    "priceMonthly": 10,
+    "priceYearly": 100,
+    "features": [
+      "All features from Reader plan",
+      "Early access to new content",
+      "Monthly Q&A with authors",
+      "Your name in our patrons list"
+    ],
+    "isPopular": true
+  }
+]
