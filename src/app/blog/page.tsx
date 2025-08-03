@@ -1,4 +1,6 @@
 
+'use client';
+
 import { motion } from 'framer-motion';
 import { Rss, Calendar, User, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
@@ -6,9 +8,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Post } from '@/lib/blog';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { getPosts } from '../admin/blog/actions';
 
 
 const containerVariants = {
@@ -29,9 +29,8 @@ const itemVariants = {
 };
 
 
-export default async function BlogPage() {
-  const posts = await getPosts();
-
+export default function BlogPage() {
+  
   return (
     <div className="bg-background min-h-screen py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -62,63 +61,11 @@ export default async function BlogPage() {
             </div>
           </div>
         </motion.header>
+        
+        <div className="text-center text-muted-foreground">
+            No blog posts available at the moment.
+        </div>
 
-        <motion.div 
-            variants={containerVariants} 
-            initial="hidden" 
-            animate="visible" 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {posts.map((post) => (
-            <motion.div key={post.slug} variants={itemVariants}>
-              <Card className="bg-muted/30 group overflow-hidden h-full flex flex-col backdrop-blur-sm shadow-lg hover:shadow-primary/20 transition-all duration-300">
-                <CardHeader className="p-0">
-                  <div className="relative overflow-hidden">
-                    <Link href={`/blog/${post.slug}`}>
-                        <Image
-                          src={post.coverImage}
-                          alt={post.title}
-                          width={600}
-                          height={400}
-                          data-ai-hint="blog post cover"
-                          className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                    </Link>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-6 flex-grow">
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    {post.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
-                  </div>
-                  <CardTitle className="text-xl font-bold mb-2 text-primary-foreground group-hover:text-primary transition-colors">
-                    <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-                  </CardTitle>
-                  <CardDescription className="line-clamp-3">{post.description}</CardDescription>
-                </CardContent>
-                <CardFooter className="p-6 pt-0 flex flex-col items-start gap-4">
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-2">
-                             <Avatar className="h-6 w-6">
-                                <AvatarImage src={post.author.imageUrl} alt={post.author.name} />
-                                <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <span>{post.author.name}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                           <Calendar className="h-4 w-4" />
-                           <time dateTime={new Date(post.date).toISOString()}>{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</time>
-                        </div>
-                    </div>
-                    <Link href={`/blog/${post.slug}`} className="w-full">
-                        <Button variant="outline" className="w-full">
-                          Read More <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </Link>
-                </CardFooter>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
       </div>
     </div>
   );

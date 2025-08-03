@@ -10,8 +10,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Project } from '@/lib/projects';
-import { getProjects } from '@/app/admin/projects/actions';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 
@@ -27,7 +25,7 @@ const techSkills = [
           { name: "CSS3", logo: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.75L3.25 4.5v13.5L12 22.25l8.75-4.25V4.5M12 1.75L3.25 4.5v13.5L12 22.25l8.75-4.25V4.5zM12 7h5l-.5 2.5h-4.5v2h4l-.5 2.5h-3.5v2H16l-1 2.5-3 .75v-2.25h5.5l.5-2.5h-5.5V7z"/></svg> },
           { name: "JavaScript", logo: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2m4.28 13.84a.81.81 0 0 1-1 .13l-2.45-1.42a.54.54 0 0 1-.29-.48V10.2a.55.55 0 0 1 .55-.55.56.56 0 0 1 .55.55v3.34l1.65.95a.81.81 0 0 1 .13 1.01m-5-1a.81.81 0 0 1-1 .13l-2.45-1.42a.55.55 0 0 1-.29-.48v-3.86a.55.55 0 0 1 .55-.55.56.56 0 0 1 .55.55v3.34l1.65.95a.81.81 0 0 1-.13 1.14"/></svg> },
           { name: "React.js", logo: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><ellipse cx="12" cy="12" rx="11" ry="4.2"/><path d="M12 12.01V12M12 21.8C7.64 21.8 4 17.33 4 12c0-5.33 3.64-9.8 8-9.8c4.36 0 8 4.47 8 9.8c0 5.33-3.64 9.8-8 9.8Z"/></g></svg> },
-          { name: "Tailwind CSS", logo: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12.001 4.5c-4.114 0-7.462 3.344-7.462 7.458c0 2.89 1.69 5.43 4.125 6.643c.187 1.48.74 2.473 1.432 3.168c.94.94 2.21 1.48 3.707 1.48c2.218 0 3.753-1.24 4.537-2.44c.48-.74.654-1.63.585-2.733c2.083-1.24 3.443-3.52 3.443-6.126c0-4.114-3.348-7.458-7.467-7.458zm-3.28 7.459c0-.46.37-.83.83-.83h4.91c.46 0 .83.37.83.83c0 .458-.37.83-.83.83h-4.91a.83.83 0 0 1-.83-.83zm6.56 2.489c0 .46-.37.83-.83.83h-4.91a.83.83 0 0 1-.83-.83c0-.46.37-.83.83-.83h4.91c.46 0 .83.37.83.83z"/></svg> },
+          { name: "Tailwind CSS", logo: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12.001 4.5c-4.114 0-7.462 3.344-7.462 7.458c0 2.89 1.69 5.43 4.125 6.643c.187 1.48.74 2.473 1.432 3.168c.94.94 2.21 1.48 3.707 1.48c2.218 0 3.753-1.24 4.537-2.44c.48-.74.654-1.63.585-2.733c2.083-1.24 3.443-3.52 3.443-6.126c0-4.114-3.348-7.458-7.467-7.458zm-3.28 7.459c0-.46.37-.83.83-.83h4.91c.46 0 .83.37.83.83c0 .458-.37.83-.83-.83h-4.91a.83.83 0 0 1-.83-.83zm6.56 2.489c0 .46-.37.83-.83.83h-4.91a.83.83 0 0 1-.83-.83c0-.46.37-.83.83-.83h4.91c.46 0 .83.37.83.83z"/></svg> },
         ]
       },
       {
@@ -87,168 +85,8 @@ const techSkills = [
   }
 ];
 
-const ProfessionalProjectsClient = ({ projects: initialProjects }: { projects: Project[] }) => {
-  const [projects, setProjects] = useState<Project[]>(initialProjects);
-  
-  const allCategories = useMemo(() => ['All', ...Array.from(new Set(initialProjects.map(p => p.category)))], [initialProjects]);
-  const allTags = useMemo(() => ['All', ...Array.from(new Set(initialProjects.flatMap(p => p.tags)))], [initialProjects]);
-
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedTag, setSelectedTag] = useState('All');
-  const [likes, setLikes] = useState<{ [key: number]: number }>({});
-  const [loved, setLoved] = useState<{ [key: number]: boolean }>({});
-
-  useEffect(() => {
-    try {
-      const savedLikes = localStorage.getItem('projectLikes');
-      if (savedLikes) {
-        setLikes(JSON.parse(savedLikes));
-      }
-      const savedLoves = localStorage.getItem('projectLoves');
-      if (savedLoves) {
-        setLoved(JSON.parse(savedLoves));
-      }
-    } catch (error) {
-      console.error("Failed to parse from localStorage", error);
-    }
-  }, []);
-
-  const handleLoveClick = (projectId: number) => {
-    const newLovedState = !loved[projectId];
-    const newLikesCount = newLovedState
-      ? (likes[projectId] || 0) + 1
-      : (likes[projectId] || 1) - 1;
-
-    const newLikes = { ...likes, [projectId]: newLikesCount };
-    const newLoves = { ...loved, [projectId]: newLovedState };
-    
-    setLikes(newLikes);
-    setLoved(newLoves);
-    
-    localStorage.setItem('projectLikes', JSON.stringify(newLikes));
-    localStorage.setItem('projectLoves', JSON.stringify(newLoves));
-  };
-
-  const filteredProjects = useMemo(() => projects.filter(project => {
-    const categoryMatch = selectedCategory === 'All' || project.category === selectedCategory;
-    const tagMatch = selectedTag === 'All' || project.tags.includes(selectedTag);
-    return categoryMatch && tagMatch;
-  }), [projects, selectedCategory, selectedTag]);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0, scale: 0.95 },
-    visible: { y: 0, opacity: 1, scale: 1, transition: { type: 'spring', stiffness: 100 } },
-    exit: { y: -20, opacity: 0, scale: 0.95 }
-  };
-
-  const FilterDropdown = ({ label, options, selected, onSelect }: { label: string, options: string[], selected: string, onSelect: (value: string) => void }) => (
-    <div className="grid w-full items-center gap-1.5">
-        <Label htmlFor={label.toLowerCase()} className="text-sm font-semibold text-muted-foreground">{label}</Label>
-        <Select value={selected} onValueChange={onSelect}>
-            <SelectTrigger id={label.toLowerCase()} className="w-full bg-background/50">
-                <SelectValue placeholder={`Select ${label}`} />
-            </SelectTrigger>
-            <SelectContent>
-                {options.map(option => (
-                    <SelectItem key={option} value={option}>{option}</SelectItem>
-                ))}
-            </SelectContent>
-        </Select>
-    </div>
-  );
-
-  return (
-    <>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-        className="bg-muted/30 backdrop-blur-sm p-6 md:p-8 rounded-2xl mb-12 border border-border"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FilterDropdown label="Filter by Category" options={allCategories} selected={selectedCategory} onSelect={setSelectedCategory} />
-          <FilterDropdown label="Filter by Tool/Tag" options={allTags} selected={selectedTag} onSelect={setSelectedTag} />
-        </div>
-      </motion.div>
-
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-      >
-        <AnimatePresence>
-          {filteredProjects.map((project) => (
-            <motion.div
-              key={project.id}
-              variants={itemVariants}
-              layout
-            >
-              <Card className="bg-muted/30 group overflow-hidden h-full flex flex-col backdrop-blur-sm shadow-lg hover:shadow-primary/20 transition-all duration-300 rounded-2xl">
-                 <CardHeader className="p-0">
-                    <div className="relative overflow-hidden rounded-t-2xl">
-                      <Image
-                        src={project.imageUrl}
-                        alt={project.title}
-                        width={600}
-                        height={400}
-                        data-ai-hint={project.imageAiHint}
-                        className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
-                  </CardHeader>
-                <CardContent className="p-6 flex-grow flex flex-col">
-                  <Badge variant="outline" className="mb-2 self-start">{project.category}</Badge>
-                  <CardTitle className="text-xl font-bold mb-2 text-primary-foreground group-hover:text-primary transition-colors">
-                      <Link href={`/projects/${project.slug}`}>{project.title}</Link>
-                  </CardTitle>
-                  <CardDescription className="line-clamp-3 mb-4 flex-grow">{project.description}</CardDescription>
-                   <div className="flex flex-wrap gap-2">
-                      {project.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
-                    </div>
-                </CardContent>
-                <div className="p-6 pt-0 mt-auto flex justify-between items-center">
-                  <Link href={`/projects/${project.slug}`}>
-                    <Button variant="outline" className="w-full">
-                      View Case Study <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon" onClick={() => handleLoveClick(project.id)}>
-                      <Heart className={`h-5 w-5 ${loved[project.id] ? 'text-red-500 fill-current' : 'text-muted-foreground'}`} />
-                    </Button>
-                    <span className="text-sm text-muted-foreground">{likes[project.id] || 0}</span>
-                  </div>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </motion.div>
-    </>
-  );
-};
-
-
 export default function ProfessionalProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
   
-  useEffect(() => {
-      async function fetchProjects() {
-          const fetchedProjects = await getProjects();
-          setProjects(fetchedProjects);
-      }
-      fetchProjects();
-  }, [])
-
   return (
     <div className="relative bg-background min-h-screen">
       <Image
@@ -275,8 +113,10 @@ export default function ProfessionalProjectsPage() {
             A showcase of my skills through real-world client projects. Filter by category or technology to explore my work.
           </p>
         </motion.header>
-
-        <ProfessionalProjectsClient projects={projects} />
+        
+        <div className="text-center text-muted-foreground">
+            No projects available at the moment.
+        </div>
         
         <motion.section
             initial={{ opacity: 0, y: 50 }}

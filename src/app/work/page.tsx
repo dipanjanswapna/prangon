@@ -9,8 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { experiences } from '@/lib/experiences';
 import { achievements } from '@/lib/achievements';
-import { getProjects } from '../admin/projects/actions';
-import type { Project } from '@/lib/projects';
 
 
 const visualArts = [
@@ -52,7 +50,6 @@ const SectionHeader = ({ icon, title, description }: { icon: React.ReactNode; ti
 );
 
 export default async function WorkPage() {
-    const professionalProjects: Project[] = (await getProjects()).slice(0, 2);
 
   return (
     <div className="relative bg-background min-h-screen">
@@ -76,14 +73,6 @@ export default async function WorkPage() {
           <p className="text-xl md:text-2xl text-muted-foreground mt-4 max-w-4xl mx-auto">
             A curated showcase of my professional projects, creative endeavors, experiences, and achievements.
           </p>
-           <div className="mt-8">
-                <Link href="/admin/dashboard">
-                    <Button size="lg" variant="outline">
-                        <Shield className="mr-2 h-5 w-5" />
-                        Admin Panel
-                    </Button>
-                </Link>
-            </div>
         </motion.header>
 
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-24">
@@ -95,45 +84,11 @@ export default async function WorkPage() {
                 title="Professional Projects"
                 description="A selection of my best client work, ranging from UI/UX design to complete branding projects."
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {professionalProjects.map((project, index) => (
-                <motion.div key={project.slug} variants={itemVariants}>
-                  <Card className="bg-muted/30 group overflow-hidden h-full flex flex-col backdrop-blur-sm shadow-lg">
-                    <CardHeader className="p-0">
-                      <div className="relative overflow-hidden rounded-t-lg">
-                        <Image
-                          src={project.imageUrl}
-                          alt={project.title}
-                          width={600}
-                          height={400}
-                          data-ai-hint={project.imageAiHint}
-                          className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      </div>
-                    </CardHeader>
-                    <CardContent className="p-6 flex-grow">
-                      <CardTitle className="text-xl font-bold mb-2">{project.title}</CardTitle>
-                      <CardDescription>{project.description}</CardDescription>
-                      <div className="flex flex-wrap gap-2 mt-4">
-                        {project.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
-                      </div>
-                    </CardContent>
-                    <div className="p-6 pt-0">
-                      <Link href={`/projects/${project.slug}`}>
-                        <Button variant="outline" className="w-full">
-                          View Case Study <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-            <motion.div variants={itemVariants} className="text-center mt-8">
+            <div className="text-center mt-8">
                 <Link href={"/work/projects"}>
                     <Button size="lg">View Full Portfolio</Button>
                 </Link>
-            </motion.div>
+            </div>
           </motion.section>
 
           {/* Visual Arts Section */}

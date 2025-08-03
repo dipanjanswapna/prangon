@@ -2,7 +2,7 @@
 'use client';
 
 import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter } from '@/components/ui/sidebar';
-import { Home, Briefcase, FileText, Settings, Loader2 } from 'lucide-react';
+import { Home, Settings, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
@@ -48,22 +48,6 @@ export default function AdminLayout({
                             <Link href="/admin/dashboard">
                                 <Home />
                                 <span>Dashboard</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton asChild>
-                            <Link href="/admin/projects">
-                                <Briefcase />
-                                <span>Projects</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton asChild>
-                            <Link href="/admin/blog">
-                                <FileText />
-                                <span>Blog</span>
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

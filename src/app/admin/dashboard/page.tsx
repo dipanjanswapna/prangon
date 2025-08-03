@@ -2,12 +2,10 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Activity, Briefcase, BarChart, FileText } from 'lucide-react';
+import { Activity, BarChart } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const stats = [
-    { title: 'Total Projects', value: '12', icon: <Briefcase className="h-6 w-6 text-primary" /> },
-    { title: 'Blog Posts', value: '8', icon: <FileText className="h-6 w-6 text-primary" /> },
     { title: 'Page Views', value: '25.3K', icon: <BarChart className="h-6 w-6 text-primary" /> },
     { title: 'New Leads', value: '150', icon: <Activity className="h-6 w-6 text-primary" /> },
 ];
