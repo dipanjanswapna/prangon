@@ -81,6 +81,8 @@ export const libraryItemSchema = z.object({
     coverImage: z.string().url('Must be a valid URL.'),
     imageAiHint: z.string().optional().default('book cover'),
     content: z.string().optional(),
+    pdfUrl: z.string().url().optional(),
+    documentAiHint: z.string().optional().default('document screenshot'),
     tags: z.array(z.string().min(1, 'Tag cannot be empty.')),
     isFeatured: z.boolean().default(false),
     isPremium: z.boolean().default(false),
