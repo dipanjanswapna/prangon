@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function AdminLayout({
   children,
@@ -42,6 +43,7 @@ export default function AdminLayout({
                 </div>
             </SidebarHeader>
             <SidebarContent>
+              <ScrollArea className="h-full">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild>
@@ -84,6 +86,7 @@ export default function AdminLayout({
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
+              </ScrollArea>
             </SidebarContent>
             <SidebarFooter>
                  <SidebarMenu>
