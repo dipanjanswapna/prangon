@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { getPrangonsLikhaPosts } from '@/app/admin/prangons-likha/actions';
 import { PrangonsLikhaPost } from '@/lib/types';
 import { motion } from 'framer-motion';
@@ -99,9 +99,9 @@ function Section({ title, posts, href }: { title: string, posts: PrangonsLikhaPo
 export default function PrangonsLikhaPage() {
     const [posts, setPosts] = useState<PrangonsLikhaPost[]>([]);
 
-    useState(() => {
+    useEffect(() => {
         getPrangonsLikhaPosts().then(setPosts);
-    });
+    }, []);
 
     const categorizedPosts = useMemo(() => {
         return posts.reduce((acc, post) => {
