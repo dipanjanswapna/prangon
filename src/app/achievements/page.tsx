@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Award, GraduationCap, Users, ExternalLink, Verified, Download, X } from 'lucide-react';
 import Image from 'next/image';
@@ -10,12 +10,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { achievements, Achievement } from '@/lib/achievements';
+import { Achievement } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { getAchievements } from './actions';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const categoryFilters = ['All', ...Array.from(new Set(achievements.map(e => e.category)))];
-
-const categoryStyles = {
+const categoryStyles: { [key: string]: { icon: React.ElementType, color: string } } = {
     Award: { icon: Trophy, color: 'text-yellow-500' },
     Certification: { icon: Verified, color: 'text-green-500' },
     Academic: { icon: GraduationCap, color: 'text-blue-500' },
@@ -72,9 +72,42 @@ const AchievementCard = ({ achievement, onCardClick }: { achievement: Achievemen
     );
 };
 
+const AchievementCardSkeleton = () => (
+    <Card className="bg-muted/30 backdrop-blur-sm shadow-lg h-full flex flex-col">
+        <Skeleton className="h-48 w-full rounded-t-lg" />
+        <CardHeader>
+            <div className="flex items-start gap-4">
+                <Skeleton className="h-12 w-12 rounded-lg" />
+                <div className="flex-1 space-y-2">
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-4 w-1/2" />
+                </div>
+            </div>
+        </CardHeader>
+        <CardContent>
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6 mt-2" />
+        </CardContent>
+        <div className="p-6 pt-0 flex justify-between items-center">
+            <Skeleton className="h-5 w-20 rounded-full" />
+            <Skeleton className="h-4 w-24" />
+        </div>
+    </Card>
+);
+
 export default function AchievementsPage() {
+    const [achievements, setAchievements] = useState<Achievement[]>([]);
+    const [loading, setLoading] = useState(true);
     const [activeFilter, setActiveFilter] = useState('All');
     const [selectedAchievement, setSelectedAchievement] = useState<Achievement | null>(null);
+
+    useEffect(() => {
+        getAchievements()
+            .then(data => {
+                setAchievements(data);
+            })
+            .finally(() => setLoading(false));
+    }, []);
 
     const filteredAchievements = activeFilter === 'All'
         ? achievements
@@ -87,6 +120,9 @@ export default function AchievementsPage() {
             transition: { staggerChildren: 0.1, delayChildren: 0.2 },
         },
     };
+    
+    const categoryFilters = ['All', 'Award', 'Certification', 'Academic', 'Leadership'];
+
 
     return (
         <>
@@ -134,18 +170,24 @@ export default function AchievementsPage() {
                         ))}
                     </motion.div>
 
-                    <motion.div
-                        variants={containerVariants}
-                        initial="hidden"
-                        animate="visible"
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                    >
-                        <AnimatePresence>
-                        {filteredAchievements.map((ach) => (
-                                <AchievementCard key={ach.id} achievement={ach} onCardClick={setSelectedAchievement} />
-                            ))}
-                        </AnimatePresence>
-                    </motion.div>
+                    {loading ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {[...Array(3)].map((_, i) => <AchievementCardSkeleton key={i} />)}
+                        </div>
+                    ) : (
+                        <motion.div
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                        >
+                            <AnimatePresence>
+                            {filteredAchievements.map((ach) => (
+                                    <AchievementCard key={ach.id} achievement={ach} onCardClick={setSelectedAchievement} />
+                                ))}
+                            </AnimatePresence>
+                        </motion.div>
+                    )}
                 </div>
             </div>
             

@@ -1,4 +1,6 @@
 
+'use client';
+
 import { getVisualArts } from './actions';
 import { VisualArtForm, DeleteArtButton } from '@/components/admin/visual-arts-form';
 import { VisualArt } from '@/lib/types';
@@ -6,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -20,9 +24,29 @@ const itemVariants = {
   visible: { y: 0, opacity: 1 },
 };
 
+const ArtCardSkeleton = () => (
+    <Card>
+        <Skeleton className="h-48 w-full" />
+        <CardContent className="p-4 space-y-2">
+            <Skeleton className="h-6 w-3/4" />
+            <Skeleton className="h-5 w-20" />
+            <div className="flex justify-end gap-2 pt-2">
+                <Skeleton className="h-8 w-16" />
+                <Skeleton className="h-8 w-16" />
+            </div>
+        </CardContent>
+    </Card>
+);
 
-export default async function AdminVisualArtsPage() {
-  const artworks = await getVisualArts();
+export default function AdminVisualArtsPage() {
+  const [artworks, setArtworks] = useState<VisualArt[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getVisualArts()
+        .then(setArtworks)
+        .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div className="p-4 md:p-8">
@@ -43,7 +67,9 @@ export default async function AdminVisualArtsPage() {
             animate="visible"
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         >
-            {artworks.length > 0 ? (
+            {loading ? (
+                [...Array(4)].map((_, i) => <ArtCardSkeleton key={i} />)
+            ) : artworks.length > 0 ? (
                 artworks.map(art => (
                     <motion.div key={art.id} variants={itemVariants}>
                         <Card className="group">

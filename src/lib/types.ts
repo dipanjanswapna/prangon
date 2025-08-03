@@ -115,7 +115,7 @@ export const achievementSchema = z.object({
     description: z.string().min(1, 'Description is required.'),
     category: z.enum(['Award', 'Certification', 'Academic', 'Leadership']),
     link: z.string().url().optional().or(z.literal('')),
-    imageUrl: z.string().url().optional().or(z.literal('')),
+    imageUrl: z.string().url('Must be a valid URL.'),
     imageAiHint: z.string().optional(),
 });
 
