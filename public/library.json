@@ -1,55 +1,73 @@
 
 [
   {
+    "id": "sonnet-collection-1",
+    "slug": "sonnet-collection",
+    "title": "A Collection of Sonnets",
+    "author": "William Shakespeare",
+    "category": "Book",
+    "coverImage": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385l/40121378.jpg",
+    "imageAiHint": "old book cover",
+    "content": "Sonnet 1: From fairest creatures we desire increase,\nThat thereby beauty's rose might never die,\nBut as the riper should by time decease,\nHis tender heir might bear his memory:\nBut thou, contracted to thine own bright eyes,\nFeed'st thy light's flame with self-substantial fuel,\nMaking a famine where abundance lies,\nThyself thy foe, to thy sweet self too cruel.\nThou that art now the world's fresh ornament\nAnd only herald to the gaudy spring,\nWithin thine own bud buriest thy content\nAnd, tender churl, mak'st waste in niggarding.\nPity the world, or else this glutton be,\nTo eat the world's due, by the grave and thee.\n\n\nSonnet 18: Shall I compare thee to a summer’s day?\nThou art more lovely and more temperate:\nRough winds do shake the darling buds of May,\nAnd summer’s lease hath all too short a date;\nSometime too hot the eye of heaven shines,\nAnd often is his gold complexion dimm'd;\nAnd every fair from fair sometime declines,\nBy chance or nature’s changing course untrimm'd;\nBut thy eternal summer shall not fade,\nNor lose possession of that fair thou ow’st;\nNor shall death brag thou wander’st in his shade,\nWhen in eternal lines to time thou grow’st:\nSo long as men can breathe or eyes can see,\nSo long lives this, and this gives life to thee.\n\n\nSonnet 29: When, in disgrace with fortune and men's eyes,\nI all alone beweep my outcast state,\nAnd trouble deaf heaven with my bootless cries,\nAnd look upon myself and curse my fate,\nWishing me like to one more rich in hope,\nFeatured like him, like him with friends possessed,\nDesiring this man's art and that man's scope,\nWith what I most enjoy contented least;\nYet in these thoughts myself almost despising,\nHaply I think on thee, and then my state,\n(Like to the lark at break of day arising\nFrom sullen earth) sings hymns at heaven's gate;\nFor thy sweet love remembered such wealth brings\nThat then I scorn to change my state with kings.\n\n\nSonnet 116: Let me not to the marriage of true minds\nAdmit impediments. Love is not love\nWhich alters when it alteration finds,\nOr bends with the remover to remove:\nO no! it is an ever-fixed mark\nThat looks on tempests and is never shaken;\nIt is the star to every wandering bark,\nWhose worth's unknown, although his height be taken.\nLove's not Time's fool, though rosy lips and cheeks\nWithin his bending sickle's compass come:\nLove alters not with his brief hours and weeks,\nBut bears it out even to the edge of doom.\nIf this be error and upon me proved,\nI never writ, nor no man ever loved.\n\n\nSonnet 130: My mistress' eyes are nothing like the sun;\nCoral is far more red than her lips' red;\nIf snow be white, why then her breasts are dun;\nIf hairs be wires, black wires grow on her head.\nI have seen roses damasked, red and white,\nBut no such roses see I in her cheeks;\nAnd in some perfumes is there more delight\nThan in the breath that from my mistress reeks.\nI love to hear her speak, yet well I know\nThat music hath a far more pleasing sound;\nI grant I never saw a goddess go;\nMy mistress, when she walks, treads on the ground:\nAnd yet, by heaven, I think my love as rare\nAs any she belied with false compare.",
+    "pdfUrl": "https://www.google.com/books/edition/Shakespeare_s_Sonnets/sK9-AAAAIAAJ?hl=en&gbpv=1&printsec=frontcover",
+    "documentAiHint": "document screenshot",
+    "tags": [
+      "Poetry",
+      "Classic",
+      "Sonnets"
+    ],
+    "isFeatured": true,
+    "isPremium": false
+  },
+  {
     "id": "1",
     "slug": "atomic-habits",
     "title": "Atomic Habits",
     "author": "James Clear",
     "category": "Book",
-    "coverImage": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385l/40121378.jpg",
-    "imageAiHint": "book cover",
-    "content": "An easy & proven way to build good habits & break bad ones.",
-    "tags": ["Self-Help", "Productivity"],
+    "coverImage": "https://placehold.co/600x800.png",
+    "imageAiHint": "book cover self help",
+    "content": "Tiny Changes, Remarkable Results. An Easy & Proven Way to Build Good Habits & Break Bad Ones.",
+    "tags": [
+      "Self-Help",
+      "Productivity",
+      "Psychology"
+    ],
     "isFeatured": true,
-    "isPremium": false
+    "isPremium": true
   },
   {
     "id": "2",
-    "slug": "time-weekly-may-2024",
-    "title": "The AI Revolution",
-    "author": "TIME Magazine",
+    "slug": "prothom-alo-weekly-1",
+    "title": "Weekly Prothom Alo",
+    "author": "Prothom Alo",
     "category": "Weekly Magazine",
-    "coverImage": "https://placehold.co/400x600.png",
-    "imageAiHint": "magazine cover",
-    "content": "Exploring the rapid advancements and societal impact of Artificial Intelligence.",
-    "tags": ["Technology", "AI", "Future"],
-    "isFeatured": true,
-    "isPremium": true
+    "coverImage": "https://placehold.co/600x800.png",
+    "imageAiHint": "magazine cover design",
+    "content": "Latest news and analysis from Bangladesh and around the world.",
+    "tags": [
+      "News",
+      "Current Affairs",
+      "Bangladesh"
+    ],
+    "isFeatured": false,
+    "isPremium": false
   },
   {
     "id": "3",
-    "slug": "nat-geo-june-2024",
-    "title": "Secrets of the Deep",
-    "author": "National Geographic",
+    "slug": "anondolok-monthly-1",
+    "title": "Monthly Anondolok",
+    "author": "Anondolok",
     "category": "Monthly Magazine",
-    "coverImage": "https://placehold.co/400x600.png",
-    "imageAiHint": "ocean photography",
-    "content": "A journey into the mysterious and uncharted territories of our oceans.",
-    "tags": ["Nature", "Oceanography", "Exploration"],
-    "isFeatured": false,
+    "coverImage": "https://placehold.co/600x800.png",
+    "imageAiHint": "entertainment magazine cover",
+    "content": "Entertainment news, celebrity interviews, and lifestyle articles.",
+    "tags": [
+      "Entertainment",
+      "Celebrity",
+      "Lifestyle"
+    ],
+    "isFeatured": true,
     "isPremium": true
-  },
-  {
-    "id": "4",
-    "slug": "the-psychology-of-money",
-    "title": "The Psychology of Money",
-    "author": "Morgan Housel",
-    "category": "Book",
-    "coverImage": "https://placehold.co/400x600.png",
-    "imageAiHint": "abstract money illustration",
-    "content": "Timeless lessons on wealth, greed, and happiness.",
-    "tags": ["Finance", "Psychology", "Investing"],
-    "isFeatured": false,
-    "isPremium": false
   }
 ]

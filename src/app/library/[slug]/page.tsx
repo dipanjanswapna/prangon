@@ -4,15 +4,91 @@
 import { notFound, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-import { Lock, Star, FileText, BookText } from 'lucide-react';
+import { Lock, Star, FileText, BookText, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LibraryItem } from '@/lib/types';
 import { motion } from 'framer-motion';
 import { getLibraryItems } from '../actions';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+// E-book Reader Component
+const EbookReader = ({ content }: { content: string }) => {
+    const [currentPage, setCurrentPage] = useState(0);
+    const charsPerPage = 1500; // Approximate characters per page
+
+    const pages = useMemo(() => {
+        const p = [];
+        for (let i = 0; i < content.length; i += charsPerPage) {
+            p.push(content.substring(i, i + charsPerPage));
+        }
+        return p;
+    }, [content]);
+
+    const totalPages = pages.length;
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages - 2) {
+            setCurrentPage(prev => prev + 2);
+        } else if (currentPage < totalPages - 1) {
+            setCurrentPage(prev => prev + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prev => prev - 2);
+        } else if (currentPage > 0) {
+            setCurrentPage(prev => prev - 1)
+        }
+    };
+
+    const leftPageContent = pages[currentPage];
+    const rightPageContent = currentPage + 1 < totalPages ? pages[currentPage + 1] : '';
+
+    return (
+        <div className="flex flex-col items-center">
+            <div className="w-full max-w-6xl p-4 bg-muted/20 rounded-lg shadow-inner mt-4 font-serif">
+                <div className="flex flex-col md:flex-row gap-8 min-h-[60vh]">
+                    {/* Left Page */}
+                    <div className="w-full md:w-1/2 p-6 bg-background/50 rounded-lg shadow-md flex flex-col">
+                        <p className="text-foreground/90 whitespace-pre-line leading-relaxed flex-grow">
+                            {leftPageContent}
+                        </p>
+                        <span className="text-center text-sm text-muted-foreground mt-4">
+                            Page {currentPage + 1}
+                        </span>
+                    </div>
+                    {/* Right Page */}
+                     <div className="w-full md:w-1/2 p-6 bg-background/50 rounded-lg shadow-md flex flex-col">
+                        <p className="text-foreground/90 whitespace-pre-line leading-relaxed flex-grow">
+                           {rightPageContent}
+                        </p>
+                         {rightPageContent && (
+                            <span className="text-center text-sm text-muted-foreground mt-4">
+                                Page {currentPage + 2}
+                            </span>
+                         )}
+                    </div>
+                </div>
+            </div>
+            <div className="flex items-center justify-center gap-4 mt-6">
+                <Button onClick={handlePrevPage} disabled={currentPage === 0}>
+                    <ArrowLeft className="mr-2 h-4 w-4" /> Previous
+                </Button>
+                <span className="text-muted-foreground">
+                    Pages {currentPage + 1}{rightPageContent ? `-${currentPage + 2}` : ''} of {totalPages}
+                </span>
+                <Button onClick={handleNextPage} disabled={currentPage >= totalPages - 2}>
+                    Next <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+            </div>
+        </div>
+    );
+};
+
 
 export default function LibraryItemPage() {
   const params = useParams();
@@ -65,11 +141,11 @@ export default function LibraryItemPage() {
     const hasText = !!item.content;
 
     return (
-        <Tabs defaultValue={hasPdf ? "document" : "text"} className="w-full mt-8">
+        <Tabs defaultValue={hasText ? "text" : "document"} className="w-full mt-8">
             <div className="flex justify-center">
               <TabsList>
                   {hasPdf && <TabsTrigger value="document"><FileText className="mr-2 h-4 w-4"/>Document</TabsTrigger>}
-                  {hasText && <TabsTrigger value="text"><BookText className="mr-2 h-4 w-4"/>Text Version</TabsTrigger>}
+                  {hasText && <TabsTrigger value="text"><BookText className="mr-2 h-4 w-4"/>E-Book Reader</TabsTrigger>}
               </TabsList>
             </div>
             {hasPdf && (
@@ -83,11 +159,7 @@ export default function LibraryItemPage() {
             )}
             {hasText && (
                <TabsContent value="text">
-                  <div className="bg-muted/20 p-4 sm:p-8 rounded-lg shadow-inner mt-4">
-                      <div className="prose prose-invert prose-lg max-w-none mx-auto leading-relaxed whitespace-pre-line text-foreground/90 font-serif">
-                          {item.content}
-                      </div>
-                  </div>
+                  <EbookReader content={item.content!} />
               </TabsContent>
             )}
             {!hasPdf && !hasText && (
