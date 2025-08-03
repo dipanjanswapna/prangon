@@ -38,6 +38,7 @@ export const homePageSchema = z.object({
 
 export type HomePageData = z.infer<typeof homePageSchema>;
 
+
 export const prangonsLikhaPostSchema = z.object({
     id: z.string(),
     slug: z.string(),

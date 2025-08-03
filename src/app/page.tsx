@@ -194,7 +194,7 @@ const WhatTheySaidSection = ({ testimonials }: { testimonials: any[] }) => {
                 alt={testimonial.author}
                 width={80}
                 height={80}
-                data-ai-hint={testimonial.imageAiHint}
+                data-ai-hint={testimonial.imageAiHint || 'person'}
                 className={`rounded-full cursor-pointer transition-all duration-300 w-16 h-16 sm:w-20 sm:h-20 ${
                   index === activeIndex ? 'scale-110 border-4 border-primary' : 'opacity-50 hover:opacity-75'
                 }`}
@@ -381,7 +381,7 @@ const LatestVideosSection = ({ videos }: { videos: any[] }) => {
                     width={400} 
                     height={225} 
                     className="w-full h-auto"
-                    data-ai-hint={video.thumbnailAiHint}
+                    data-ai-hint={video.thumbnailAiHint || 'video thumbnail'}
                   />
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <Youtube className="h-12 w-12 sm:h-16 sm:w-16 text-white" />
@@ -470,7 +470,7 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <Image
             src={content.heroBackgroundImageUrl}
-            alt="Minh Pham"
+            alt="Hero background"
             className="object-cover opacity-30"
             priority
             data-ai-hint="man portrait"
@@ -495,15 +495,11 @@ export default function Home() {
           >
            {titleWords.map((word, index) => (
              <span key={index} className="inline-block">
-                {word === "FOR" ? (
-                    <motion.span variants={titleItem} className="text-primary">FOR&nbsp;</motion.span>
-                ) : (
-                    word.split("").map((char, charIndex) => (
-                        <motion.span key={charIndex} variants={titleItem} className="inline-block">
-                            {char}
-                        </motion.span>
-                    ))
-                )}
+                {word.split("").map((char, charIndex) => (
+                    <motion.span key={charIndex} variants={titleItem} className="inline-block">
+                        {char}
+                    </motion.span>
+                ))}
                 {index < titleWords.length -1 && <span>&nbsp;</span>}
             </span>
            ))}

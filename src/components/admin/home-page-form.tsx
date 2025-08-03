@@ -244,7 +244,7 @@ export function HomePageForm({ initialData }: { initialData: HomePageData }) {
                         />
                     </motion.div>
                 ))}
-                 <Button type="button" variant="outline" size="sm" onClick={() => appendTestimonial({ quote: '', author: '', title: '', image: 'https://placehold.co/100x100.png' })}>
+                 <Button type="button" variant="outline" size="sm" onClick={() => appendTestimonial({ quote: '', author: '', title: '', image: 'https://placehold.co/100x100.png', imageAiHint: 'person' }, { shouldFocus: false })}>
                     <PlusCircle className="mr-2 h-4 w-4" /> Add Testimonial
                 </Button>
             </CardContent>
@@ -369,7 +369,7 @@ export function HomePageForm({ initialData }: { initialData: HomePageData }) {
                         />
                     </motion.div>
                 ))}
-                 <Button type="button" variant="outline" size="sm" onClick={() => appendVideo({ title: '', author: '', timestamp: '', thumbnail: 'https://placehold.co/400x225.png' })}>
+                 <Button type="button" variant="outline" size="sm" onClick={() => appendVideo({ title: '', author: '', timestamp: '', thumbnail: 'https://placehold.co/400x225.png', thumbnailAiHint: 'video thumbnail' })}>
                     <PlusCircle className="mr-2 h-4 w-4" /> Add Video
                 </Button>
             </CardContent>
