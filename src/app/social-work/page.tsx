@@ -2,63 +2,25 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { HandHeart, BookOpen, Trees, Users, Heart, Award, ArrowRight } from 'lucide-react';
+import { HandHeart, BookOpen, Trees, Users, Heart, ArrowRight, Salad, BrainCircuit } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getSocialWorkPageData } from './actions';
+import { useState, useEffect } from 'react';
+import { SocialWorkPageData } from '@/lib/types';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const initiatives = [
-  {
-    title: 'EduCare Initiative',
-    category: 'Education',
-    icon: <BookOpen className="h-8 w-8 text-primary" />,
-    description: 'Providing free tutoring and educational materials to underprivileged students in local communities.',
-    impact: 'Reached 200+ students, improving literacy rates by 15% in the target area.',
-    imageUrl: 'https://placehold.co/600x400.png',
-    imageAiHint: 'children studying',
-    tags: ['Education', 'Community', 'Tutoring'],
-  },
-  {
-    title: 'Green Earth Project',
-    category: 'Environment',
-    icon: <Trees className="h-8 w-8 text-primary" />,
-    description: 'Organized tree plantation drives and awareness campaigns about climate change.',
-    impact: 'Planted over 1,000 saplings and conducted 5 awareness seminars in schools.',
-    imageUrl: 'https://placehold.co/600x400.png',
-    imageAiHint: 'tree plantation',
-    tags: ['Environment', 'Climate Action', 'Volunteering'],
-  },
-  {
-    title: 'Community Kitchen',
-    category: 'Humanitarian',
-    icon: <Users className="h-8 w-8 text-primary" />,
-    description: 'A weekly program to provide warm meals for the homeless and daily wage earners.',
-    impact: 'Served over 5,000 meals in the last year, providing crucial support during the pandemic.',
-    imageUrl: 'https://placehold.co/600x400.png',
-    imageAiHint: 'serving food',
-    tags: ['Food Drive', 'Humanitarian', 'Community Support'],
-  },
-];
-
-const testimonials = [
-  {
-    quote: 'The EduCare initiative has been a blessing for my children. They are more confident in their studies now.',
-    author: 'Amina Begum',
-    role: 'Parent',
-    imageUrl: 'https://placehold.co/100x100.png',
-    imageAiHint: 'smiling woman',
-  },
-  {
-    quote: 'Dipanjan’s dedication to community service is truly inspiring. He motivates everyone around him.',
-    author: 'Mr. Rahman',
-    role: 'Community Leader',
-    imageUrl: 'https://placehold.co/100x100.png',
-    imageAiHint: 'man portrait',
-  },
-];
+const categoryIcons: { [key: string]: React.ReactNode } = {
+  Education: <BookOpen className="h-8 w-8 text-primary" />,
+  Environment: <Trees className="h-8 w-8 text-primary" />,
+  Humanitarian: <Users className="h-8 w-8 text-primary" />,
+  Health: <Heart className="h-8 w-8 text-primary" />,
+  Community: <HandHeart className="h-8 w-8 text-primary" />,
+};
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -78,6 +40,37 @@ const itemVariants = {
 };
 
 export default function SocialWorkPage() {
+  const [data, setData] = useState<SocialWorkPageData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getSocialWorkPageData().then((pageData) => {
+      setData(pageData);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-16 md:py-24">
+        <Skeleton className="h-24 w-1/2 mx-auto mb-16" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
+          {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-96 rounded-xl" />)}
+        </div>
+        <Skeleton className="h-20 w-1/3 mx-auto mb-12" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {[...Array(2)].map((_, i) => <Skeleton key={i} className="h-64 rounded-xl" />)}
+        </div>
+      </div>
+    )
+  }
+
+  if (!data) {
+    return <div className="text-center py-24">Could not load data.</div>;
+  }
+
+  const { initiatives, testimonials } = data;
+
   return (
     <div className="bg-background min-h-screen relative">
        <Image
@@ -125,7 +118,7 @@ export default function SocialWorkPage() {
                         <Card className="bg-muted/30 group overflow-hidden h-full flex flex-col backdrop-blur-sm shadow-lg hover:shadow-primary/20 transition-all duration-300 rounded-xl hover:scale-105">
                             <CardHeader className="flex flex-col items-center text-center p-6">
                                 <div className="p-3 bg-primary/10 rounded-full mb-4">
-                                  {item.icon}
+                                  {categoryIcons[item.category] || <HandHeart className="h-8 w-8 text-primary" />}
                                 </div>
                                 <CardTitle className="text-xl font-bold mb-1">{item.title}</CardTitle>
                                 <Badge variant="secondary">{item.category}</Badge>

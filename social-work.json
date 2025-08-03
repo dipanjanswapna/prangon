@@ -1,0 +1,53 @@
+
+{
+  "initiatives": [
+    {
+      "id": "1",
+      "title": "EduCare Initiative",
+      "category": "Education",
+      "description": "Providing free tutoring and educational materials to underprivileged students in local communities.",
+      "impact": "Reached 200+ students, improving literacy rates by 15% in the target area.",
+      "imageUrl": "https://placehold.co/600x400.png",
+      "imageAiHint": "children studying",
+      "tags": ["Education", "Community", "Tutoring"]
+    },
+    {
+      "id": "2",
+      "title": "Green Earth Project",
+      "category": "Environment",
+      "description": "Organized tree plantation drives and awareness campaigns about climate change.",
+      "impact": "Planted over 1,000 saplings and conducted 5 awareness seminars in schools.",
+      "imageUrl": "https://placehold.co/600x400.png",
+      "imageAiHint": "tree plantation",
+      "tags": ["Environment", "Climate Action", "Volunteering"]
+    },
+    {
+      "id": "3",
+      "title": "Community Kitchen",
+      "category": "Humanitarian",
+      "description": "A weekly program to provide warm meals for the homeless and daily wage earners.",
+      "impact": "Served over 5,000 meals in the last year, providing crucial support during the pandemic.",
+      "imageUrl": "https://placehold.co/600x400.png",
+      "imageAiHint": "serving food",
+      "tags": ["Food Drive", "Humanitarian", "Community Support"]
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "1",
+      "quote": "The EduCare initiative has been a blessing for my children. They are more confident in their studies now.",
+      "author": "Amina Begum",
+      "role": "Parent",
+      "imageUrl": "https://placehold.co/100x100.png",
+      "imageAiHint": "smiling woman"
+    },
+    {
+      "id": "2",
+      "quote": "Dipanjan’s dedication to community service is truly inspiring. He motivates everyone around him.",
+      "author": "Mr. Rahman",
+      "role": "Community Leader",
+      "imageUrl": "https://placehold.co/100x100.png",
+      "imageAiHint": "man portrait"
+    }
+  ]
+}

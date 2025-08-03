@@ -203,3 +203,34 @@ export const blogPostSchema = z.object({
 });
 
 export type BlogPost = z.infer<typeof blogPostSchema>;
+
+export const socialWorkInitiativeSchema = z.object({
+    id: z.string(),
+    title: z.string().min(1, 'Title is required.'),
+    category: z.enum(['Education', 'Environment', 'Humanitarian', 'Health', 'Community']),
+    description: z.string().min(1, 'Description is required.'),
+    impact: z.string().min(1, 'Impact statement is required.'),
+    imageUrl: z.string().url('Must be a valid URL.'),
+    imageAiHint: z.string().optional(),
+    tags: z.array(z.string().min(1, 'Tag cannot be empty.')),
+});
+
+export type SocialWorkInitiative = z.infer<typeof socialWorkInitiativeSchema>;
+
+export const socialWorkTestimonialSchema = z.object({
+    id: z.string(),
+    quote: z.string().min(1, 'Quote is required.'),
+    author: z.string().min(1, 'Author is required.'),
+    role: z.string().min(1, 'Role is required.'),
+    imageUrl: z.string().url('Must be a valid URL.'),
+    imageAiHint: z.string().optional(),
+});
+
+export type SocialWorkTestimonial = z.infer<typeof socialWorkTestimonialSchema>;
+
+export const socialWorkPageSchema = z.object({
+  initiatives: z.array(socialWorkInitiativeSchema),
+  testimonials: z.array(socialWorkTestimonialSchema),
+});
+
+export type SocialWorkPageData = z.infer<typeof socialWorkPageSchema>;
