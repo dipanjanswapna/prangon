@@ -21,6 +21,11 @@ const videoSchema = z.object({
     thumbnailAiHint: z.string().optional(),
 });
 
+const statsSchema = z.object({
+  happyCustomers: z.string().min(1, 'Happy customers stat is required.'),
+  servicesProvided: z.string().min(1, 'Services provided stat is required.'),
+});
+
 
 export const homePageSchema = z.object({
   heroWelcomeText: z.string().min(1, 'Welcome text is required.'),
@@ -29,6 +34,7 @@ export const homePageSchema = z.object({
   aboutMeText: z.string().min(1, 'About me text is required.'),
   aboutMeImageUrl: z.string().url('Must be a valid URL.'),
   skills: z.array(z.string().min(1, 'Skill cannot be empty.')).min(1, 'At least one skill is required.'),
+  stats: statsSchema,
   testimonials: z.array(testimonialSchema),
   toolboxItems: z.array(toolboxItemSchema),
   readsImage: z.string().url('Must be a valid URL.'),

@@ -4,12 +4,16 @@
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Youtube, Sparkles, ChevronsRight, Loader2 } from 'lucide-react';
+import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getHomePageContent } from './admin/home/actions';
-import { HomePageData } from '@/lib/types';
+import { HomePageData, LibraryItem, PrangonsLikhaPost, SubscriptionPlan } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import { getLibraryItems } from './library/actions';
+import { getPrangonsLikhaPosts } from './admin/prangons-likha/actions';
+import { getSubscriptionPlans } from './admin/subscriptions/actions';
+import { Card } from '@/components/ui/card';
 
 
 const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
@@ -123,6 +127,86 @@ const SkillsSection = ({ skills } : { skills: string[] }) => {
     </div>
   );
 };
+
+const StatsSection = ({ happyCustomers, servicesProvided }: { happyCustomers: string, servicesProvided: string }) => {
+    const [libraryItems, setLibraryItems] = useState<LibraryItem[]>([]);
+    const [prangonLikhaItems, setPrangonLikhaItems] = useState<PrangonsLikhaPost[]>([]);
+    const [subscriptionPlans, setSubscriptionPlans] = useState<SubscriptionPlan[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [lib, likha, plans] = await Promise.all([
+                    getLibraryItems(),
+                    getPrangonsLikhaPosts(),
+                    getSubscriptionPlans(),
+                ]);
+                setLibraryItems(lib);
+                setPrangonLikhaItems(likha);
+                setSubscriptionPlans(plans);
+            } catch (error) {
+                console.error("Failed to fetch stats data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const totalWritings = libraryItems.length + prangonLikhaItems.length;
+
+    const stats = [
+        { name: 'Happy Customers', value: happyCustomers, icon: <Heart className="h-8 w-8 text-red-400" />, href: null },
+        { name: 'Services Provided', value: servicesProvided, icon: <Briefcase className="h-8 w-8 text-blue-400" />, href: null },
+        { name: 'Books & Writings', value: loading ? '...' : `${totalWritings}+`, icon: <BookCopy className="h-8 w-8 text-green-400" />, href: null },
+        { name: 'Subscription Packages', value: loading ? '...' : `${subscriptionPlans.length}+`, icon: <Star className="h-8 w-8 text-yellow-400" />, href: '/subscribe' },
+    ];
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.2, delayChildren: 0.3 } },
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
+    };
+
+    return (
+        <div className="bg-background py-16 sm:py-24">
+            <div className="container mx-auto px-4">
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.3 }}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+                >
+                    {stats.map((stat, index) => {
+                        const StatCard = (
+                            <motion.div key={stat.name} variants={itemVariants}>
+                                <Card className="bg-muted/30 p-6 text-center rounded-2xl shadow-lg hover:shadow-primary/20 hover:-translate-y-2 transition-all duration-300 h-full">
+                                    <div className="flex justify-center items-center mb-4 bg-primary/10 w-16 h-16 mx-auto rounded-full">
+                                        {stat.icon}
+                                    </div>
+                                    <p className="text-4xl font-extrabold text-primary-foreground">{stat.value}</p>
+                                    <p className="text-muted-foreground mt-1">{stat.name}</p>
+                                </Card>
+                            </motion.div>
+                        );
+
+                        if (stat.href) {
+                            return <Link href={stat.href} key={stat.name}>{StatCard}</Link>;
+                        }
+                        return StatCard;
+                    })}
+                </motion.div>
+            </div>
+        </div>
+    );
+};
+
 
 const WhatTheySaidSection = ({ testimonials }: { testimonials: any[] }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -508,6 +592,7 @@ export default function Home() {
       </div>
       <AboutMe text={content.aboutMeText} imageUrl={content.aboutMeImageUrl}/>
       <SkillsSection skills={content.skills} />
+      <StatsSection happyCustomers={content.stats.happyCustomers} servicesProvided={content.stats.servicesProvided} />
       <WhatTheySaidSection testimonials={content.testimonials}/>
       <InfoSection toolboxItems={content.toolboxItems} readsImage={content.readsImage} hobbiesImage={content.hobbiesImage} />
       <LatestVideosSection videos={content.videos} />

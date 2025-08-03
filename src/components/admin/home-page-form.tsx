@@ -179,6 +179,44 @@ export function HomePageForm({ initialData }: { initialData: HomePageData }) {
         
         <Card>
             <CardHeader>
+                <CardTitle>Stats Section</CardTitle>
+                <CardDescription>Manage the stats displayed on the home page.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                        control={form.control}
+                        name="stats.happyCustomers"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Happy Customers</FormLabel>
+                            <FormControl>
+                                <Input {...field} placeholder="e.g., 500+" />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="stats.servicesProvided"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Services Provided</FormLabel>
+                            <FormControl>
+                                <Input {...field} placeholder="e.g., 20+" />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+                <p className="text-sm text-muted-foreground">Other stats like 'Books & Writings' and 'Subscription Packages' are calculated automatically.</p>
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
                 <CardTitle>Testimonials Section</CardTitle>
                 <CardDescription>Manage client testimonials.</CardDescription>
             </CardHeader>
