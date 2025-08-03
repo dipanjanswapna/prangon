@@ -17,12 +17,13 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LogIn, UserPlus } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address.' }),
@@ -44,11 +45,25 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
+const images = {
+    login: {
+        src: "https://i.pinimg.com/1200x/af/5e/13/af5e1320015a3672ea231c203ca45ee4.jpg",
+        alt: "Login illustration",
+        aiHint: "fantasy character"
+    },
+    signup: {
+        src: "https://i.pinimg.com/1200x/a9/d8/46/a9d846d03604c81f09ec1f49914df77f.jpg",
+        alt: "Signup illustration",
+        aiHint: "fantasy landscape"
+    }
+}
+
 export default function LoginPage() {
   const { toast } = useToast();
   const { login, signup, loginWithGoogle, user, loading } = useAuth();
   const router = useRouter();
   const [isAdminLogin, setIsAdminLogin] = useState(false);
+  const [activeTab, setActiveTab] = useState('login');
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -114,17 +129,20 @@ export default function LoginPage() {
       toast({ variant: 'destructive', title: 'Login Failed', description: 'Could not log in with Google.' });
     }
   }
+  
+  const currentImage = images[activeTab as keyof typeof images];
 
   return (
     <div className="relative flex min-h-screen items-center justify-center p-4 lg:p-8 bg-background">
       <div className="absolute inset-0 z-0">
           <Image
-              src="https://i.pinimg.com/1200x/af/5e/13/af5e1320015a3672ea231c203ca45ee4.jpg"
+              src={currentImage.src}
               alt="Background"
               layout="fill"
               objectFit="cover"
-              className="opacity-20"
-              data-ai-hint="fantasy character"
+              className="opacity-20 transition-all duration-1000"
+              data-ai-hint={currentImage.aiHint}
+              key={activeTab}
           />
           <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" />
       </div>
@@ -135,22 +153,34 @@ export default function LoginPage() {
         className="relative z-10 w-full max-w-4xl"
       >
         <Card className="grid lg:grid-cols-2 overflow-hidden shadow-2xl border-border/20 bg-card/80">
-             <div className="hidden lg:block relative">
-                <Image
-                    src="https://i.pinimg.com/1200x/af/5e/13/af5e1320015a3672ea231c203ca45ee4.jpg"
-                    alt="Login illustration"
-                    layout="fill"
-                    objectFit="cover"
-                    data-ai-hint="fantasy character"
-                />
-            </div>
+             <AnimatePresence>
+                 <motion.div
+                    key={activeTab}
+                    initial={{ opacity: 0, x: activeTab === 'login' ? -100 : 100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: activeTab === 'login' ? -100 : 100 }}
+                    transition={{ duration: 0.5, ease: 'easeInOut' }}
+                    className={cn(
+                        "hidden lg:block relative",
+                        activeTab === 'signup' && "lg:order-last"
+                    )}
+                 >
+                    <Image
+                        src={currentImage.src}
+                        alt={currentImage.alt}
+                        layout="fill"
+                        objectFit="cover"
+                        data-ai-hint={currentImage.aiHint}
+                    />
+                </motion.div>
+             </AnimatePresence>
             <div className="p-6 sm:p-8">
                 <CardHeader className="text-center p-0 mb-6">
                     <CardTitle className="text-2xl font-bold">Welcome</CardTitle>
                     <CardDescription>{isAdminLogin ? "Admin Panel Access" : "Login or create an account to continue"}</CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                    <Tabs defaultValue="login">
+                    <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="login"><LogIn className="mr-2 h-4 w-4"/>Login</TabsTrigger>
                         <TabsTrigger value="signup"><UserPlus className="mr-2 h-4 w-4"/>Sign Up</TabsTrigger>
