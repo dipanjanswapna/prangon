@@ -588,14 +588,7 @@ export default function Home() {
             </span>
            ))}
           </motion.h1>
-           <div className="ghost-container mt-4">
-                <div className="ghost-text text-primary-foreground">
-                    smile for miles
-                </div>
-                <div className="ghost-icon">
-                    <Ghost className="w-16 h-16" />
-                </div>
-            </div>
+            <p className="text-lg mt-4 text-primary-foreground/80">smile for miles</p>
         </div>
       </div>
       <AboutMe text={content.aboutMeText} imageUrl={content.aboutMeImageUrl}/>

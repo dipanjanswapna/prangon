@@ -70,34 +70,3 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
-@keyframes ghostMove {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.ghost-container {
-  position: relative;
-  overflow: hidden;
-}
-
-.ghost-text {
-  font-family: 'Creepster', cursive; /* A ghost-like font, you might need to import it */
-  font-size: 1.5rem; /* Adjust size as needed */
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.ghost-icon {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  transform: translateY(-50%);
-  animation: ghostMove 10s linear infinite;
-  color: hsl(var(--primary));
-}
