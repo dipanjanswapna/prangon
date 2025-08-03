@@ -8,6 +8,7 @@ let appInitialized = false;
 const initializeFirebaseAdmin = () => {
     if (appInitialized) return;
 
+    // Check if the SDK has already been initialized
     if (admin.apps.length === 0) {
         try {
             // When running on Google Cloud (like Firebase App Hosting),
@@ -22,6 +23,7 @@ const initializeFirebaseAdmin = () => {
             console.error('Original Error:', e.message);
         }
     } else {
+        // App is already initialized
         appInitialized = true;
     }
 };
