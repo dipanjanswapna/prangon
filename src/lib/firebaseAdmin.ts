@@ -1,3 +1,4 @@
+
 'use server';
 
 import admin from 'firebase-admin';
@@ -8,32 +9,16 @@ const initializeFirebaseAdmin = () => {
     if (appInitialized) return;
 
     if (admin.apps.length === 0) {
-        const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT;
-        if (!serviceAccountJson) {
-            console.error('Firebase Admin Init Error: FIREBASE_SERVICE_ACCOUNT env var not set. Skipping initialization.');
-            return;
-        }
-
         try {
-            let serviceAccount;
-            // First, try to parse it as a direct JSON string
-            try {
-                serviceAccount = JSON.parse(serviceAccountJson);
-            } catch (e) {
-                // If that fails, assume it's a Base64 encoded string
-                console.log('Could not parse service account as raw JSON, attempting Base64 decode...');
-                const decodedServiceAccount = Buffer.from(serviceAccountJson, 'base64').toString('utf-8');
-                serviceAccount = JSON.parse(decodedServiceAccount);
-            }
-            
-            admin.initializeApp({
-                credential: admin.credential.cert(serviceAccount),
-            });
+            // When running on Google Cloud (like Firebase App Hosting),
+            // the SDK can automatically discover the service account credentials.
+            // No need to parse a JSON key from an env var.
+            admin.initializeApp();
             appInitialized = true;
-            console.log('Firebase Admin SDK initialized successfully.');
-
+            console.log('Firebase Admin SDK initialized successfully using Application Default Credentials.');
         } catch (e: any) {
             console.error('Firebase Admin Init Error: Failed to initialize Firebase Admin SDK.');
+            console.error('This might be because the server is not running in a Google Cloud environment or the required credentials are not set.');
             console.error('Original Error:', e.message);
         }
     } else {
