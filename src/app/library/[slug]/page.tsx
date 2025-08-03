@@ -115,6 +115,23 @@ export default function LibraryItemPage() {
 
   const isSubscribed = false; // Placeholder
 
+  const getEmbedUrl = (url: string): string => {
+    try {
+        const urlObj = new URL(url);
+        if (urlObj.hostname === 'drive.google.com') {
+            const pathParts = urlObj.pathname.split('/');
+            const fileIdIndex = pathParts.findIndex(part => part === 'd') + 1;
+            if (fileIdIndex > 0 && pathParts[fileIdIndex]) {
+                const fileId = pathParts[fileIdIndex];
+                return `https://drive.google.com/file/d/${fileId}/preview`;
+            }
+        }
+    } catch(e) {
+        // Not a valid URL, return original
+    }
+    return url;
+  }
+
   const renderContent = () => {
     if (item.isPremium && !isSubscribed) {
       return (
@@ -139,6 +156,7 @@ export default function LibraryItemPage() {
 
     const hasPdf = !!item.pdfUrl;
     const hasText = !!item.content;
+    const embeddableUrl = hasPdf ? getEmbedUrl(item.pdfUrl!) : '';
 
     return (
         <Tabs defaultValue={hasText ? "text" : "document"} className="w-full mt-8">
@@ -152,7 +170,7 @@ export default function LibraryItemPage() {
               <TabsContent value="document">
                   <div className="bg-muted/20 p-2 sm:p-4 rounded-lg shadow-inner mt-4">
                     <div className="aspect-[4/5] w-full">
-                       <embed src={item.pdfUrl} type="application/pdf" className="w-full h-full" />
+                       <iframe src={embeddableUrl} className="w-full h-full border-0" allow="fullscreen"></iframe>
                     </div>
                   </div>
               </TabsContent>
