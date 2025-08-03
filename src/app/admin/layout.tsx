@@ -87,8 +87,7 @@ export default function AdminLayout({
                     </SidebarMenuItem>
                 </SidebarMenu>
               </ScrollArea>
-            </SidebarContent>
-            <SidebarFooter>
+              <SidebarFooter>
                  <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild>
@@ -99,7 +98,8 @@ export default function AdminLayout({
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                  </SidebarMenu>
-            </SidebarFooter>
+              </SidebarFooter>
+            </SidebarContent>
         </Sidebar>
         <main className="flex-1 flex flex-col">
             <header className="flex items-center justify-between p-4 border-b">
