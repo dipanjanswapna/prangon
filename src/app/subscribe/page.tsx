@@ -74,7 +74,7 @@ export default function SubscribePage() {
     return (
         <div className="bg-background min-h-screen py-16 md:py-24 relative">
              <Image
-                src="https://i.pinimg.com/1200x/a9/d8/46/a9d846d03604c81f09ec1f49914df77f.jpg"
+                src="https://i.pinimg.com/736x/33/b0/7b/33b07b85217d89cfa5a73560f21660ae.jpg"
                 alt="Subscribe background"
                 layout="fill"
                 objectFit="cover"
