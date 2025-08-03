@@ -8,16 +8,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LibraryItem } from '@/lib/types';
 import { motion } from 'framer-motion';
-
-async function getLibraryItems(): Promise<LibraryItem[]> {
-    // In a real app, this would fetch from a database.
-    // For now, we read from the public JSON file.
-    const res = await fetch('/library.json');
-     if (!res.ok) {
-        return [];
-    }
-    return res.json();
-}
+import { getLibraryItems } from '../actions';
 
 
 export async function generateStaticParams() {

@@ -12,15 +12,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-
-
-async function getLibraryItems(): Promise<LibraryItem[]> {
-    const res = await fetch('/library.json');
-    if (!res.ok) {
-        return [];
-    }
-    return res.json();
-}
+import { getLibraryItems } from './actions';
 
 
 const containerVariants = {

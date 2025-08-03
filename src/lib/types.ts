@@ -80,7 +80,7 @@ export const libraryItemSchema = z.object({
     category: z.enum(['Book', 'Weekly Magazine', 'Monthly Magazine']),
     coverImage: z.string().url('Must be a valid URL.'),
     imageAiHint: z.string().optional().default('book cover'),
-    content: z.string(),
+    content: z.string().optional(),
     tags: z.array(z.string().min(1, 'Tag cannot be empty.')),
     isFeatured: z.boolean().default(false),
     isPremium: z.boolean().default(false),
