@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star } from 'lucide-react';
+import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getHomePageContent } from './admin/home/actions';
@@ -588,6 +588,14 @@ export default function Home() {
             </span>
            ))}
           </motion.h1>
+           <div className="ghost-container mt-4">
+                <div className="ghost-text text-primary-foreground">
+                    smile for miles
+                </div>
+                <div className="ghost-icon">
+                    <Ghost className="w-16 h-16" />
+                </div>
+            </div>
         </div>
       </div>
       <AboutMe text={content.aboutMeText} imageUrl={content.aboutMeImageUrl}/>
