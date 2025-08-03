@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Github, Twitter, Linkedin, Copy, ExternalLink, Facebook, HandHeart, LogIn, LogOut, LayoutDashboard } from 'lucide-react';
+import { Github, Twitter, Linkedin, Copy, ExternalLink, Facebook, HandHeart, LogIn, LogOut, LayoutDashboard, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -79,6 +79,15 @@ export function Footer() {
         </motion.div>
 
         <div className="border-t border-border pt-8">
+             <div className="bg-background/20 backdrop-blur-sm border border-destructive/50 rounded-lg p-4 text-center mb-8">
+                <div className="flex items-center justify-center gap-2">
+                    <Shield className="h-5 w-5 text-destructive" />
+                    <h3 className="font-bold text-destructive">Copyright & Warning</h3>
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                    এই ওয়েবসাইটের সমস্ত কনটেন্ট (লেখা, ছবি, বই) কপিরাইট দ্বারা সুরক্ষিত। অনুমতি ছাড়া কোনো কনটেন্ট নকল করা বা বাণিজ্যিক উদ্দেশ্যে ব্যবহার করা আইনত দণ্ডনীয়। কোনো বই বা কনটেন্ট নকল করার চেষ্টা করলে অ্যাডমিন প্যানেল থেকে কঠোর ব্যবস্থা নেওয়া হবে এবং সরাসরি ১০,০০০ টাকা জরিমানা করা হবে।
+                </p>
+            </div>
             <div className="flex flex-col md:flex-row justify-between items-center text-muted-foreground">
                 <p className="text-sm mb-4 md:mb-0 text-center md:text-left">
                     &copy; {new Date().getFullYear()} All rights reserved by PRANGON CENTRE
