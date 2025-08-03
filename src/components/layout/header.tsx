@@ -20,6 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { ThemeToggle } from '../theme-toggle';
 
 
 const navItems = [
@@ -84,6 +85,7 @@ export function Header() {
 
         <div className="hidden md:flex items-center space-x-6">
            <NavLinks />
+           <ThemeToggle />
             {user ? (
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -126,7 +128,8 @@ export function Header() {
             )}
         </div>
 
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center gap-2">
+          <ThemeToggle />
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">

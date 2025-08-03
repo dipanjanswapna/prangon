@@ -1,7 +1,6 @@
 
 'use client';
 
-import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
@@ -13,7 +12,7 @@ import { HireMeBanner } from '@/components/layout/hire-me-banner';
 import { useRef, useState, useEffect } from 'react';
 import { AuthProvider } from '@/context/auth-context';
 import { usePathname } from 'next/navigation';
-
+import { ThemeProvider } from '@/components/theme-provider';
 
 export default function RootLayout({
   children,
@@ -82,7 +81,7 @@ export default function RootLayout({
   };
   
   return (
-    <html lang="en" className="h-full dark">
+    <html lang="en" className="h-full" suppressHydrationWarning>
       <head>
         <title>PRANGON CENTRE - Creative Design, EdTech, and Digital Innovation</title>
         <meta name="description" content='Welcome to PRANGON CENTRE, the home of Dipanjan "Swapna Prangon" Prangon. We specialize in creative design, EdTech innovation, branding, and digital tools for students and educators in Dhaka, Bangladesh and beyond.' />
@@ -100,50 +99,57 @@ export default function RootLayout({
           isAdminPage ? 'bg-background' : 'min-h-screen bg-background flex flex-col'
         )}
       >
-        <AuthProvider>
-          {!isAdminPage && (
-             <audio ref={audioRef} src="/mixkit-relax-beat-292.mp3" loop preload="auto" />
-          )}
-          
-          {!isAdminPage && <Header />}
-          
-          <main className={cn(isAdminPage ? '' : 'flex-grow relative')}>
-            {children}
-          </main>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            {!isAdminPage && (
+               <audio ref={audioRef} src="/mixkit-relax-beat-292.mp3" loop preload="auto" />
+            )}
+            
+            {!isAdminPage && <Header />}
+            
+            <main className={cn(isAdminPage ? '' : 'flex-grow relative')}>
+              {children}
+            </main>
 
-          {!isAdminPage && (
-            <>
-              <aside className="fixed left-4 bottom-4 z-50 hidden md:flex flex-col items-center space-y-4">
-                <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  <Dribbble className="h-5 w-5" />
-                </Link>
-                <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  <Instagram className="h-5 w-5" />
-                </Link>
-                <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  <PlayCircle className="h-5 w-5" />
-                </Link>
-                <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  <Linkedin className="h-5 w-5" />
-                </Link>
-              </aside>
+            {!isAdminPage && (
+              <>
+                <aside className="fixed left-4 bottom-4 z-50 hidden md:flex flex-col items-center space-y-4">
+                  <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Dribbble className="h-5 w-5" />
+                  </Link>
+                  <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Instagram className="h-5 w-5" />
+                  </Link>
+                  <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                    <PlayCircle className="h-5 w-5" />
+                  </Link>
+                  <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Linkedin className="h-5 w-5" />
+                  </Link>
+                </aside>
 
-              <aside className="fixed right-4 bottom-4 z-50 flex items-center space-x-2">
-                  <button onClick={toggleSound} className="text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
-                      {isPlaying ? <Volume2 className="h-4 w-4 md:h-5 md:w-5" /> : <VolumeX className="h-4 w-4 md:h-5 md:w-5" />}
-                      <span className="[writing-mode:vertical-rl] text-xs md:text-sm tracking-widest uppercase">
-                          {isPlaying ? 'Sound On' : 'Sound Off'}
-                      </span>
-                  </button>
-              </aside>
-              
-              <Footer />
-              <HireMeBanner />
-            </>
-          )}
+                <aside className="fixed right-4 bottom-4 z-50 flex items-center space-x-2">
+                    <button onClick={toggleSound} className="text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
+                        {isPlaying ? <Volume2 className="h-4 w-4 md:h-5 md:w-5" /> : <VolumeX className="h-4 w-4 md:h-5 md:w-5" />}
+                        <span className="[writing-mode:vertical-rl] text-xs md:text-sm tracking-widest uppercase">
+                            {isPlaying ? 'Sound On' : 'Sound Off'}
+                        </span>
+                    </button>
+                </aside>
+                
+                <Footer />
+                <HireMeBanner />
+              </>
+            )}
 
-          <Toaster />
-        </AuthProvider>
+            <Toaster />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
