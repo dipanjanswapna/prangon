@@ -20,6 +20,8 @@ import { useState, useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Image from 'next/image';
+
 
 const paymentSchema = z.object({
   nameOnCard: z.string().min(3, 'Name must be at least 3 characters.'),
@@ -285,14 +287,24 @@ function CheckoutForm() {
 
 export default function CheckoutPage() {
   return (
-    <div className="container mx-auto max-w-5xl py-12 px-4">
-        <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold font-headline">Complete Your Subscription</h1>
-            <p className="text-muted-foreground mt-2">You're one step away from unlocking premium content.</p>
+    <div className="relative min-h-screen">
+        <Image
+            src="https://i.pinimg.com/1200x/74/91/5c/74915cfe2e29d53bafb269ffa0a6c1dc.jpg"
+            alt="Checkout background"
+            layout="fill"
+            objectFit="cover"
+            className="absolute inset-0 z-0 opacity-10"
+            data-ai-hint="abstract background"
+        />
+        <div className="relative z-10 container mx-auto max-w-5xl py-12 px-4">
+            <div className="text-center mb-8">
+                <h1 className="text-4xl font-bold font-headline">Complete Your Subscription</h1>
+                <p className="text-muted-foreground mt-2">You're one step away from unlocking premium content.</p>
+            </div>
+            <Suspense fallback={<div className="text-center"><Loader2 className="h-8 w-8 animate-spin mx-auto"/></div>}>
+                <CheckoutForm />
+            </Suspense>
         </div>
-        <Suspense fallback={<div className="text-center"><Loader2 className="h-8 w-8 animate-spin mx-auto"/></div>}>
-            <CheckoutForm />
-        </Suspense>
     </div>
   )
 }
