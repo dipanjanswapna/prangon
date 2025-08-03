@@ -35,6 +35,12 @@ export function Footer() {
     { name: 'Twitter', href: '#', icon: Twitter },
   ];
 
+  const policyLinks = [
+      {name: 'Privacy', href: '/privacy-policy'},
+      {name: 'Terms', href: '/terms-of-service'},
+      {name: 'Return Policy', href: '/return-policy'},
+  ];
+
   return (
     <footer id="page-footer" className="relative bg-muted text-foreground pt-20 pb-8 overflow-hidden">
         <Image
@@ -88,17 +94,23 @@ export function Footer() {
                     এই ওয়েবসাইটের সমস্ত কনটেন্ট (লেখা, ছবি, বই) কপিরাইট দ্বারা সুরক্ষিত। অনুমতি ছাড়া কোনো কনটেন্ট নকল করা বা বাণিজ্যিক উদ্দেশ্যে ব্যবহার করা আইনত দণ্ডনীয়। কোনো বই বা কনটেন্ট নকল করার চেষ্টা করলে অ্যাডমিন প্যানেল থেকে কঠোর ব্যবস্থা নেওয়া হবে এবং সরাসরি ১০,০০০ টাকা জরিমানা করা হবে।
                 </p>
             </div>
-            <div className="flex flex-col md:flex-row justify-between items-center text-muted-foreground">
-                <p className="text-sm mb-4 md:mb-0 text-center md:text-left">
+            <div className="grid md:grid-cols-3 gap-8 text-muted-foreground">
+                 <div className="text-sm text-center md:text-left">
                     &copy; {new Date().getFullYear()} All rights reserved by PRANGON CENTRE
-                </p>
-                <div className="flex items-center space-x-4 md:space-x-6">
-                    {user ? (
+                    <div className="flex justify-center md:justify-start items-center space-x-4 mt-2">
+                        {policyLinks.map((link) => (
+                            <Link key={link.name} href={link.href} className="hover:text-primary transition-colors">{link.name}</Link>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="flex justify-center items-center space-x-4">
+                     {user ? (
                       <>
                         <Link href="/admin/dashboard">
                            <Button variant="ghost" size="sm">
                              <LayoutDashboard className="mr-2 h-4 w-4" />
-                             Go to Admin Dashboard
+                             Dashboard
                            </Button>
                         </Link>
                         <Link href="/logout">
@@ -116,6 +128,9 @@ export function Footer() {
                         </Button>
                       </Link>
                     )}
+                </div>
+
+                <div className="flex justify-center md:justify-end items-center space-x-4 md:space-x-6">
                     {socialLinks.map((link, index) => (
                         <motion.div
                             key={link.name}
@@ -125,7 +140,7 @@ export function Footer() {
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
                             <Link href={link.href} className="text-sm hover:text-primary transition-colors flex items-center gap-1">
-                                {link.name} <ExternalLink size={14} />
+                                <link.icon className="h-5 w-5"/>
                             </Link>
                         </motion.div>
                     ))}
