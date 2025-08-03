@@ -110,7 +110,7 @@ export function Header() {
                             My Account
                            </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={logout}>
+                        <DropdownMenuItem asChild>
                            <Link href="/logout">
                              <LogOut className="mr-2 h-4 w-4"/>
                              Logout
@@ -168,11 +168,25 @@ export function Header() {
                      {user ? (
                         <div className="text-center">
                           <p className="text-white">Welcome, {user.displayName}</p>
-                          <Button variant="ghost" onClick={() => { setIsMobileMenuOpen(false);}} className="text-white mt-2">
-                             <Link href="/logout">
-                                <LogOut className="mr-2 h-4 w-4"/> Logout
-                             </Link>
-                          </Button>
+                           <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="text-white mt-2">
+                                        <UserCircle className="mr-2 h-4 w-4"/> My Account
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuItem asChild>
+                                        <Link href="/account" onClick={() => setIsMobileMenuOpen(false)}>
+                                            View Profile
+                                        </Link>
+                                    </DropdownMenuItem>
+                                     <DropdownMenuItem asChild>
+                                        <Link href="/logout" onClick={() => setIsMobileMenuOpen(false)}>
+                                            Logout
+                                        </Link>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
                      ) : (
                         <Button asChild className="w-full" onClick={() => setIsMobileMenuOpen(false)}>
