@@ -2,7 +2,7 @@
 'use client';
 
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { onAuthStateChanged, User, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { onAuthStateChanged, User, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '@/lib/auth';
 import { Loader2 } from 'lucide-react';
 
@@ -10,6 +10,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, pass: string) => Promise<any>;
+  signup: (email: string, pass: string, displayName: string) => Promise<any>;
   loginWithGoogle: () => Promise<any>;
   logout: () => Promise<void>;
 }
@@ -33,6 +34,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, pass).finally(() => setLoading(false));
   };
+  
+  const signup = async (email: string, pass: string, displayName: string) => {
+    setLoading(true);
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+        if (userCredential.user) {
+            await updateProfile(userCredential.user, { displayName });
+            // Manually update the user state as onAuthStateChanged might be slow
+            setUser({ ...userCredential.user, displayName });
+        }
+        return userCredential;
+    } finally {
+        setLoading(false);
+    }
+  };
+
 
   const loginWithGoogle = () => {
     setLoading(true);
@@ -44,7 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return signOut(auth);
   };
 
-  if (loading) {
+  if (loading && !user) {
      return (
       <div className="flex h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -53,7 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, loginWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, signup, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );

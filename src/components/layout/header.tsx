@@ -4,12 +4,23 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LogIn, UserCircle, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/hooks/use-auth';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+
 
 const navItems = [
   { href: '/work', label: 'Work' },
@@ -24,6 +35,7 @@ export function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,6 +83,44 @@ export function Header() {
 
         <div className="hidden md:flex items-center space-x-6">
            <NavLinks />
+            {user ? (
+                 <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                            <Avatar className="h-10 w-10">
+                                <AvatarImage src={user.photoURL ?? ''} alt={user.displayName ?? 'User'} />
+                                <AvatarFallback>{user.displayName?.charAt(0) ?? 'U'}</AvatarFallback>
+                            </Avatar>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56" align="end" forceMount>
+                        <DropdownMenuLabel className="font-normal">
+                            <div className="flex flex-col space-y-1">
+                                <p className="text-sm font-medium leading-none">{user.displayName}</p>
+                                <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                            </div>
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                           <Link href="/account">
+                            <UserCircle className="mr-2 h-4 w-4"/>
+                            My Account
+                           </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={logout}>
+                           <LogOut className="mr-2 h-4 w-4"/>
+                           Logout
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            ) : (
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/auth">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Login / Sign Up
+                  </Link>
+                </Button>
+            )}
         </div>
 
         <div className="md:hidden">
@@ -81,7 +131,7 @@ export function Header() {
                 <span className="sr-only">Open menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="h-[50vh] rounded-t-2xl bg-background text-foreground p-0">
+            <SheetContent side="bottom" className="h-[75vh] rounded-t-2xl bg-background text-foreground p-0">
               <div className="relative w-full h-full bg-cover bg-center" style={{backgroundImage: "url('https://wallpapercat.com/w/full/5/1/d/121255-1125x2436-phone-hd-squid-game-wallpaper-photo.jpg')"}}>
                 <div className="absolute inset-0 bg-black/60" />
                 <div className="relative z-10 flex flex-col space-y-8 p-6 h-full">
@@ -108,6 +158,20 @@ export function Header() {
                       </Link>
                     ))}
                   </nav>
+                   <div className="mt-auto pt-8">
+                     {user ? (
+                        <div className="text-center">
+                          <p className="text-white">Welcome, {user.displayName}</p>
+                          <Button variant="ghost" onClick={() => { logout(); setIsMobileMenuOpen(false);}} className="text-white mt-2">
+                             <LogOut className="mr-2 h-4 w-4"/> Logout
+                          </Button>
+                        </div>
+                     ) : (
+                        <Button asChild className="w-full" onClick={() => setIsMobileMenuOpen(false)}>
+                            <Link href="/auth">Login / Sign Up</Link>
+                        </Button>
+                     )}
+                   </div>
                 </div>
               </div>
             </SheetContent>

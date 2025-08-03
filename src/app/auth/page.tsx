@@ -1,0 +1,197 @@
+
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { LogIn, UserPlus } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useAuth } from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+const loginSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+});
+
+const signupSchema = z.object({
+  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+});
+
+const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px" {...props}>
+        <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
+        <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
+        <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.619-3.317-11.28-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
+        <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.574l6.19,5.238C39.99,35.588,44,30.168,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
+    </svg>
+);
+
+export default function AuthPage() {
+  const { toast } = useToast();
+  const { login, signup, loginWithGoogle, user, loading } = useAuth();
+  const router = useRouter();
+
+  const loginForm = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: '', password: '' },
+  });
+
+  const signupForm = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: { name: '', email: '', password: '' },
+  });
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/');
+    }
+  }, [user, loading, router]);
+
+  async function onLogin(values: z.infer<typeof loginSchema>) {
+    try {
+      await login(values.email, values.password);
+      toast({ title: 'Login Successful!', description: "Welcome back!" });
+      router.push('/');
+    } catch (error) {
+      toast({ variant: 'destructive', title: 'Login Failed', description: 'Invalid email or password.' });
+    }
+  }
+
+  async function onSignup(values: z.infer<typeof signupSchema>) {
+    try {
+      await signup(values.email, values.password, values.name);
+      toast({ title: 'Signup Successful!', description: "Welcome to the community!" });
+      router.push('/');
+    } catch (error: any) {
+      toast({ variant: 'destructive', title: 'Signup Failed', description: error.message });
+    }
+  }
+
+  async function handleGoogleLogin() {
+    try {
+      await loginWithGoogle();
+      toast({ title: 'Login Successful!', description: "Welcome!" });
+      router.push('/');
+    } catch (error) {
+      toast({ variant: 'destructive', title: 'Login Failed', description: 'Could not log in with Google.' });
+    }
+  }
+
+  return (
+    <div className="container mx-auto flex min-h-screen items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md"
+      >
+        <Card>
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-bold">Welcome</CardTitle>
+            <CardDescription>Login or create an account to continue</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="login">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="login"><LogIn className="mr-2 h-4 w-4"/>Login</TabsTrigger>
+                <TabsTrigger value="signup"><UserPlus className="mr-2 h-4 w-4"/>Sign Up</TabsTrigger>
+              </TabsList>
+              <TabsContent value="login">
+                <div className="py-4">
+                  <Button variant="outline" className="w-full mb-4" onClick={handleGoogleLogin}>
+                    <GoogleIcon className="mr-2 h-5 w-5" /> Continue with Google
+                  </Button>
+                  <div className="relative mb-4">
+                    <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                    </div>
+                  </div>
+                  <Form {...loginForm}>
+                    <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
+                      <FormField control={loginForm.control} name="email" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl><Input type="email" placeholder="you@example.com" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <FormField control={loginForm.control} name="password" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl><Input type="password" placeholder="••••••••" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <Button type="submit" className="w-full" disabled={loginForm.formState.isSubmitting}>
+                        {loginForm.formState.isSubmitting ? 'Logging in...' : 'Login'}
+                      </Button>
+                    </form>
+                  </Form>
+                </div>
+              </TabsContent>
+              <TabsContent value="signup">
+                <div className="py-4">
+                   <Button variant="outline" className="w-full mb-4" onClick={handleGoogleLogin}>
+                    <GoogleIcon className="mr-2 h-5 w-5" /> Sign up with Google
+                  </Button>
+                  <div className="relative mb-4">
+                    <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-card px-2 text-muted-foreground">Or sign up with email</span>
+                    </div>
+                  </div>
+                  <Form {...signupForm}>
+                    <form onSubmit={signupForm.handleSubmit(onSignup)} className="space-y-4">
+                      <FormField control={signupForm.control} name="name" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl><Input placeholder="Your Name" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <FormField control={signupForm.control} name="email" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl><Input type="email" placeholder="you@example.com" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <FormField control={signupForm.control} name="password" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl><Input type="password" placeholder="••••••••" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <Button type="submit" className="w-full" disabled={signupForm.formState.isSubmitting}>
+                        {signupForm.formState.isSubmitting ? 'Creating account...' : 'Create Account'}
+                      </Button>
+                    </form>
+                  </Form>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
+  );
+}

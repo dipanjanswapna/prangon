@@ -1,8 +1,7 @@
-
 [
   {
     "id": "1",
-    "slug": "sesh-pusthar-prem",
+    "slug": "",
     "title": "শেষ পৃষ্ঠার প্রেম",
     "author": "মধুমিতা ভট্টাচার্য",
     "category": "অণুগল্প",
@@ -15,7 +14,7 @@
       "ছোটগল্প"
     ],
     "isFeatured": true,
-    "isPremium": false
+    "isPremium": true
   },
   {
     "id": "2",
