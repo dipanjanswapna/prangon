@@ -2,71 +2,54 @@
 [
   {
     "id": "1",
-    "slug": "digital-fortress",
-    "title": "Digital Fortress",
-    "author": "Dan Brown",
+    "slug": "atomic-habits",
+    "title": "Atomic Habits",
+    "author": "James Clear",
     "category": "Book",
-    "coverImage": "https://placehold.co/400x600.png",
-    "imageAiHint": "thriller book cover",
-    "content": "This is the content for the book Digital Fortress. It would contain the full text of the book for online reading. To access this, a user might need a premium subscription. This placeholder demonstrates how premium content would be locked.",
-    "tags": [
-      "Thriller",
-      "Mystery",
-      "Technology"
-    ],
+    "coverImage": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385l/40121378.jpg",
+    "imageAiHint": "book cover",
+    "content": "An easy & proven way to build good habits & break bad ones.",
+    "tags": ["Self-Help", "Productivity"],
     "isFeatured": true,
-    "isPremium": true
+    "isPremium": false
   },
   {
     "id": "2",
-    "slug": "tech-today-weekly-1",
-    "title": "Tech Today Weekly - Issue 1",
-    "author": "Prangon Centre",
+    "slug": "time-weekly-may-2024",
+    "title": "The AI Revolution",
+    "author": "TIME Magazine",
     "category": "Weekly Magazine",
     "coverImage": "https://placehold.co/400x600.png",
-    "imageAiHint": "tech magazine cover",
-    "content": "Content for the first issue of Tech Today Weekly. This would cover the latest in technology, startups, and innovation. Available only to our esteemed subscribers.",
-    "tags": [
-      "Technology",
-      "Innovation",
-      "Startups"
-    ],
+    "imageAiHint": "magazine cover",
+    "content": "Exploring the rapid advancements and societal impact of Artificial Intelligence.",
+    "tags": ["Technology", "AI", "Future"],
     "isFeatured": true,
     "isPremium": true
   },
   {
     "id": "3",
-    "slug": "science-explorer-jan",
-    "title": "Science Explorer - January",
-    "author": "Prangon Centre",
+    "slug": "nat-geo-june-2024",
+    "title": "Secrets of the Deep",
+    "author": "National Geographic",
     "category": "Monthly Magazine",
     "coverImage": "https://placehold.co/400x600.png",
-    "imageAiHint": "science magazine cover",
-    "content": "January's issue of Science Explorer delves into space exploration, new discoveries in medicine, and the future of AI. This is a free sample content available to all readers.",
-    "tags": [
-      "Science",
-      "Space",
-      "Medicine",
-      "AI"
-    ],
+    "imageAiHint": "ocean photography",
+    "content": "A journey into the mysterious and uncharted territories of our oceans.",
+    "tags": ["Nature", "Oceanography", "Exploration"],
     "isFeatured": false,
-    "isPremium": false
+    "isPremium": true
   },
-   {
+  {
     "id": "4",
-    "slug": "the-alchemist",
-    "title": "The Alchemist",
-    "author": "Paulo Coelho",
+    "slug": "the-psychology-of-money",
+    "title": "The Psychology of Money",
+    "author": "Morgan Housel",
     "category": "Book",
     "coverImage": "https://placehold.co/400x600.png",
-    "imageAiHint": "fantasy book cover",
-    "content": "The Alchemist is a novel by Brazilian author Paulo Coelho that was first published in 1988. Originally written in Portuguese, it became a widely translated international bestseller.",
-    "tags": [
-      "Fantasy",
-      "Adventure",
-      "Philosophy"
-    ],
-    "isFeatured": true,
+    "imageAiHint": "abstract money illustration",
+    "content": "Timeless lessons on wealth, greed, and happiness.",
+    "tags": ["Finance", "Psychology", "Investing"],
+    "isFeatured": false,
     "isPremium": false
   }
 ]
