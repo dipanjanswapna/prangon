@@ -49,6 +49,7 @@ export const prangonsLikhaPostSchema = z.object({
     content: z.string().min(10, 'Content must be at least 10 characters.'),
     tags: z.array(z.string().min(1, 'Tag cannot be empty.')),
     isFeatured: z.boolean().default(false),
+    isPremium: z.boolean().default(false),
 });
 
 export type PrangonsLikhaPost = z.infer<typeof prangonsLikhaPostSchema>;

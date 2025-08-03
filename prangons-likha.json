@@ -14,7 +14,8 @@
       "বিরহ",
       "ছোটগল্প"
     ],
-    "isFeatured": true
+    "isFeatured": true,
+    "isPremium": false
   },
   {
     "id": "2",
@@ -30,7 +31,8 @@
       "প্রকৃতি",
       "গ্রাম্য জীবন"
     ],
-    "isFeatured": false
+    "isFeatured": false,
+    "isPremium": true
   },
   {
     "id": "3",
@@ -46,7 +48,8 @@
       "অনুভূতি",
       "রোমান্টিক"
     ],
-    "isFeatured": true
+    "isFeatured": true,
+    "isPremium": false
   },
   {
     "id": "4",
@@ -62,6 +65,7 @@
       "অ্যাডভেঞ্চার",
       "প্রেম"
     ],
-    "isFeatured": false
+    "isFeatured": false,
+    "isPremium": false
   }
 ]

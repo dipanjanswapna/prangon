@@ -31,6 +31,7 @@ export function PrangonsLikhaForm({ postToEdit }: { postToEdit?: PrangonsLikhaPo
     content: postToEdit?.content || '',
     tags: postToEdit?.tags || [],
     isFeatured: postToEdit?.isFeatured || false,
+    isPremium: postToEdit?.isPremium || false,
   };
 
   const form = useForm<FormValues>({
@@ -187,23 +188,43 @@ export function PrangonsLikhaForm({ postToEdit }: { postToEdit?: PrangonsLikhaPo
                         </Button>
                     </div>
 
-                    <FormField
-                        control={form.control}
-                        name="isFeatured"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                            <FormControl>
-                                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                            </FormControl>
-                            <div className="space-y-1 leading-none">
-                                <FormLabel>Featured Post</FormLabel>
-                                <FormDescription>
-                                Mark this post as featured. It will appear in the carousel on the Prangons Likha page.
-                                </FormDescription>
-                            </div>
-                            </FormItem>
-                        )}
-                    />
+                    <div className="space-y-4">
+                        <FormField
+                            control={form.control}
+                            name="isFeatured"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                <FormControl>
+                                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                    <FormLabel>Featured Post</FormLabel>
+                                    <FormDescription>
+                                    Mark this post as featured to highlight it at the top of the page.
+                                    </FormDescription>
+                                </div>
+                                </FormItem>
+                            )}
+                        />
+                         <FormField
+                            control={form.control}
+                            name="isPremium"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                <FormControl>
+                                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                    <FormLabel>Premium Post</FormLabel>
+                                    <FormDescription>
+                                    Mark this post as premium. It will require a subscription to read.
+                                    </FormDescription>
+                                </div>
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
 
                     <div className="flex justify-end">
                     <Button type="submit" disabled={form.formState.isSubmitting}>

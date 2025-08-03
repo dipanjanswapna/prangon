@@ -5,7 +5,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { getPrangonsLikhaPosts } from '@/app/admin/prangons-likha/actions';
 import { PrangonsLikhaPost } from '@/lib/types';
 import { motion } from 'framer-motion';
-import { ArrowRight, Feather, Crown } from 'lucide-react';
+import { ArrowRight, Feather, Crown, Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -45,14 +45,20 @@ function PostCard({ post }: { post: PrangonsLikhaPost }) {
                             data-ai-hint={post.imageAiHint}
                         />
                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                         {post.isFeatured && (
-                            <div className="absolute top-2 left-2">
-                                <Badge className="bg-yellow-500 text-black gap-1">
+                         <div className="absolute top-2 left-2 flex flex-col gap-1">
+                            {post.isFeatured && (
+                                <Badge className="bg-yellow-500 text-black gap-1 w-fit">
                                     <Crown className="h-3 w-3" />
                                     Featured
                                 </Badge>
-                            </div>
-                        )}
+                            )}
+                            {post.isPremium && (
+                                <Badge variant="destructive" className="gap-1 w-fit">
+                                    <Star className="h-3 w-3" />
+                                    Premium
+                                </Badge>
+                            )}
+                        </div>
                     </div>
                     <CardContent className="p-4 flex-grow flex flex-col justify-between">
                        <div>
@@ -69,7 +75,7 @@ function PostCard({ post }: { post: PrangonsLikhaPost }) {
     );
 }
 
-function Section({ title, posts, href }: { title: string, posts: PrangonsLikhaPost[], href: string }) {
+function Section({ title, posts }: { title: string, posts: PrangonsLikhaPost[] }) {
     if (posts.length === 0) return null;
     return (
         <motion.section
@@ -81,7 +87,7 @@ function Section({ title, posts, href }: { title: string, posts: PrangonsLikhaPo
         >
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl md:text-3xl font-bold font-headline text-primary-foreground">{title}</h2>
-                <Link href={href}>
+                <Link href={`/prangons-likha/category/${title}`}>
                     <Button variant="ghost" className="text-primary">
                         See All <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
@@ -113,7 +119,7 @@ export default function PrangonsLikhaPage() {
         }, {} as Record<string, PrangonsLikhaPost[]>);
     }, [posts]);
     
-    const featuredPosts = useMemo(() => posts.filter(p => p.isFeatured).slice(0, 5), [posts]);
+    const featuredPosts = useMemo(() => posts.filter(p => p.isFeatured), [posts]);
 
   return (
     <div className="bg-background min-h-screen py-16 md:py-24">
@@ -140,8 +146,9 @@ export default function PrangonsLikhaPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="mb-16"
+                className="mb-24"
             >
+                <h2 className="text-3xl font-bold font-headline text-primary-foreground text-center mb-8">Featured Writings</h2>
                 <Carousel
                     opts={{
                         align: "start",
@@ -164,7 +171,10 @@ export default function PrangonsLikhaPage() {
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                                         <div className="absolute bottom-0 left-0 p-6 text-white">
-                                            <Badge className="mb-2 bg-yellow-500 text-black">Featured</Badge>
+                                            <Badge className="mb-2 bg-yellow-500 text-black gap-1">
+                                                <Crown className="h-3 w-3" />
+                                                Featured
+                                            </Badge>
                                             <h2 className="text-2xl font-bold line-clamp-2">{post.title}</h2>
                                             <p>{post.author}</p>
                                         </div>
@@ -179,8 +189,8 @@ export default function PrangonsLikhaPage() {
             </motion.section>
         )}
         
-        {Object.entries(categorizedPosts).map(([category, posts]) => (
-            <Section key={category} title={category} posts={posts} href={`/prangons-likha/category/${category}`} />
+        {Object.entries(categorizedPosts).map(([category, catPosts]) => (
+            <Section key={category} title={category} posts={catPosts} />
         ))}
         
         {posts.length === 0 && (
