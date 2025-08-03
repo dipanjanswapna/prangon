@@ -1,14 +1,33 @@
 
 'use client';
 
-import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter } from '@/components/ui/sidebar';
-import { Home, Settings, Loader2, Feather, Palette, Star } from 'lucide-react';
+import { Home, Settings, Loader2, Feather, Palette, Star, UserCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
+
+const adminNavItems = [
+    { href: '/admin/dashboard', label: 'Dashboard', icon: <Home /> },
+    { href: '/admin/home', label: 'Home Page', icon: <Home /> },
+    { href: '/admin/prangons-likha', label: 'Prangons Likha', icon: <Feather /> },
+    { href: '/admin/subscriptions', label: 'Subscriptions', icon: <Star /> },
+    { href: '/admin/visual-arts', label: 'Visual Arts', icon: <Palette /> },
+    { href: '/admin/settings', label: 'Settings', icon: <Settings /> },
+]
 
 export default function AdminLayout({
   children,
@@ -17,10 +36,11 @@ export default function AdminLayout({
 }) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/login');
+      router.push('/login?flow=admin');
     }
   }, [user, loading, router]);
 
@@ -33,84 +53,56 @@ export default function AdminLayout({
   }
 
   return (
-    <SidebarProvider>
-      <div className="flex min-h-screen">
-        <Sidebar>
-            <SidebarHeader>
-                <div className="flex items-center gap-2 p-2">
-                    <Image src="/logo.png" alt="PRANGON CENTRE Logo" width={32} height={32} className="rounded-full" />
-                    <span className="text-lg font-semibold">PRANGON CENTRE</span>
+    <div className="flex min-h-screen w-full flex-col">
+        <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-50">
+            <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+                <Link href="/" className="flex items-center gap-2 text-lg font-semibold md:text-base">
+                     <Image src="/logo.png" alt="PRANGON CENTRE Logo" width={32} height={32} className="rounded-full" />
+                     <span className="sr-only">PRANGON CENTRE</span>
+                </Link>
+                {adminNavItems.map(item => (
+                    <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn("transition-colors hover:text-foreground", pathname === item.href ? "text-foreground" : "text-muted-foreground")}
+                    >
+                        {item.label}
+                    </Link>
+                ))}
+            </nav>
+            <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+                <div className="ml-auto flex-1 sm:flex-initial">
                 </div>
-            </SidebarHeader>
-            <SidebarContent>
-              <ScrollArea className="h-full">
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton asChild>
-                            <Link href="/admin/dashboard">
-                                <Home />
-                                <span>Dashboard</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                     <SidebarMenuItem>
-                        <SidebarMenuButton asChild>
-                            <Link href="/admin/home">
-                                <Home />
-                                <span>Home Page</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton asChild>
-                            <Link href="/admin/prangons-likha">
-                                <Feather />
-                                <span>Prangons Likha</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                     <SidebarMenuItem>
-                        <SidebarMenuButton asChild>
-                            <Link href="/admin/subscriptions">
-                                <Star />
-                                <span>Subscriptions</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton asChild>
-                            <Link href="/admin/visual-arts">
-                                <Palette />
-                                <span>Visual Arts</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-              </ScrollArea>
-              <SidebarFooter>
-                 <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton asChild>
-                            <Link href="/admin/settings">
-                                <Settings />
-                                <span>Settings</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                 </SidebarMenu>
-              </SidebarFooter>
-            </SidebarContent>
-        </Sidebar>
-        <main className="flex-1 flex flex-col">
-            <header className="flex items-center justify-between p-4 border-b">
-                <SidebarTrigger />
-                <h1 className="text-xl font-semibold">Admin Panel</h1>
-            </header>
-            <div className="flex-1">
-              {children}
+                 <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="secondary" size="icon" className="rounded-full">
+                           <Avatar className="h-8 w-8">
+                                <AvatarImage src={user.photoURL ?? ''} alt={user.displayName ?? 'User'} />
+                                <AvatarFallback>{user.displayName?.charAt(0)?.toUpperCase() ?? 'A'}</AvatarFallback>
+                            </Avatar>
+                            <span className="sr-only">Toggle user menu</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                            <Link href="/account">Profile</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                             <Link href="/admin/settings">Settings</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                            <Link href="/logout">Logout</Link>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
+        </header>
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+            {children}
         </main>
-      </div>
-    </SidebarProvider>
+    </div>
   );
 }
