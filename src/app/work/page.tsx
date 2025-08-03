@@ -8,8 +8,10 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { experiences } from '@/lib/experiences';
-import { achievements } from '@/lib/achievements';
+import { getExperiences } from '@/app/admin/experiences/actions';
+import { getAchievements } from '@/app/admin/achievements/actions';
+import { Experience, Achievement } from '@/lib/types';
+import { useState, useEffect } from 'react';
 
 
 const visualArts = [
@@ -17,10 +19,6 @@ const visualArts = [
   { imageUrl: 'https://placehold.co/400x400.png', imageAiHint: 'portrait painting', title: 'Serenity' },
   { imageUrl: 'https://placehold.co/400x400.png', imageAiHint: 'landscape illustration', title: 'Silent Valley' },
 ];
-
-const homeExperiences = experiences.slice(0, 3);
-const homeAchievements = achievements.slice(0, 3);
-
 
 // Animation Variants
 const containerVariants = {
@@ -51,6 +49,13 @@ const SectionHeader = ({ icon, title, description }: { icon: React.ReactNode; ti
 );
 
 export default function WorkPage() {
+  const [homeExperiences, setHomeExperiences] = useState<Experience[]>([]);
+  const [homeAchievements, setHomeAchievements] = useState<Achievement[]>([]);
+
+  useEffect(() => {
+    getExperiences().then(data => setHomeExperiences(data.slice(0, 3)));
+    getAchievements().then(data => setHomeAchievements(data.slice(0, 3)));
+  }, []);
 
   return (
     <div className="relative bg-background min-h-screen">

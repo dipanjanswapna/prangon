@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Briefcase, Award, Users, Wand2, Calendar, Link as LinkIcon, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
@@ -9,12 +9,13 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { experiences, Experience } from '@/lib/experiences';
+import { Experience } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { getExperiences } from '../admin/experiences/actions';
 
-const categoryFilters = ['All', ...Array.from(new Set(experiences.map(e => e.category)))];
+const categoryFilters = ['All', 'Professional', 'Freelance', 'Content Creation', 'Leadership'];
 
-const categoryStyles = {
+const categoryStyles: Record<string, { icon: React.ComponentType<any>, color: string }> = {
     Professional: { icon: Briefcase, color: 'text-blue-500' },
     Freelance: { icon: Wand2, color: 'text-green-500' },
     'Content Creation': { icon: Users, color: 'text-red-500' },
@@ -92,7 +93,12 @@ const ExperienceCard = ({ experience }: { experience: Experience }) => {
 };
 
 export default function ExperiencesPage() {
+    const [experiences, setExperiences] = useState<Experience[]>([]);
     const [activeFilter, setActiveFilter] = useState('All');
+    
+    useEffect(() => {
+        getExperiences().then(data => setExperiences(data));
+    }, []);
 
     const filteredExperiences = activeFilter === 'All'
         ? experiences

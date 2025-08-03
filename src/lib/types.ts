@@ -105,3 +105,31 @@ export const paymentSettingsSchema = z.object({
 });
 
 export type PaymentSettings = z.infer<typeof paymentSettingsSchema>;
+
+export const achievementSchema = z.object({
+    id: z.string(),
+    title: z.string().min(1, 'Title is required.'),
+    issuer: z.string().min(1, 'Issuer is required.'),
+    date: z.string().min(1, 'Date is required.'),
+    description: z.string().min(1, 'Description is required.'),
+    category: z.enum(['Award', 'Certification', 'Academic', 'Leadership']),
+    link: z.string().url().optional().or(z.literal('')),
+    imageUrl: z.string().url().optional().or(z.literal('')),
+    imageAiHint: z.string().optional(),
+});
+
+export type Achievement = z.infer<typeof achievementSchema>;
+
+
+export const experienceSchema = z.object({
+    id: z.string(),
+    role: z.string().min(1, 'Role is required.'),
+    entity: z.string().min(1, 'Entity is required.'),
+    period: z.string().min(1, 'Period is required.'),
+    category: z.enum(['Professional', 'Freelance', 'Content Creation', 'Leadership']),
+    description: z.array(z.string().min(1, 'Description cannot be empty.')).min(1, 'At least one description point is required.'),
+    achievements: z.array(z.string().min(1, 'Achievement cannot be empty.')).optional(),
+    link: z.string().url().optional().or(z.literal('')),
+});
+
+export type Experience = z.infer<typeof experienceSchema>;
