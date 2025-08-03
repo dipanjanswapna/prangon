@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Github, Twitter, Linkedin, Copy, ExternalLink, Facebook, HandHeart, LogIn, LogOut } from 'lucide-react';
+import { Github, Twitter, Linkedin, Copy, ExternalLink, Facebook, HandHeart, LogIn, LogOut, LayoutDashboard } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -85,12 +85,20 @@ export function Footer() {
                 </p>
                 <div className="flex items-center space-x-4 md:space-x-6">
                     {user ? (
-                      <Link href="/logout">
-                        <Button variant="ghost" size="sm">
-                          <LogOut className="mr-2 h-4 w-4" />
-                          Logout
-                        </Button>
-                      </Link>
+                      <>
+                        <Link href="/admin/dashboard">
+                           <Button variant="ghost" size="sm">
+                             <LayoutDashboard className="mr-2 h-4 w-4" />
+                             Go to Admin Dashboard
+                           </Button>
+                        </Link>
+                        <Link href="/logout">
+                          <Button variant="ghost" size="sm">
+                            <LogOut className="mr-2 h-4 w-4" />
+                            Logout
+                          </Button>
+                        </Link>
+                      </>
                     ) : (
                       <Link href="/login">
                          <Button variant="ghost" size="sm">
