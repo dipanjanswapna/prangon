@@ -16,6 +16,44 @@ import { getSubscriptionPlans } from './admin/subscriptions/actions';
 import { Card } from '@/components/ui/card';
 
 
+const TypingAnimation = ({ text }: { text: string }) => {
+  const [typedText, setTypedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+  const typingSpeed = 150;
+  const deletingSpeed = 100;
+  const delay = 2000;
+
+  useEffect(() => {
+    const handleTyping = () => {
+      const fullText = text;
+      const updatedText = isDeleting
+        ? fullText.substring(0, typedText.length - 1)
+        : fullText.substring(0, typedText.length + 1);
+      
+      setTypedText(updatedText);
+
+      if (!isDeleting && updatedText === fullText) {
+        setTimeout(() => setIsDeleting(true), delay);
+      } else if (isDeleting && updatedText === '') {
+        setIsDeleting(false);
+        setLoopNum(loopNum + 1);
+      }
+    };
+    
+    const typingTimeout = setTimeout(handleTyping, isDeleting ? deletingSpeed : typingSpeed);
+    
+    return () => clearTimeout(typingTimeout);
+  }, [typedText, isDeleting, text]);
+
+  return (
+    <div className="mt-4 h-8">
+       <p className="typing-text">{typedText}&nbsp;</p>
+    </div>
+  );
+};
+
+
 const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
   const words = text.split(' ');
   const aboutRef = useRef<HTMLDivElement>(null);
@@ -588,10 +626,7 @@ export default function Home() {
             </span>
            ))}
           </motion.h1>
-             <div className="animated-text-container">
-                <p className="animated-text-bg">smile for miles</p>
-                <p className="animated-text-fg">smile for miles</p>
-            </div>
+          <TypingAnimation text="smile for miles" />
         </div>
       </div>
       <AboutMe text={content.aboutMeText} imageUrl={content.aboutMeImageUrl}/>
