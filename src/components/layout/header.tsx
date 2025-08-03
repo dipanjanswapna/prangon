@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Menu, X, LogIn, UserCircle, LogOut } from 'lucide-react';
+import { Menu, X, LogIn, UserCircle, LogOut, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
@@ -27,6 +27,7 @@ const navItems = [
   { href: '/about', label: 'About' },
   { href: '/social-work', label: 'Social Work' },
   { href: '/prangons-likha', label: 'Prangons Likha'},
+  { href: '/library', label: 'Library' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];

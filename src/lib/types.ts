@@ -71,3 +71,19 @@ export const subscriptionPlanSchema = z.object({
 });
 
 export type SubscriptionPlan = z.infer<typeof subscriptionPlanSchema>;
+
+export const libraryItemSchema = z.object({
+    id: z.string(),
+    slug: z.string(),
+    title: z.string().min(1, 'Title is required.'),
+    author: z.string().min(1, 'Author or publisher is required.'),
+    category: z.enum(['Book', 'Weekly Magazine', 'Monthly Magazine']),
+    coverImage: z.string().url('Must be a valid URL.'),
+    imageAiHint: z.string().optional().default('book cover'),
+    content: z.string().min(10, 'Content must be at least 10 characters.'),
+    tags: z.array(z.string().min(1, 'Tag cannot be empty.')),
+    isFeatured: z.boolean().default(false),
+    isPremium: z.boolean().default(false),
+});
+
+export type LibraryItem = z.infer<typeof libraryItemSchema>;
