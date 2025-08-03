@@ -88,6 +88,20 @@ function CheckoutForm() {
             });
         }, 2000);
     };
+
+    const handleMobilePayment = (provider: string) => {
+        toast({
+            title: `Processing ${provider} Payment...`,
+            description: 'Please wait while we process your payment.',
+        });
+        setTimeout(() => {
+            setPaymentSuccess(true);
+             toast({
+                title: 'Payment Successful!',
+                description: `You have successfully subscribed to the ${plan?.name} plan.`,
+            });
+        }, 2000);
+    }
     
     if (loading) {
         return <Skeleton className="h-96 w-full max-w-lg" />;
@@ -239,8 +253,8 @@ function CheckoutForm() {
                                     <div className="pt-4 space-y-4">
                                          <p className="text-muted-foreground text-center">Select your mobile banking provider.</p>
                                          <div className="grid grid-cols-2 gap-4">
-                                            {paymentSettings?.bkash?.enabled && <Button variant="outline" className="h-16">bKash</Button>}
-                                            {paymentSettings?.nagad?.enabled && <Button variant="outline" className="h-16">Nagad</Button>}
+                                            {paymentSettings?.bkash?.enabled && <Button variant="outline" className="h-16" onClick={() => handleMobilePayment('bKash')}>bKash</Button>}
+                                            {paymentSettings?.nagad?.enabled && <Button variant="outline" className="h-16" onClick={() => handleMobilePayment('Nagad')}>Nagad</Button>}
                                          </div>
                                     </div>
                                 </TabsContent>
