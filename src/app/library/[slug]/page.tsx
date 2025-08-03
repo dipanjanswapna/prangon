@@ -120,20 +120,28 @@ export default function LibraryItemPage() {
         const urlObj = new URL(url);
         if (urlObj.hostname === 'drive.google.com') {
             const pathParts = urlObj.pathname.split('/');
-            // Handle /folders/ or /file/d/ or /d/
-            const fileIdIndex = pathParts.findIndex(part => ['folders', 'd'].includes(part)) + 1;
-            const fileIdIndexForFile = pathParts.findIndex(part => part === 'file') + 2;
-
-            let fileId = '';
-
-            if (pathParts[fileIdIndexForFile] && pathParts[fileIdIndexForFile -1] === 'd') {
-                fileId = pathParts[fileIdIndexForFile];
-            } else if (pathParts[fileIdIndex]) {
-                 fileId = pathParts[fileIdIndex];
-            }
             
-            if (fileId) {
-                return `https://drive.google.com/file/d/${fileId}/preview`;
+            const isFolder = pathParts.includes('folders');
+
+            if (isFolder) {
+                const folderIdIndex = pathParts.findIndex(part => part === 'folders') + 1;
+                const folderId = pathParts[folderIdIndex];
+                if (folderId) {
+                    return `https://drive.google.com/drive/embed?id=${folderId}`;
+                }
+            } else {
+                 // Handle /file/d/ or /d/
+                const fileIdIndex = pathParts.findIndex(part => ['d', 'file'].includes(part));
+                let fileId = '';
+                if(pathParts[fileIdIndex] === 'file' && pathParts[fileIdIndex+1] === 'd'){
+                    fileId = pathParts[fileIdIndex + 2];
+                } else if(pathParts[fileIdIndex] === 'd') {
+                    fileId = pathParts[fileIdIndex + 1];
+                }
+
+                if (fileId) {
+                    return `https://drive.google.com/file/d/${fileId}/preview`;
+                }
             }
         }
     } catch(e) {
@@ -169,7 +177,7 @@ export default function LibraryItemPage() {
     const embeddableUrl = hasPdf ? getEmbedUrl(item.pdfUrl) : '';
 
     return (
-        <Tabs defaultValue={hasText ? "text" : "document"} className="w-full mt-8">
+        <Tabs defaultValue={hasPdf ? "document" : "text"} className="w-full mt-8">
             <div className="flex justify-center">
               <TabsList>
                   {hasPdf && <TabsTrigger value="document"><FileText className="mr-2 h-4 w-4"/>Document</TabsTrigger>}
