@@ -76,7 +76,7 @@ export function Header() {
   return (
     <header className={cn(
         "fixed top-0 z-50 w-full transition-all duration-300 ease-in-out",
-        hasScrolled ? "bg-black/50 backdrop-blur-sm shadow-md" : "bg-transparent"
+        hasScrolled ? "bg-background/80 backdrop-blur-sm shadow-md" : "bg-transparent"
     )}>
       <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center space-x-2">
