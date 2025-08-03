@@ -8,14 +8,14 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --background: 210 40% 98%;
+    --foreground: 224 71.4% 4.1%;
+    --card: 210 40% 98%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 210 40% 98%;
+    --popover-foreground: 224 71.4% 4.1%;
     --primary: 334 93% 38%;
-    --primary-foreground: 210 40% 98%;
+    --primary-foreground: 345.9 100% 98.4%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
@@ -26,8 +26,7 @@ body {
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+    --ring: 334 93% 38%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -75,6 +74,14 @@ body {
 @keyframes blink-caret {
   from, to { border-color: transparent }
   50% { border-color: hsl(var(--primary)); }
+}
+
+.typing-text-container {
+    height: 1.5rem; /* Adjust based on font size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
 }
 
 .typing-text {
