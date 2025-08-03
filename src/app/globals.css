@@ -83,12 +83,11 @@ body {
 .ghost-container {
   position: relative;
   overflow: hidden;
-  -webkit-box-reflect: below -20px linear-gradient(transparent, #0004);
 }
 
 .ghost-text {
   font-family: 'Creepster', cursive; /* A ghost-like font, you might need to import it */
-  font-size: 2rem; /* Adjust size as needed */
+  font-size: 1.5rem; /* Adjust size as needed */
   font-weight: bold;
   text-transform: uppercase;
 }
@@ -100,6 +99,5 @@ body {
   width: 100%;
   transform: translateY(-50%);
   animation: ghostMove 10s linear infinite;
-  mix-blend-mode: exclusion;
-  color: white; /* or any color that works with exclusion */
+  color: hsl(var(--primary));
 }
