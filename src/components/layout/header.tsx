@@ -26,7 +26,7 @@ const navItems = [
   { href: '/work', label: 'Work' },
   { href: '/about', label: 'About' },
   { href: '/social-work', label: 'Social Work' },
-  { href: '/prangons_likha', label: 'Prangons Likha'},
+  { href: '/prangons-likha', label: 'Prangons Likha'},
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -108,8 +108,10 @@ export function Header() {
                            </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={logout}>
-                           <LogOut className="mr-2 h-4 w-4"/>
-                           Logout
+                           <Link href="/logout">
+                             <LogOut className="mr-2 h-4 w-4"/>
+                             Logout
+                           </Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -162,8 +164,10 @@ export function Header() {
                      {user ? (
                         <div className="text-center">
                           <p className="text-white">Welcome, {user.displayName}</p>
-                          <Button variant="ghost" onClick={() => { logout(); setIsMobileMenuOpen(false);}} className="text-white mt-2">
-                             <LogOut className="mr-2 h-4 w-4"/> Logout
+                          <Button variant="ghost" onClick={() => { setIsMobileMenuOpen(false);}} className="text-white mt-2">
+                             <Link href="/logout">
+                                <LogOut className="mr-2 h-4 w-4"/> Logout
+                             </Link>
                           </Button>
                         </div>
                      ) : (
