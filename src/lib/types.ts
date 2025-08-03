@@ -234,3 +234,17 @@ export const socialWorkPageSchema = z.object({
 });
 
 export type SocialWorkPageData = z.infer<typeof socialWorkPageSchema>;
+
+export const projectSchema = z.object({
+    id: z.string(),
+    title: z.string().min(1, 'Title is required.'),
+    client: z.string().min(1, 'Client is required.'),
+    description: z.string().min(1, 'Description is required.'),
+    imageUrl: z.string().url('Must be a valid URL.'),
+    imageAiHint: z.string().optional().default('project screenshot'),
+    category: z.string().min(1, 'Category is required.'),
+    tags: z.array(z.string().min(1, 'Tag cannot be empty.')),
+    link: z.string().url().optional().or(z.literal('')),
+});
+
+export type Project = z.infer<typeof projectSchema>;

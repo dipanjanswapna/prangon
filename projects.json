@@ -1,0 +1,36 @@
+
+[
+  {
+    "id": "1",
+    "title": "E-commerce Website Redesign",
+    "client": "FashionForward Inc.",
+    "description": "Led the complete redesign of the FashionForward e-commerce platform, focusing on a mobile-first approach and a streamlined checkout process. The new design increased user engagement by 30% and conversion rates by 15%.",
+    "imageUrl": "https://placehold.co/800x600.png",
+    "imageAiHint": "e-commerce website",
+    "category": "UI/UX Design",
+    "tags": ["UI/UX", "E-commerce", "Figma", "React"],
+    "link": "https://example.com"
+  },
+  {
+    "id": "2",
+    "title": "EdTech Mobile App",
+    "client": "LearnSphere",
+    "description": "Designed and developed a mobile application for LearnSphere, an educational platform for students. The app features interactive quizzes, video lectures, and progress tracking, resulting in over 10,000 downloads in the first three months.",
+    "imageUrl": "https://placehold.co/800x600.png",
+    "imageAiHint": "mobile app education",
+    "category": "Mobile App Development",
+    "tags": ["Mobile App", "EdTech", "React Native", "Firebase"],
+    "link": "https://example.com"
+  },
+  {
+    "id": "3",
+    "title": "Corporate Branding Package",
+    "client": "Innovate Solutions",
+    "description": "Created a comprehensive branding package for Innovate Solutions, including a new logo, brand guidelines, marketing materials, and a website design. The new branding helped the company secure a 25% increase in lead generation.",
+    "imageUrl": "https://placehold.co/800x600.png",
+    "imageAiHint": "branding mockups",
+    "category": "Branding",
+    "tags": ["Branding", "Logo Design", "Marketing", "Adobe Suite"],
+    "link": ""
+  }
+]
