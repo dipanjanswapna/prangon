@@ -100,7 +100,7 @@ export function Footer() {
                         </Link>
                       </>
                     ) : (
-                      <Link href="/login">
+                      <Link href="/login?flow=admin">
                          <Button variant="ghost" size="sm">
                            <LogIn className="mr-2 h-4 w-4" />
                           Admin Login

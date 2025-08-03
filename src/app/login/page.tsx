@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -16,20 +15,22 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogIn } from 'lucide-react';
+import { LogIn, UserPlus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { Separator } from '@/components/ui/separator';
+import { useEffect, useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-const formSchema = z.object({
-  email: z.string().email({
-    message: 'Please enter a valid email address.',
-  }),
-  password: z.string().min(6, {
-    message: 'Password must be at least 6 characters.',
-  }),
+const loginSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+});
+
+const signupSchema = z.object({
+  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
 });
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -41,67 +42,82 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
-
 export default function LoginPage() {
   const { toast } = useToast();
-  const { login, loginWithGoogle, user, loading } = useAuth();
+  const { login, signup, loginWithGoogle, user, loading } = useAuth();
   const router = useRouter();
+  const [isAdminLogin, setIsAdminLogin] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+
+  const loginForm = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: '', password: '' },
   });
+
+  const signupForm = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: { name: '', email: '', password: '' },
+  });
+  
+  useEffect(() => {
+    // Check for query param to determine if it's an admin login flow
+    const query = new URLSearchParams(window.location.search);
+    if (query.get('flow') === 'admin') {
+      setIsAdminLogin(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (!loading && user) {
-      router.push('/admin/dashboard');
+        if (isAdminLogin) {
+            router.push('/admin/dashboard');
+        } else {
+            router.push('/');
+        }
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, isAdminLogin]);
 
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onLogin(values: z.infer<typeof loginSchema>) {
     try {
       await login(values.email, values.password);
-      toast({
-        title: 'Login Successful!',
-        description: "Welcome back!",
-      });
-      router.push('/admin/dashboard');
+      toast({ title: 'Login Successful!', description: "Welcome back!" });
+       if (isAdminLogin) {
+            router.push('/admin/dashboard');
+        } else {
+            router.push('/');
+        }
     } catch (error) {
-      console.error(error);
-      toast({
-        variant: 'destructive',
-        title: 'Login Failed',
-        description: 'Invalid email or password. Please try again.',
-      });
+      toast({ variant: 'destructive', title: 'Login Failed', description: 'Invalid email or password.' });
     }
   }
-  
+
+  async function onSignup(values: z.infer<typeof signupSchema>) {
+    try {
+      await signup(values.email, values.password, values.name);
+      toast({ title: 'Signup Successful!', description: "Welcome to the community!" });
+      router.push('/');
+    } catch (error: any) {
+      toast({ variant: 'destructive', title: 'Signup Failed', description: error.message });
+    }
+  }
+
   async function handleGoogleLogin() {
     try {
       await loginWithGoogle();
-      toast({
-        title: 'Login Successful!',
-        description: "Welcome!",
-      });
-      router.push('/admin/dashboard');
+      toast({ title: 'Login Successful!', description: "Welcome!" });
+      if (isAdminLogin) {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/');
+      }
     } catch (error) {
-      console.error(error);
-      toast({
-        variant: 'destructive',
-        title: 'Login Failed',
-        description: 'Could not log in with Google. Please try again.',
-      });
+      toast({ variant: 'destructive', title: 'Login Failed', description: 'Could not log in with Google.' });
     }
   }
 
-
   return (
     <div className="container mx-auto flex min-h-screen items-center justify-center p-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -109,62 +125,91 @@ export default function LoginPage() {
       >
         <Card>
           <CardHeader className="text-center">
-            <div className="flex justify-center">
-              <LogIn className="h-8 w-8 mb-2" />
-            </div>
-            <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
-            <CardDescription>Enter your credentials to access the admin panel.</CardDescription>
+            <CardTitle className="text-2xl font-bold">Welcome</CardTitle>
+            <CardDescription>{isAdminLogin ? "Admin Panel Access" : "Login or create an account to continue"}</CardDescription>
           </CardHeader>
           <CardContent>
-             <Button variant="outline" className="w-full mb-6" onClick={handleGoogleLogin}>
-                <GoogleIcon className="mr-2 h-5 w-5" />
-                Continue with Google
-             </Button>
-            
-            <div className="relative mb-6">
-                <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
+            <Tabs defaultValue="login">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="login"><LogIn className="mr-2 h-4 w-4"/>Login</TabsTrigger>
+                <TabsTrigger value="signup"><UserPlus className="mr-2 h-4 w-4"/>Sign Up</TabsTrigger>
+              </TabsList>
+              <TabsContent value="login">
+                <div className="py-4">
+                  <Button variant="outline" className="w-full mb-4" onClick={handleGoogleLogin}>
+                    <GoogleIcon className="mr-2 h-5 w-5" /> Continue with Google
+                  </Button>
+                  <div className="relative mb-4">
+                    <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                    </div>
+                  </div>
+                  <Form {...loginForm}>
+                    <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
+                      <FormField control={loginForm.control} name="email" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl><Input type="email" placeholder="you@example.com" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <FormField control={loginForm.control} name="password" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl><Input type="password" placeholder="••••••••" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <Button type="submit" className="w-full" disabled={loginForm.formState.isSubmitting}>
+                        {loginForm.formState.isSubmitting ? 'Logging in...' : 'Login'}
+                      </Button>
+                    </form>
+                  </Form>
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                    Or continue with
-                    </span>
+              </TabsContent>
+              <TabsContent value="signup">
+                <div className="py-4">
+                   <Button variant="outline" className="w-full mb-4" onClick={handleGoogleLogin}>
+                    <GoogleIcon className="mr-2 h-5 w-5" /> Sign up with Google
+                  </Button>
+                  <div className="relative mb-4">
+                    <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-card px-2 text-muted-foreground">Or sign up with email</span>
+                    </div>
+                  </div>
+                  <Form {...signupForm}>
+                    <form onSubmit={signupForm.handleSubmit(onSignup)} className="space-y-4">
+                      <FormField control={signupForm.control} name="name" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl><Input placeholder="Your Name" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <FormField control={signupForm.control} name="email" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl><Input type="email" placeholder="you@example.com" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <FormField control={signupForm.control} name="password" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl><Input type="password" placeholder="••••••••" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+                      <Button type="submit" className="w-full" disabled={signupForm.formState.isSubmitting}>
+                        {signupForm.formState.isSubmitting ? 'Creating account...' : 'Create Account'}
+                      </Button>
+                    </form>
+                  </Form>
                 </div>
-            </div>
-
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder="admin@example.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? 'Logging in...' : 'Login'}
-                </Button>
-              </form>
-            </Form>
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
       </motion.div>

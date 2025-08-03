@@ -26,7 +26,7 @@ const navItems = [
   { href: '/work', label: 'Work' },
   { href: '/about', label: 'About' },
   { href: '/social-work', label: 'Social Work' },
-  { href: '/prangons-likha', label: 'Prangons Likha'},
+  { href: '/prangons_likha', label: 'Prangons Likha'},
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -89,7 +89,7 @@ export function Header() {
                         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                             <Avatar className="h-10 w-10">
                                 <AvatarImage src={user.photoURL ?? ''} alt={user.displayName ?? 'User'} />
-                                <AvatarFallback>{user.displayName?.charAt(0) ?? 'U'}</AvatarFallback>
+                                <AvatarFallback>{user.displayName?.charAt(0)?.toUpperCase() ?? 'U'}</AvatarFallback>
                             </Avatar>
                         </Button>
                     </DropdownMenuTrigger>
@@ -115,7 +115,7 @@ export function Header() {
                 </DropdownMenu>
             ) : (
                 <Button asChild variant="outline" size="sm">
-                  <Link href="/auth">
+                  <Link href="/login">
                     <LogIn className="mr-2 h-4 w-4" />
                     Login / Sign Up
                   </Link>
@@ -168,7 +168,7 @@ export function Header() {
                         </div>
                      ) : (
                         <Button asChild className="w-full" onClick={() => setIsMobileMenuOpen(false)}>
-                            <Link href="/auth">Login / Sign Up</Link>
+                            <Link href="/login">Login / Sign Up</Link>
                         </Button>
                      )}
                    </div>
