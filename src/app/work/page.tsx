@@ -1,4 +1,5 @@
 
+'use client';
 
 import { motion } from 'framer-motion';
 import { Briefcase, Paintbrush, TrendingUp, Trophy, ArrowRight, ExternalLink, Shield } from 'lucide-react';
@@ -49,7 +50,7 @@ const SectionHeader = ({ icon, title, description }: { icon: React.ReactNode; ti
   </motion.div>
 );
 
-export default async function WorkPage() {
+export default function WorkPage() {
 
   return (
     <div className="relative bg-background min-h-screen">
