@@ -45,11 +45,11 @@ function PostCard({ post }: { post: PrangonsLikhaPost }) {
                             data-ai-hint={post.imageAiHint}
                         />
                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                         {post.isPremium && (
+                         {post.isFeatured && (
                             <div className="absolute top-2 left-2">
                                 <Badge className="bg-yellow-500 text-black gap-1">
                                     <Crown className="h-3 w-3" />
-                                    Premium
+                                    Featured
                                 </Badge>
                             </div>
                         )}
@@ -113,7 +113,7 @@ export default function PrangonsLikhaPage() {
         }, {} as Record<string, PrangonsLikhaPost[]>);
     }, [posts]);
     
-    const featuredPosts = useMemo(() => posts.filter(p => p.isPremium).slice(0, 5), [posts]);
+    const featuredPosts = useMemo(() => posts.filter(p => p.isFeatured).slice(0, 5), [posts]);
 
   return (
     <div className="bg-background min-h-screen py-16 md:py-24">

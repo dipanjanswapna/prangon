@@ -48,7 +48,7 @@ export const prangonsLikhaPostSchema = z.object({
     imageAiHint: z.string().optional().default('book cover'),
     content: z.string().min(10, 'Content must be at least 10 characters.'),
     tags: z.array(z.string().min(1, 'Tag cannot be empty.')),
-    isPremium: z.boolean().default(false),
+    isFeatured: z.boolean().default(false),
 });
 
 export type PrangonsLikhaPost = z.infer<typeof prangonsLikhaPostSchema>;

@@ -30,7 +30,7 @@ export function PrangonsLikhaForm({ postToEdit }: { postToEdit?: PrangonsLikhaPo
     imageAiHint: postToEdit?.imageAiHint || '',
     content: postToEdit?.content || '',
     tags: postToEdit?.tags || [],
-    isPremium: postToEdit?.isPremium || false,
+    isFeatured: postToEdit?.isFeatured || false,
   };
 
   const form = useForm<FormValues>({
@@ -189,16 +189,16 @@ export function PrangonsLikhaForm({ postToEdit }: { postToEdit?: PrangonsLikhaPo
 
                     <FormField
                         control={form.control}
-                        name="isPremium"
+                        name="isFeatured"
                         render={({ field }) => (
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                             <FormControl>
                                 <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                                <FormLabel>Premium Post</FormLabel>
+                                <FormLabel>Featured Post</FormLabel>
                                 <FormDescription>
-                                Mark this post as premium. It might be featured more prominently.
+                                Mark this post as featured. It will appear in the carousel on the Prangons Likha page.
                                 </FormDescription>
                             </div>
                             </FormItem>
