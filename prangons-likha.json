@@ -1,7 +1,8 @@
+
 [
   {
     "id": "1",
-    "slug": "",
+    "slug": "sesh-prishthar-prem",
     "title": "শেষ পৃষ্ঠার প্রেম",
     "author": "মধুমিতা ভট্টাচার্য",
     "category": "অণুগল্প",
@@ -14,11 +15,11 @@
       "ছোটগল্প"
     ],
     "isFeatured": true,
-    "isPremium": true
+    "isPremium": false
   },
   {
     "id": "2",
-    "slug": "mrigonoyoni",
+    "slug": "mrignoyoni",
     "title": "মৃগনয়নী",
     "author": "দেবাশিস বন্দ্যোপাধ্যায়",
     "category": "নতুন গল্প",
@@ -30,7 +31,7 @@
       "প্রকৃতি",
       "গ্রাম্য জীবন"
     ],
-    "isFeatured": false,
+    "isFeatured": true,
     "isPremium": true
   },
   {

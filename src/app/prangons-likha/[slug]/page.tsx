@@ -59,7 +59,7 @@ export default async function PrangonsLikhaPostPage({ params }: { params: { slug
           </header>
           
           {post.isPremium ? (
-             <Card className="bg-muted/30 border-primary/20 text-center p-8">
+             <Card className="bg-muted/30 border-primary/20 text-center p-8 backdrop-blur-sm">
                 <CardHeader>
                     <div className="mx-auto bg-primary/10 text-primary w-fit p-3 rounded-full mb-4">
                         <Lock className="h-8 w-8" />
