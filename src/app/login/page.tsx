@@ -58,6 +58,19 @@ const images = {
     }
 }
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 },
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+};
+
 export default function LoginPage() {
   const { toast } = useToast();
   const { login, signup, loginWithGoogle, user, loading } = useAuth();
@@ -186,79 +199,109 @@ export default function LoginPage() {
                         <TabsTrigger value="signup"><UserPlus className="mr-2 h-4 w-4"/>Sign Up</TabsTrigger>
                     </TabsList>
                     <TabsContent value="login">
-                        <div className="py-4">
-                        <Button variant="outline" className="w-full mb-4" onClick={handleGoogleLogin}>
-                            <GoogleIcon className="mr-2 h-5 w-5" /> Continue with Google
-                        </Button>
-                        <div className="relative mb-4">
-                            <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
-                            <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
-                            </div>
-                        </div>
-                        <Form {...loginForm}>
-                            <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
-                            <FormField control={loginForm.control} name="email" render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl><Input type="email" placeholder="you@example.com" {...field} /></FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )} />
-                            <FormField control={loginForm.control} name="password" render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>Password</FormLabel>
-                                <FormControl><Input type="password" placeholder="••••••••" {...field} /></FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )} />
-                            <Button type="submit" className="w-full" disabled={loginForm.formState.isSubmitting}>
-                                {loginForm.formState.isSubmitting ? 'Logging in...' : 'Login'}
-                            </Button>
-                            </form>
-                        </Form>
-                        </div>
+                        <motion.div 
+                            key="login-form"
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className="py-4 space-y-4"
+                        >
+                            <motion.div variants={itemVariants}>
+                                <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
+                                    <GoogleIcon className="mr-2 h-5 w-5" /> Continue with Google
+                                </Button>
+                            </motion.div>
+                            <motion.div variants={itemVariants} className="relative">
+                                <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+                                <div className="relative flex justify-center text-xs uppercase">
+                                <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                                </div>
+                            </motion.div>
+                            <Form {...loginForm}>
+                                <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
+                                <motion.div variants={itemVariants}>
+                                    <FormField control={loginForm.control} name="email" render={({ field }) => (
+                                        <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl><Input type="email" placeholder="you@example.com" {...field} /></FormControl>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )} />
+                                </motion.div>
+                                <motion.div variants={itemVariants}>
+                                    <FormField control={loginForm.control} name="password" render={({ field }) => (
+                                        <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl><Input type="password" placeholder="••••••••" {...field} /></FormControl>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )} />
+                                </motion.div>
+                                <motion.div variants={itemVariants}>
+                                    <Button type="submit" className="w-full" disabled={loginForm.formState.isSubmitting}>
+                                        {loginForm.formState.isSubmitting ? 'Logging in...' : 'Login'}
+                                    </Button>
+                                </motion.div>
+                                </form>
+                            </Form>
+                        </motion.div>
                     </TabsContent>
                     <TabsContent value="signup">
-                        <div className="py-4">
-                        <Button variant="outline" className="w-full mb-4" onClick={handleGoogleLogin}>
-                            <GoogleIcon className="mr-2 h-5 w-5" /> Sign up with Google
-                        </Button>
-                        <div className="relative mb-4">
-                            <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
-                            <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-card px-2 text-muted-foreground">Or sign up with email</span>
-                            </div>
-                        </div>
-                        <Form {...signupForm}>
-                            <form onSubmit={signupForm.handleSubmit(onSignup)} className="space-y-4">
-                            <FormField control={signupForm.control} name="name" render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>Name</FormLabel>
-                                <FormControl><Input placeholder="Your Name" {...field} /></FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )} />
-                            <FormField control={signupForm.control} name="email" render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl><Input type="email" placeholder="you@example.com" {...field} /></FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )} />
-                            <FormField control={signupForm.control} name="password" render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>Password</FormLabel>
-                                <FormControl><Input type="password" placeholder="••••••••" {...field} /></FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )} />
-                            <Button type="submit" className="w-full" disabled={signupForm.formState.isSubmitting}>
-                                {signupForm.formState.isSubmitting ? 'Creating account...' : 'Create Account'}
-                            </Button>
-                            </form>
-                        </Form>
-                        </div>
+                       <motion.div 
+                            key="signup-form"
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className="py-4 space-y-4"
+                        >
+                            <motion.div variants={itemVariants}>
+                                <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
+                                    <GoogleIcon className="mr-2 h-5 w-5" /> Sign up with Google
+                                </Button>
+                            </motion.div>
+                            <motion.div variants={itemVariants} className="relative">
+                                <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
+                                <div className="relative flex justify-center text-xs uppercase">
+                                <span className="bg-card px-2 text-muted-foreground">Or sign up with email</span>
+                                </div>
+                            </motion.div>
+                            <Form {...signupForm}>
+                                <form onSubmit={signupForm.handleSubmit(onSignup)} className="space-y-4">
+                                <motion.div variants={itemVariants}>
+                                    <FormField control={signupForm.control} name="name" render={({ field }) => (
+                                        <FormItem>
+                                        <FormLabel>Name</FormLabel>
+                                        <FormControl><Input placeholder="Your Name" {...field} /></FormControl>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )} />
+                                </motion.div>
+                                <motion.div variants={itemVariants}>
+                                    <FormField control={signupForm.control} name="email" render={({ field }) => (
+                                        <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl><Input type="email" placeholder="you@example.com" {...field} /></FormControl>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )} />
+                                </motion.div>
+                                <motion.div variants={itemVariants}>
+                                    <FormField control={signupForm.control} name="password" render={({ field }) => (
+                                        <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl><Input type="password" placeholder="••••••••" {...field} /></FormControl>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )} />
+                                </motion.div>
+                                <motion.div variants={itemVariants}>
+                                    <Button type="submit" className="w-full" disabled={signupForm.formState.isSubmitting}>
+                                        {signupForm.formState.isSubmitting ? 'Creating account...' : 'Create Account'}
+                                    </Button>
+                                </motion.div>
+                                </form>
+                            </Form>
+                        </motion.div>
                     </TabsContent>
                     </Tabs>
                 </CardContent>
