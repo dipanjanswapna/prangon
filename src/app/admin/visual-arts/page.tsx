@@ -1,48 +1,82 @@
 
-'use client';
-
+import { getVisualArts } from './actions';
+import { VisualArtForm, DeleteArtButton } from '@/components/admin/visual-arts-form';
+import { VisualArt } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Palette, Construction } from 'lucide-react';
+import Image from 'next/image';
+import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 
-export default function AdminVisualArtsPage() {
-    return (
-        <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-            <div className="flex items-center justify-between space-y-2">
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: { y: 0, opacity: 1 },
+};
+
+
+export default async function AdminVisualArtsPage() {
+  const artworks = await getVisualArts();
+
+  return (
+    <div className="p-4 md:p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+            <div>
                 <h2 className="text-3xl font-bold tracking-tight">Manage Visual Arts</h2>
+                <p className="text-muted-foreground">
+                Add, edit, or delete your creative artworks.
+                </p>
             </div>
-            
-            <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="flex items-center justify-center h-[60vh]"
-            >
-                <Card className="w-full max-w-lg text-center bg-muted/30">
-                    <CardHeader>
-                        <div className="mx-auto bg-primary/10 text-primary w-fit p-4 rounded-full mb-4">
-                            <Construction className="h-12 w-12" />
-                        </div>
-                        <CardTitle className="text-2xl font-bold font-headline text-primary-foreground">Feature Coming Soon!</CardTitle>
-                        <CardDescription className="text-muted-foreground">
-                            The ability to add, edit, and delete visual arts from the admin panel is currently under construction.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-muted-foreground mb-6">
-                            For now, you can view the existing gallery which is populated from a static data file. We are working hard to bring this dynamic feature to you soon.
-                        </p>
-                        <Link href="/visual-arts">
-                            <Button variant="outline">
-                                <Palette className="mr-2 h-4 w-4" />
-                                View Current Gallery
-                            </Button>
-                        </Link>
-                    </CardContent>
-                </Card>
-            </motion.div>
+            <VisualArtForm />
         </div>
-    );
+
+        <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+        >
+            {artworks.length > 0 ? (
+                artworks.map(art => (
+                    <motion.div key={art.id} variants={itemVariants}>
+                        <Card className="group">
+                            <CardHeader className="p-0">
+                                <Image
+                                    src={art.imageUrl}
+                                    alt={art.title}
+                                    width={400}
+                                    height={400}
+                                    className="rounded-t-lg object-cover aspect-square"
+                                    data-ai-hint={art.imageAiHint}
+                                />
+                            </CardHeader>
+                            <CardContent className="p-4 space-y-2">
+                                <CardTitle className="text-lg truncate">{art.title}</CardTitle>
+                                <CardDescription>
+                                    <Badge variant="secondary">{art.category}</Badge>
+                                </CardDescription>
+                                <div className="flex justify-end gap-2 pt-2">
+                                    <VisualArtForm artToEdit={art} />
+                                    <DeleteArtButton id={art.id} />
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
+                ))
+            ) : (
+                <div className="col-span-full text-center py-16">
+                    <p className="text-muted-foreground">No artworks found. Add your first piece!</p>
+                </div>
+            )}
+        </motion.div>
+      </div>
+    </div>
+  );
 }

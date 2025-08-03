@@ -11,20 +11,9 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-
-type ArtWork = {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  imageAiHint: string;
-  category: 'Handmade Art' | 'Illustration' | 'Photography' | 'Graphics Design' | 'UI/UX Design';
-  tags: string[];
-  tools: string[];
-  date: string;
-  likes: number;
-  comments: { author: string; text: string }[];
-};
+import { VisualArt } from '@/lib/types';
+import { getVisualArts } from '../admin/visual-arts/actions';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const MasonryGrid = ({ children, className }: { children: React.ReactNode, className?: string }) => {
   return (
@@ -34,7 +23,7 @@ const MasonryGrid = ({ children, className }: { children: React.ReactNode, class
   );
 };
 
-const ArtCard = ({ art, onClick }: { art: ArtWork; onClick: () => void }) => {
+const ArtCard = ({ art, onClick }: { art: VisualArt; onClick: () => void }) => {
   return (
     <motion.div
       layout
@@ -64,19 +53,20 @@ const ArtCard = ({ art, onClick }: { art: ArtWork; onClick: () => void }) => {
 };
 
 export default function VisualArtsPage() {
-  const [artworks, setArtworks] = useState<ArtWork[]>([]);
-  const [filteredArtworks, setFilteredArtworks] = useState<ArtWork[]>([]);
-  const [selectedArt, setSelectedArt] = useState<ArtWork | null>(null);
+  const [artworks, setArtworks] = useState<VisualArt[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filteredArtworks, setFilteredArtworks] = useState<VisualArt[]>([]);
+  const [selectedArt, setSelectedArt] = useState<VisualArt | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    fetch('/visual-arts.json')
-      .then(res => res.json())
+    getVisualArts()
       .then(data => {
         setArtworks(data);
         setFilteredArtworks(data);
-      });
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -96,7 +86,7 @@ export default function VisualArtsPage() {
     setFilteredArtworks(result);
   }, [activeCategory, searchQuery, artworks]);
   
-  const categories = ['All', ...Array.from(new Set(artworks.map(art => art.category)))];
+  const categories = ['All', 'Handmade Art', 'Illustration', 'Photography', 'Graphics Design', 'UI/UX Design'];
 
   const getCategoryIcon = (category: string) => {
       switch(category) {
@@ -169,13 +159,19 @@ export default function VisualArtsPage() {
           </div>
         </motion.div>
         
-        <AnimatePresence>
-            <MasonryGrid>
-                {filteredArtworks.map(art => (
-                    <ArtCard key={art.id} art={art} onClick={() => setSelectedArt(art)} />
-                ))}
-            </MasonryGrid>
-        </AnimatePresence>
+        {loading ? (
+             <MasonryGrid>
+                {[...Array(8)].map((_, i) => <Skeleton key={i} className="h-64 w-full mb-4 rounded-2xl" />)}
+             </MasonryGrid>
+        ) : (
+            <AnimatePresence>
+                <MasonryGrid>
+                    {filteredArtworks.map(art => (
+                        <ArtCard key={art.id} art={art} onClick={() => setSelectedArt(art)} />
+                    ))}
+                </MasonryGrid>
+            </AnimatePresence>
+        )}
 
         <Dialog open={!!selectedArt} onOpenChange={(isOpen) => !isOpen && setSelectedArt(null)}>
           <DialogContent className="max-w-4xl w-full bg-gray-900/50 backdrop-blur-2xl border-primary/50 text-white rounded-2xl p-0">

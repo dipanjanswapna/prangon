@@ -166,3 +166,23 @@ export const aboutPageSchema = z.object({
 });
 
 export type AboutPageData = z.infer<typeof aboutPageSchema>;
+
+
+export const visualArtSchema = z.object({
+    id: z.string(),
+    title: z.string().min(1, 'Title is required.'),
+    description: z.string().min(1, 'Description is required.'),
+    imageUrl: z.string().url('Must be a valid URL.'),
+    imageAiHint: z.string().optional().default('visual art'),
+    category: z.enum(['Handmade Art', 'Illustration', 'Photography', 'Graphics Design', 'UI/UX Design']),
+    tags: z.array(z.string().min(1, 'Tag cannot be empty.')),
+    tools: z.array(z.string().min(1, 'Tool cannot be empty.')),
+    date: z.string().min(1, 'Date is required.'),
+    likes: z.number().int().nonnegative().default(0),
+    comments: z.array(z.object({
+        author: z.string().min(1),
+        text: z.string().min(1)
+    })).default([]),
+});
+
+export type VisualArt = z.infer<typeof visualArtSchema>;
