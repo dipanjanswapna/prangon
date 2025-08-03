@@ -115,14 +115,24 @@ export default function LibraryItemPage() {
 
   const isSubscribed = true; // Placeholder for premium user
 
-  const getEmbedUrl = (url: string): string => {
+  const getEmbedUrl = (url: string = ''): string => {
     try {
         const urlObj = new URL(url);
         if (urlObj.hostname === 'drive.google.com') {
             const pathParts = urlObj.pathname.split('/');
-            const fileIdIndex = pathParts.findIndex(part => part === 'd') + 1;
-            if (fileIdIndex > 0 && pathParts[fileIdIndex]) {
-                const fileId = pathParts[fileIdIndex];
+            // Handle /folders/ or /file/d/ or /d/
+            const fileIdIndex = pathParts.findIndex(part => ['folders', 'd'].includes(part)) + 1;
+            const fileIdIndexForFile = pathParts.findIndex(part => part === 'file') + 2;
+
+            let fileId = '';
+
+            if (pathParts[fileIdIndexForFile] && pathParts[fileIdIndexForFile -1] === 'd') {
+                fileId = pathParts[fileIdIndexForFile];
+            } else if (pathParts[fileIdIndex]) {
+                 fileId = pathParts[fileIdIndex];
+            }
+            
+            if (fileId) {
                 return `https://drive.google.com/file/d/${fileId}/preview`;
             }
         }
@@ -156,7 +166,7 @@ export default function LibraryItemPage() {
 
     const hasPdf = !!item.pdfUrl;
     const hasText = !!item.content;
-    const embeddableUrl = hasPdf ? getEmbedUrl(item.pdfUrl!) : '';
+    const embeddableUrl = hasPdf ? getEmbedUrl(item.pdfUrl) : '';
 
     return (
         <Tabs defaultValue={hasText ? "text" : "document"} className="w-full mt-8">
