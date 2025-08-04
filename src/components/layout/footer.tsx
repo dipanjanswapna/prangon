@@ -87,15 +87,6 @@ export function Footer() {
         </motion.div>
 
         <div className="border-t border-border pt-8">
-             <div className="bg-background/20 backdrop-blur-sm border border-destructive/50 rounded-lg p-4 text-center mb-8">
-                <div className="flex items-center justify-center gap-2">
-                    <Shield className="h-5 w-5 text-destructive" />
-                    <h3 className="font-bold text-destructive">Copyright & Warning</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mt-2">
-                    এই ওয়েবসাইটের সমস্ত কনটেন্ট (লেখা, ছবি, বই) কপিরাইট দ্বারা সুরক্ষিত। অনুমতি ছাড়া কোনো কনটেন্ট নকল করা বা বাণিজ্যিক উদ্দেশ্যে ব্যবহার করা আইনত দণ্ডনীয়। কোনো বই বা কনটেন্ট নকল করার চেষ্টা করলে অ্যাডমিন প্যানেল থেকে কঠোর ব্যবস্থা নেওয়া হবে এবং সরাসরি ১০,০০০ টাকা জরিমানা করা হবে।
-                </p>
-            </div>
             <div className="grid md:grid-cols-3 gap-8 text-muted-foreground">
                  <div className="text-sm text-center md:text-left">
                     &copy; {new Date().getFullYear()} All rights reserved by PRANGON CENTRE
