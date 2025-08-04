@@ -79,7 +79,7 @@ export default function SubscribePage() {
                 alt="Subscribe background"
                 layout="fill"
                 objectFit="cover"
-                className="absolute inset-0 z-0 opacity-5"
+                className="absolute inset-0 z-0 opacity-15"
                 data-ai-hint="abstract background"
             />
             <div className="container mx-auto px-4 relative z-10">

@@ -118,7 +118,7 @@ export default function ExperiencesPage() {
                 src="https://c4.wallpaperflare.com/wallpaper/412/867/629/your-name-sky-stars-wallpaper-preview.jpg"
                 alt="Experiences Background"
                 fill
-                className="absolute inset-0 z-0 object-cover opacity-5"
+                className="absolute inset-0 z-0 object-cover opacity-15"
                 data-ai-hint="starry sky anime"
             />
             <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">

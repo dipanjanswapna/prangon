@@ -77,7 +77,7 @@ export default function SocialWorkPage() {
           src="https://cdnb.artstation.com/p/assets/images/images/060/998/715/large/srabon-arafat-53.jpg?1679785068"
           alt="Social work background"
           fill
-          className="fixed inset-0 z-0 object-cover opacity-5"
+          className="fixed inset-0 z-0 object-cover opacity-10"
           data-ai-hint="abstract background"
         />
       <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">

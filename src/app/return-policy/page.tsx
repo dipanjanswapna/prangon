@@ -71,7 +71,7 @@ export default function ReturnPolicyPage() {
         src="https://cdna.artstation.com/p/assets/images/images/061/000/222/large/srabon-arafat-meditation-of-sadness.jpg?1679796016"
         alt="Return policy background"
         fill
-        className="absolute inset-0 z-0 object-cover opacity-5"
+        className="absolute inset-0 z-0 object-cover opacity-15"
         data-ai-hint="abstract digital art"
       />
       <div className="relative z-10 container mx-auto px-4 max-w-4xl">

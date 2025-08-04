@@ -82,7 +82,7 @@ export default function ProfessionalProjectsPage() {
         src="https://cdna.artstation.com/p/assets/images/images/047/764/192/large/srabon-arafat-uploded-file.jpg?1648398231"
         alt="Work background"
         fill
-        className="absolute inset-0 z-0 object-cover opacity-5"
+        className="absolute inset-0 z-0 object-cover opacity-15"
         data-ai-hint="abstract background"
       />
       <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">
