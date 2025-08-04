@@ -56,14 +56,14 @@ export function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.8 }}
-            className="relative p-8 md:p-12 mb-20 bg-background/20 rounded-t-2xl"
+            className="relative p-8 md:p-12 mb-20 bg-background/20 rounded-2xl"
         >
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
             <div className="lg:w-2/3">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-primary-foreground">
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-white">
                 Download My CV
               </h2>
-              <p className="text-md md:text-lg text-muted-foreground">
+              <p className="text-md md:text-lg text-white/80">
                 Interested in my profile? Get a detailed overview of my skills, experience, and projects by downloading my CV.
               </p>
             </div>
@@ -86,8 +86,8 @@ export function Footer() {
           </div>
         </motion.div>
 
-        <div className="border-t border-border pt-8">
-            <div className="grid md:grid-cols-3 gap-8 text-muted-foreground">
+        <div className="border-t border-white/20 pt-8">
+            <div className="grid md:grid-cols-3 gap-8 text-white">
                  <div className="text-sm text-center md:text-left">
                     &copy; {new Date().getFullYear()} All rights reserved by PRANGON CENTRE
                     <div className="flex justify-center md:justify-start items-center space-x-4 mt-2">
@@ -101,13 +101,13 @@ export function Footer() {
                      {user ? (
                       <>
                         <Link href="/admin/dashboard">
-                           <Button variant="ghost" size="sm">
+                           <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
                              <LayoutDashboard className="mr-2 h-4 w-4" />
                              Dashboard
                            </Button>
                         </Link>
                         <Link href="/logout">
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
                             <LogOut className="mr-2 h-4 w-4" />
                             Logout
                           </Button>
@@ -115,7 +115,7 @@ export function Footer() {
                       </>
                     ) : (
                       <Link href="/login?flow=admin">
-                         <Button variant="ghost" size="sm">
+                         <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
                            <LogIn className="mr-2 h-4 w-4" />
                           Admin Login
                         </Button>
@@ -132,7 +132,7 @@ export function Footer() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
-                            <Link href={link.href} className="text-sm hover:text-primary transition-colors flex items-center gap-1">
+                            <Link href={link.href} className="text-sm text-white hover:text-primary transition-colors flex items-center gap-1">
                                 <link.icon className="h-5 w-5"/>
                             </Link>
                         </motion.div>
@@ -146,7 +146,7 @@ export function Footer() {
             </Link>
             <div className="relative">
                 <p 
-                    className="text-sm text-muted-foreground font-code font-bold cursor-pointer"
+                    className="text-sm text-white/80 font-code font-bold cursor-pointer"
                     onClick={handleThankYouClick}
                 >
                     Thank you for visiting Prangon Centre. Your support is a great motivation for my creative and humanitarian pursuits.
