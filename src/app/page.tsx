@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, animate } from 'framer-motion';
-import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost } from 'lucide-react';
+import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost, Check, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getHomePageContent } from './admin/home/actions';
@@ -13,7 +13,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { getLibraryItems } from './library/actions';
 import { getPrangonsLikhaPosts } from './admin/prangons-likha/actions';
 import { getSubscriptionPlans } from './admin/subscriptions/actions';
-import { Card } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 
 const TypingAnimation = ({ texts }: { texts: string[] }) => {
@@ -557,6 +558,111 @@ const LatestVideosSection = ({ videos }: { videos: any[] }) => {
     );
   };
 
+const SubscriptionSection = () => {
+    const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const containerRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ['start end', 'end start'],
+    });
+
+    useEffect(() => {
+        getSubscriptionPlans()
+            .then(data => setPlans(data))
+            .finally(() => setLoading(false));
+    }, []);
+
+    const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
+    const y2 = useTransform(scrollYProgress, [0, 1], [0, -50]);
+
+    return (
+        <div ref={containerRef} className="relative bg-background text-foreground py-20 sm:py-32 overflow-hidden">
+            <motion.div className="absolute inset-0 z-0">
+                <Image
+                    src="https://i.pinimg.com/1200x/b5/02/aa/b502aa040d85af2e24210889d0f1ab12.jpg"
+                    alt="Subscription background"
+                    layout="fill"
+                    objectFit="cover"
+                    className="opacity-20"
+                    data-ai-hint="fantasy castle night"
+                />
+                <div className="absolute inset-0 bg-background/50" />
+            </motion.div>
+
+            <div className="container mx-auto px-4 relative z-10">
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="text-center mb-12"
+                >
+                    <h2 className="text-3xl md:text-5xl font-bold font-headline text-primary-foreground mb-4">
+                        Unlock Premium Access
+                    </h2>
+                    <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+                        Join our community and get exclusive access to premium content, special features, and more.
+                    </p>
+                </motion.div>
+
+                {loading ? (
+                    <div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                        {plans.map((plan, index) => {
+                            const y = index === 0 ? y1 : y2;
+                            return (
+                                <motion.div key={plan.id} style={{ y }}>
+                                    <Card className={cn(
+                                        "bg-background/20 backdrop-blur-md border-border/20 flex flex-col h-full shadow-2xl transition-all duration-300 hover:border-primary",
+                                        plan.isPopular && "border-primary"
+                                    )}>
+                                        {plan.isPopular && (
+                                            <div className="bg-primary text-primary-foreground text-center py-1.5 px-4 text-sm font-bold rounded-t-lg flex items-center justify-center gap-1">
+                                                <Star className="h-4 w-4" /> Most Popular
+                                            </div>
+                                        )}
+                                        <CardHeader className="text-center">
+                                            <CardTitle className="text-3xl font-bold">{plan.name}</CardTitle>
+                                            <CardDescription className="text-muted-foreground">{plan.description}</CardDescription>
+                                        </CardHeader>
+                                        <CardContent className="flex-grow">
+                                            <div className="text-center mb-6">
+                                                <span className="text-5xl font-extrabold text-primary-foreground">
+                                                    ${plan.priceMonthly}
+                                                </span>
+                                                <span className="text-muted-foreground">/month</span>
+                                            </div>
+                                            <ul className="space-y-3">
+                                                {plan.features.map((feature, i) => (
+                                                    <li key={i} className="flex items-center gap-3 text-muted-foreground">
+                                                        <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
+                                                        <span>{feature}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </CardContent>
+                                        <CardFooter>
+                                            <Button className="w-full" asChild size="lg">
+                                                <Link href={`/subscribe?planId=${plan.id}&billing=monthly`}>
+                                                    Choose Plan
+                                                </Link>
+                                            </Button>
+                                        </CardFooter>
+                                    </Card>
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+
 export default function Home() {
   const [content, setContent] = useState<HomePageData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -657,6 +763,7 @@ export default function Home() {
       <WhatTheySaidSection testimonials={content.testimonials}/>
       <InfoSection toolboxItems={content.toolboxItems} readsImage={content.readsImage} hobbiesImage={content.hobbiesImage} />
       <LatestVideosSection videos={content.videos} />
+      <SubscriptionSection />
     </>
   );
 }
