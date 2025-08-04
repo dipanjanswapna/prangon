@@ -85,7 +85,7 @@ export default function ContactPage() {
         alt="Contact background"
         layout="fill"
         objectFit="cover"
-        className="absolute inset-0 z-0 opacity-20"
+        className="absolute inset-0 z-0 opacity-30"
         data-ai-hint="space background"
       />
       <div className="relative z-10 container mx-auto px-4">

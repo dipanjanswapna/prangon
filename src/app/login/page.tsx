@@ -153,7 +153,7 @@ export default function LoginPage() {
               alt="Background"
               layout="fill"
               objectFit="cover"
-              className="opacity-20 transition-all duration-1000"
+              className="opacity-30 transition-all duration-1000"
               data-ai-hint={currentImage.aiHint}
               key={activeTab}
           />

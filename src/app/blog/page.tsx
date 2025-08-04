@@ -83,7 +83,7 @@ export default function BlogPage() {
                     src="https://wallpapercat.com/w/full/d/d/f/46447-3840x2160-desktop-4k-squid-game-wallpaper.jpg"
                     alt="Blog background"
                     fill
-                    className="object-cover opacity-15"
+                    className="object-cover opacity-25"
                     data-ai-hint="abstract technology background"
                 />
                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />

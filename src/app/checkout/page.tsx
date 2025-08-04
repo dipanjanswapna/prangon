@@ -307,7 +307,7 @@ export default function CheckoutPage() {
             alt="Checkout background"
             layout="fill"
             objectFit="cover"
-            className="absolute inset-0 z-0 opacity-15"
+            className="absolute inset-0 z-0 opacity-25"
             data-ai-hint="abstract background"
         />
         <div className="relative z-10 container mx-auto max-w-5xl py-12 px-4">
