@@ -104,7 +104,7 @@ export default function VisualArtsPage() {
             alt="Visual Arts background"
             layout="fill"
             objectFit="cover"
-            className="fixed inset-0 z-0 opacity-20"
+            className="fixed inset-0 z-0 opacity-10"
             data-ai-hint="glowing astronaut"
         />
       

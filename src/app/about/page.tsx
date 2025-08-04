@@ -62,7 +62,7 @@ export default function AboutPage() {
             src={data.backgroundImageUrl}
             alt="About background"
             fill
-            className="absolute inset-0 z-0 object-cover opacity-20"
+            className="absolute inset-0 z-0 object-cover opacity-10"
             data-ai-hint="abstract background"
         />
       <div className="relative z-10 container mx-auto px-4">

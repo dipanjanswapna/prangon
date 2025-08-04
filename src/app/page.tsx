@@ -615,7 +615,7 @@ export default function Home() {
           <Image
             src={content.heroBackgroundImageUrl}
             alt="Hero background"
-            className="object-cover opacity-30"
+            className="object-cover opacity-20"
             priority
             data-ai-hint="man portrait"
             fill

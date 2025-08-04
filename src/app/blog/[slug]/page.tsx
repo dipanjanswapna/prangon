@@ -34,7 +34,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           src={post.coverImage}
           alt={post.title}
           fill
-          className="absolute inset-0 z-0 object-cover opacity-10"
+          className="absolute inset-0 z-0 object-cover opacity-5"
           data-ai-hint={post.imageAiHint}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-0"/>

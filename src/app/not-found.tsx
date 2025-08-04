@@ -202,7 +202,7 @@ export default function NotFound() {
             alt="404 background"
             layout="fill"
             objectFit="cover"
-            className="absolute inset-0 z-0 opacity-10"
+            className="absolute inset-0 z-0 opacity-5"
             data-ai-hint="abstract background"
         />
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-center w-full max-w-6xl mx-auto gap-16">
