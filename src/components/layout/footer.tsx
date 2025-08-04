@@ -56,7 +56,7 @@ export function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.8 }}
-            className="relative p-8 md:p-12 mb-20"
+            className="relative p-8 md:p-12 mb-20 bg-background/20 rounded-t-2xl"
         >
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
             <div className="lg:w-2/3">
