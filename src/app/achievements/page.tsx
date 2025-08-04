@@ -131,7 +131,7 @@ export default function AchievementsPage() {
                     src="https://i.pinimg.com/736x/01/d7/fd/01d7fd28dd72179bfcc3e8cdd5806d2c.jpg"
                     alt="Achievements Background"
                     fill
-                    className="absolute inset-0 z-0 object-cover opacity-20"
+                    className="absolute inset-0 z-0 object-cover opacity-25"
                     data-ai-hint="abstract geometric background"
                 />
                 <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">

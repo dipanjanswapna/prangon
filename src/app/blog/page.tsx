@@ -86,7 +86,6 @@ export default function BlogPage() {
                     className="object-cover opacity-25"
                     data-ai-hint="abstract technology background"
                 />
-                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
             </div>
             <div className="relative z-10">
                 <div className="inline-block bg-primary/10 p-3 rounded-full mb-4">
