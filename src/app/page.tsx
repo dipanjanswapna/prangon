@@ -153,7 +153,7 @@ const SkillsSection = ({ skills } : { skills: string[] }) => {
 
           return (
             <motion.div
-              key={skill}
+              key={`${skill}-${index}`}
               className="py-4 md:py-8 border-b border-border"
               style={{ opacity }}
             >
