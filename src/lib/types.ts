@@ -255,3 +255,17 @@ export const projectSchema = z.object({
 });
 
 export type Project = z.infer<typeof projectSchema>;
+
+export const faqItemSchema = z.object({
+    id: z.string(),
+    question: z.string().min(1, 'Question is required.'),
+    answer: z.string().min(1, 'Answer is required.'),
+});
+
+export type FAQItem = z.infer<typeof faqItemSchema>;
+
+export const faqPageSchema = z.object({
+  faqs: z.array(faqItemSchema),
+});
+
+export type FAQPageData = z.infer<typeof faqPageSchema>;

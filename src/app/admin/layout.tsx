@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Home, Settings, Loader2, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch } from 'lucide-react';
+import { Home, Settings, Loader2, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch, HelpCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
@@ -33,6 +33,7 @@ const adminNavItems = [
     { href: '/admin/blog', label: 'Blog', icon: <Rss /> },
     { href: '/admin/subscriptions', label: 'Subscriptions', icon: <Star /> },
     { href: '/admin/visual-arts', label: 'Visual Arts', icon: <Palette /> },
+    { href: '/admin/faq', label: 'FAQ', icon: <HelpCircle /> },
     { href: '/admin/settings', label: 'Settings', icon: <Settings /> },
 ]
 

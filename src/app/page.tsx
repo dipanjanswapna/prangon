@@ -4,16 +4,18 @@
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, animate } from 'framer-motion';
-import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost, Check, Crown } from 'lucide-react';
+import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost, Check, Crown, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getHomePageContent } from './admin/home/actions';
-import { HomePageData, LibraryItem, PrangonsLikhaPost, SubscriptionPlan } from '@/lib/types';
+import { HomePageData, LibraryItem, PrangonsLikhaPost, SubscriptionPlan, FAQItem } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getLibraryItems } from './library/actions';
 import { getPrangonsLikhaPosts } from './admin/prangons-likha/actions';
 import { getSubscriptionPlans } from './admin/subscriptions/actions';
+import { getFAQPageData } from './admin/faq/actions';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
 
 
@@ -662,6 +664,89 @@ const SubscriptionSection = () => {
     );
 };
 
+const FAQSection = () => {
+    const [faqData, setFaqData] = useState<FAQItem[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getFAQPageData()
+            .then(data => setFaqData(data.faqs))
+            .finally(() => setLoading(false));
+    }, []);
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
+    };
+
+    return (
+        <div className="relative bg-background text-foreground py-20 sm:py-32 overflow-hidden">
+            <motion.div className="absolute inset-0 z-0">
+                 <Image
+                    src="https://i.pinimg.com/1200x/08/f1/91/08f191ca9538e01c4ee25010718b0b38.jpg"
+                    alt="FAQ background"
+                    layout="fill"
+                    objectFit="cover"
+                    className="opacity-20"
+                    data-ai-hint="mystical forest night"
+                />
+                 <div className="absolute inset-0 bg-background/60" />
+            </motion.div>
+            <div className="container mx-auto px-4 relative z-10">
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="text-center mb-12"
+                >
+                     <div className="inline-block bg-primary/10 p-3 rounded-full mb-4">
+                        <HelpCircle className="h-8 w-8 text-primary" />
+                    </div>
+                    <h2 className="text-3xl md:text-5xl font-bold font-headline text-primary-foreground mb-4">
+                        Frequently Asked Questions
+                    </h2>
+                    <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+                        Have questions? We've got answers. If you can't find what you're looking for, feel free to contact us.
+                    </p>
+                </motion.div>
+
+                {loading ? (
+                    <div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>
+                ) : (
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.2 }}
+                        className="max-w-3xl mx-auto"
+                    >
+                        <Accordion type="single" collapsible className="w-full space-y-4">
+                            {faqData.map((faq, index) => (
+                                <motion.div key={faq.id} variants={itemVariants}>
+                                    <AccordionItem value={`item-${index}`} className="bg-muted/30 border border-border/20 rounded-lg backdrop-blur-sm">
+                                        <AccordionTrigger className="p-6 text-lg font-semibold text-left hover:no-underline">
+                                            {faq.question}
+                                        </AccordionTrigger>
+                                        <AccordionContent className="px-6 pb-6 text-muted-foreground">
+                                            {faq.answer}
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                </motion.div>
+                            ))}
+                        </Accordion>
+                    </motion.div>
+                )}
+            </div>
+        </div>
+    );
+};
+
 
 export default function Home() {
   const [content, setContent] = useState<HomePageData | null>(null);
@@ -764,6 +849,7 @@ export default function Home() {
       <InfoSection toolboxItems={content.toolboxItems} readsImage={content.readsImage} hobbiesImage={content.hobbiesImage} />
       <LatestVideosSection videos={content.videos} />
       <SubscriptionSection />
+      <FAQSection />
     </>
   );
 }
