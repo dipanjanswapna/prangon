@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Ensure user exists in our DB before setting the state
         await findOrCreateUser(firebaseUser);
         setUser(firebaseUser);
       } else {
@@ -38,31 +37,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = (email: string, pass: string) => {
-    setLoading(true);
-    return signInWithEmailAndPassword(auth, email, pass).finally(() => setLoading(false));
+    return signInWithEmailAndPassword(auth, email, pass);
   };
   
   const signup = async (email: string, pass: string, displayName: string) => {
-    setLoading(true);
-    try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-        if (userCredential.user) {
-            await updateProfile(userCredential.user, { displayName });
-            // The onAuthStateChanged listener will handle user creation in our DB.
-            // We can set the user here to avoid a flicker, the listener will re-confirm.
-            setUser({ ...userCredential.user, displayName });
-        }
-        return userCredential;
-    } finally {
-        setLoading(false);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+    if (userCredential.user) {
+        await updateProfile(userCredential.user, { displayName });
+        // The onAuthStateChanged listener will handle user creation in our DB.
+        setUser({ ...userCredential.user, displayName });
     }
+    return userCredential;
   };
 
-
   const loginWithGoogle = () => {
-    setLoading(true);
     const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider).finally(() => setLoading(false));
+    return signInWithPopup(auth, provider);
   };
 
   const logout = () => {

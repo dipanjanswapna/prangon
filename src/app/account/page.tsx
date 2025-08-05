@@ -18,21 +18,22 @@ export default function AccountPage() {
     const { user, loading, logout } = useAuth();
     const router = useRouter();
     const [appUser, setAppUser] = useState<AppUser | null>(null);
+    const [pageLoading, setPageLoading] = useState(true);
 
     useEffect(() => {
         if (!loading && !user) {
             router.push('/login');
-        }
-        if (user) {
+        } else if (user) {
             getUserData(user.uid).then(data => {
                 if (data) {
                     setAppUser(data);
                 }
+                setPageLoading(false);
             })
         }
     }, [user, loading, router]);
 
-    if (loading || !user) {
+    if (loading || pageLoading) {
         return (
             <div className="flex h-screen items-center justify-center">
                 <Loader2 className="h-8 w-8 animate-spin" />
@@ -40,6 +41,14 @@ export default function AccountPage() {
         );
     }
     
+    if (!user) {
+         return (
+            <div className="flex h-screen items-center justify-center">
+                <p>Redirecting to login...</p>
+            </div>
+        );
+    }
+
     const containerVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: {

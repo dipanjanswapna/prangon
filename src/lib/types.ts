@@ -276,10 +276,10 @@ export const appUserSchema = z.object({
     email: z.string().email(),
     displayName: z.string(),
     subscription: z.object({
-        planName: z.string(),
-        startDate: z.string(),
-        endDate: z.string(),
-    }),
+        planName: z.string().optional(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
+    }).optional(),
 });
 
 export type AppUser = z.infer<typeof appUserSchema>;

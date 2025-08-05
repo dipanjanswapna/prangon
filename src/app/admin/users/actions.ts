@@ -102,6 +102,7 @@ export async function manageSubscription(userId: string, action: 'grant' | 'revo
     try {
         await writeUsers(users);
         revalidatePath('/admin/users');
+        revalidatePath('/account');
         return { success: true, user: users[userIndex] };
     } catch (error: any) {
         return { success: false, error: error.message };
