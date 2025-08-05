@@ -692,10 +692,10 @@ const FAQSection = () => {
                     alt="FAQ background"
                     layout="fill"
                     objectFit="cover"
-                    className="opacity-20"
+                    className="opacity-30"
                     data-ai-hint="mystical forest night"
                 />
-                 <div className="absolute inset-0 bg-background/60" />
+                 <div className="absolute inset-0 bg-background/40" />
             </motion.div>
             <div className="container mx-auto px-4 relative z-10">
                 <motion.div
