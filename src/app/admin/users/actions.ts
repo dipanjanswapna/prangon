@@ -42,7 +42,7 @@ export async function getUserData(uid: string): Promise<AppUser | null> {
 }
 
 export async function findOrCreateUser(firebaseUser: User): Promise<AppUser> {
-    const users = await readUsers();
+    let users = await readUsers();
     const existingUser = users.find(u => u.uid === firebaseUser.uid);
 
     if (existingUser) {
@@ -64,8 +64,8 @@ export async function findOrCreateUser(firebaseUser: User): Promise<AppUser> {
         }
     };
     
-    const updatedUsers = [...users, newUser];
-    await writeUsers(updatedUsers);
+    users.push(newUser);
+    await writeUsers(users);
     
     return newUser;
 }
