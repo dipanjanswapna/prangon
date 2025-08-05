@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -44,6 +45,7 @@ const socialPlatforms = [
 ]
 
 export default function ContactPage() {
+  const { t } = useTranslation();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -85,7 +87,7 @@ export default function ContactPage() {
         alt="Contact background"
         layout="fill"
         objectFit="cover"
-        className="absolute inset-0 z-0 opacity-30"
+        className="absolute inset-0 z-0 opacity-20"
         data-ai-hint="space background"
       />
       <div className="relative z-10 container mx-auto px-4">
@@ -94,11 +96,11 @@ export default function ContactPage() {
             <Card className="bg-background/80 backdrop-blur-sm border-border shadow-lg">
               <CardHeader className="text-center">
                 <motion.div variants={itemVariants}>
-                  <CardTitle className="text-4xl font-bold font-headline text-primary-foreground">Contact Me</CardTitle>
+                  <CardTitle className="text-4xl font-bold font-headline text-primary-foreground">{t('contact_title')}</CardTitle>
                 </motion.div>
                 <motion.div variants={itemVariants}>
                 <CardDescription className="text-lg text-muted-foreground mt-2">
-                  Have a project in mind or just want to say hi?
+                  {t('contact_description')}
                 </CardDescription>
                 </motion.div>
               </CardHeader>
@@ -115,9 +117,9 @@ export default function ContactPage() {
                         name="name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Name</FormLabel>
+                            <FormLabel>{t('contact_name_label')}</FormLabel>
                             <FormControl>
-                              <Input placeholder="Your Name" {...field} />
+                              <Input placeholder={t('contact_name_placeholder')} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -130,9 +132,9 @@ export default function ContactPage() {
                         name="email"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>{t('contact_email_label')}</FormLabel>
                             <FormControl>
-                              <Input placeholder="your.email@example.com" {...field} />
+                              <Input placeholder={t('contact_email_placeholder')} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -145,10 +147,10 @@ export default function ContactPage() {
                         name="message"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Message</FormLabel>
+                            <FormLabel>{t('contact_message_label')}</FormLabel>
                             <FormControl>
                               <Textarea
-                                placeholder="Tell me about your project or idea..."
+                                placeholder={t('contact_message_placeholder')}
                                 className="min-h-[150px]"
                                 {...field}
                               />
@@ -161,7 +163,7 @@ export default function ContactPage() {
                     <motion.div variants={itemVariants} className="flex justify-end">
                       <Button type="submit" disabled={form.formState.isSubmitting}>
                         <Send className="mr-2 h-4 w-4" />
-                        Send Message
+                        {t('contact_send_button')}
                       </Button>
                     </motion.div>
                   </motion.form>
@@ -179,11 +181,11 @@ export default function ContactPage() {
               <Card className="bg-background/80 backdrop-blur-sm border-border shadow-lg">
                   <CardHeader>
                       <motion.div variants={itemVariants}>
-                          <CardTitle className="text-2xl font-bold text-center font-headline text-primary-foreground">Find me on</CardTitle>
+                          <CardTitle className="text-2xl font-bold text-center font-headline text-primary-foreground">{t('contact_find_me_on')}</CardTitle>
                       </motion.div>
                       <motion.div variants={itemVariants}>
                           <CardDescription className="text-center">
-                              Connect with me on social media or check out my work.
+                              {t('contact_connect_with_me')}
                           </CardDescription>
                       </motion.div>
                   </CardHeader>
@@ -206,7 +208,7 @@ export default function ContactPage() {
                   <CardFooter>
                       <motion.div variants={itemVariants} className="w-full">
                         <Button className="w-full" asChild>
-                            <Link href="#">Hire Me Now</Link>
+                            <Link href="#">{t('contact_hire_me_button')}</Link>
                         </Button>
                       </motion.div>
                   </CardFooter>

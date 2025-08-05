@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { ThemeToggle } from '../theme-toggle';
+import { LanguageSwitcher } from '../language-switcher';
 
 
 const navItems = [
@@ -76,7 +77,7 @@ export function Header() {
   return (
     <header className={cn(
         "fixed top-0 z-50 w-full transition-all duration-300 ease-in-out",
-        hasScrolled ? "bg-background/80 backdrop-blur-sm shadow-md" : "bg-transparent border-b border-transparent"
+        hasScrolled ? "bg-background/80 backdrop-blur-sm shadow-md" : "bg-transparent"
     )}>
       <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center space-x-2">
@@ -85,6 +86,7 @@ export function Header() {
 
         <div className="hidden md:flex items-center space-x-6">
            <NavLinks />
+           <LanguageSwitcher />
            <ThemeToggle />
             {user ? (
                  <DropdownMenu>
@@ -129,6 +131,7 @@ export function Header() {
         </div>
 
         <div className="md:hidden flex items-center gap-2">
+          <LanguageSwitcher />
           <ThemeToggle />
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>

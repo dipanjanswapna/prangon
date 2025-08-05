@@ -1,0 +1,14 @@
+{
+    "contact_title": "যোগাযোগ করুন",
+    "contact_description": "কোনো প্রজেক্টের কথা ভাবছেন অথবা শুধু হাই বলতে চান?",
+    "contact_name_label": "নাম",
+    "contact_name_placeholder": "আপনার নাম",
+    "contact_email_label": "ইমেল",
+    "contact_email_placeholder": "your.email@example.com",
+    "contact_message_label": "বার্তা",
+    "contact_message_placeholder": "আপনার প্রজেক্ট বা ধারণা সম্পর্কে বলুন...",
+    "contact_send_button": "বার্তা পাঠান",
+    "contact_find_me_on": "আমাকে খুঁজুন",
+    "contact_connect_with_me": "সোশ্যাল মিডিয়াতে আমার সাথে সংযোগ করুন বা আমার কাজ দেখুন।",
+    "contact_hire_me_button": "এখনই নিয়োগ করুন"
+}

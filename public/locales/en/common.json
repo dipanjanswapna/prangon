@@ -1,0 +1,14 @@
+{
+    "contact_title": "Contact Me",
+    "contact_description": "Have a project in mind or just want to say hi?",
+    "contact_name_label": "Name",
+    "contact_name_placeholder": "Your Name",
+    "contact_email_label": "Email",
+    "contact_email_placeholder": "your.email@example.com",
+    "contact_message_label": "Message",
+    "contact_message_placeholder": "Tell me about your project or idea...",
+    "contact_send_button": "Send Message",
+    "contact_find_me_on": "Find me on",
+    "contact_connect_with_me": "Connect with me on social media or check out my work.",
+    "contact_hire_me_button": "Hire Me Now"
+}

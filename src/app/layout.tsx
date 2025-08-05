@@ -2,6 +2,7 @@
 'use client';
 
 import './globals.css';
+import './i18n';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -9,10 +10,14 @@ import { Dribbble, Instagram, Linkedin, PlayCircle, Music2, VolumeX, Volume2 } f
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { HireMeBanner } from '@/components/layout/hire-me-banner';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, Suspense } from 'react';
 import { AuthProvider } from '@/context/auth-context';
 import { usePathname } from 'next/navigation';
 import { ThemeProvider } from '@/components/theme-provider';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '@/lib/i18n';
+import { Loader2 } from 'lucide-react';
+
 
 export default function RootLayout({
   children,
@@ -108,48 +113,51 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            {!isAdminPage && !isAuthPage && (
-               <audio ref={audioRef} src="/mixkit-relax-beat-292.mp3" loop preload="auto" />
-            )}
-            
-            {!isAdminPage && !isAuthPage && <Header />}
-            
-            <main className={cn(!isAdminPage && !isAuthPage ? 'flex-grow relative' : '')}>
-              {children}
-            </main>
+            <I18nextProvider i18n={i18n}>
+                <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
+                    {!isAdminPage && !isAuthPage && (
+                       <audio ref={audioRef} src="/mixkit-relax-beat-292.mp3" loop preload="auto" />
+                    )}
+                    
+                    {!isAdminPage && !isAuthPage && <Header />}
+                    
+                    <main className={cn(!isAdminPage && !isAuthPage ? 'flex-grow relative' : '')}>
+                      {children}
+                    </main>
 
-            {!isAdminPage && !isAuthPage && (
-              <>
-                <aside className="fixed left-4 bottom-4 z-50 hidden md:flex flex-col items-center space-y-4">
-                  <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                    <Dribbble className="h-5 w-5" />
-                  </Link>
-                  <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                    <Instagram className="h-5 w-5" />
-                  </Link>
-                  <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                    <PlayCircle className="h-5 w-5" />
-                  </Link>
-                  <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                    <Linkedin className="h-5 w-5" />
-                  </Link>
-                </aside>
+                    {!isAdminPage && !isAuthPage && (
+                      <>
+                        <aside className="fixed left-4 bottom-4 z-50 hidden md:flex flex-col items-center space-y-4">
+                          <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                            <Dribbble className="h-5 w-5" />
+                          </Link>
+                          <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                            <Instagram className="h-5 w-5" />
+                          </Link>
+                          <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                            <PlayCircle className="h-5 w-5" />
+                          </Link>
+                          <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                            <Linkedin className="h-5 w-5" />
+                          </Link>
+                        </aside>
 
-                <aside className="fixed right-4 bottom-4 z-50 flex items-center space-x-2">
-                    <button onClick={toggleSound} className="text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
-                        {isPlaying ? <Volume2 className="h-4 w-4 md:h-5 md:w-5" /> : <VolumeX className="h-4 w-4 md:h-5 md:w-5" />}
-                        <span className="[writing-mode:vertical-rl] text-xs md:text-sm tracking-widest uppercase">
-                            {isPlaying ? 'Sound On' : 'Sound Off'}
-                        </span>
-                    </button>
-                </aside>
-                
-                <Footer />
-                <HireMeBanner />
-              </>
-            )}
-
-            <Toaster />
+                        <aside className="fixed right-4 bottom-4 z-50 flex items-center space-x-2">
+                            <button onClick={toggleSound} className="text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
+                                {isPlaying ? <Volume2 className="h-4 w-4 md:h-5 md:w-5" /> : <VolumeX className="h-4 w-4 md:h-5 md:w-5" />}
+                                <span className="[writing-mode:vertical-rl] text-xs md:text-sm tracking-widest uppercase">
+                                    {isPlaying ? 'Sound On' : 'Sound Off'}
+                                </span>
+                            </button>
+                        </aside>
+                        
+                        <Footer />
+                        <HireMeBanner />
+                      </>
+                    )}
+                    <Toaster />
+                </Suspense>
+            </I18nextProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>
