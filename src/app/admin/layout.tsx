@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Home, Settings, Loader2, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch, HelpCircle } from 'lucide-react';
+import { Home, Settings, Loader2, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch, HelpCircle, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
@@ -22,6 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const adminNavItems = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: <Home /> },
+    { href: '/admin/users', label: 'Users', icon: <Users /> },
     { href: '/admin/home', label: 'Home Page', icon: <Home /> },
     { href: '/admin/about', label: 'About Page', icon: <Info /> },
     { href: '/admin/experiences', label: 'Experiences', icon: <Briefcase /> },

@@ -5,6 +5,7 @@ import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { onAuthStateChanged, User, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '@/lib/auth';
 import { Loader2 } from 'lucide-react';
+import { findOrCreateUser } from '@/app/admin/users/actions';
 
 interface AuthContextType {
   user: User | null;
@@ -22,8 +23,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        await findOrCreateUser(user);
+        setUser(user);
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
 
@@ -41,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
         if (userCredential.user) {
             await updateProfile(userCredential.user, { displayName });
-            // Manually update the user state as onAuthStateChanged might be slow
+            // The onAuthStateChanged listener will handle user creation in our DB.
             setUser({ ...userCredential.user, displayName });
         }
         return userCredential;

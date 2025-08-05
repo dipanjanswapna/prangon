@@ -269,3 +269,17 @@ export const faqPageSchema = z.object({
 });
 
 export type FAQPageData = z.infer<typeof faqPageSchema>;
+
+export const appUserSchema = z.object({
+    uid: z.string(),
+    customId: z.string(),
+    email: z.string().email(),
+    displayName: z.string(),
+    subscription: z.object({
+        planName: z.string(),
+        startDate: z.string(),
+        endDate: z.string(),
+    }),
+});
+
+export type AppUser = z.infer<typeof appUserSchema>;
