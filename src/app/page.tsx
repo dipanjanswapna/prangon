@@ -17,6 +17,8 @@ import { getFAQPageData } from './admin/faq/actions';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 
 const TypingAnimation = ({ texts }: { texts: string[] }) => {
@@ -453,16 +455,10 @@ const InfoSection = ({ toolboxItems, readsImage, hobbiesImage } : { toolboxItems
 }
 
 const LatestVideosSection = ({ videos }: { videos: any[] }) => {
-    const cardVariants = {
-        hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.2 } }
-    };
-    
-    const itemVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-    };
-  
+    const plugin = useRef(
+      Autoplay({ delay: 5000, stopOnInteraction: true })
+    );
+
     return (
       <div className="bg-background text-foreground p-8 md:p-16">
         <div className="max-w-7xl mx-auto">
@@ -480,10 +476,10 @@ const LatestVideosSection = ({ videos }: { videos: any[] }) => {
           </motion.div>
   
           <motion.div 
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+             initial={{ opacity: 0, y: 20 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ duration: 0.6, delay: 0.2 }}
             className="bg-muted rounded-2xl p-6 sm:p-8 mb-8 shadow-lg"
           >
             <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
@@ -507,42 +503,59 @@ const LatestVideosSection = ({ videos }: { videos: any[] }) => {
               </div>
             </div>
           </motion.div>
-  
-          <motion.div 
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8"
+          
+          <motion.div
+             initial={{ opacity: 0, y: 20 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            {videos.map((video, index) => (
-              <motion.div 
-                key={index}
-                variants={itemVariants} 
-                className="bg-muted rounded-lg overflow-hidden group shadow-lg"
-              >
-                <div className="relative">
-                  <Image 
-                    src={video.thumbnail} 
-                    alt={video.title}
-                    width={400} 
-                    height={225} 
-                    className="w-full h-auto"
-                    data-ai-hint={video.thumbnailAiHint || 'video thumbnail'}
-                  />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Youtube className="h-12 w-12 sm:h-16 sm:w-16 text-white" />
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h4 className="font-semibold text-base sm:text-lg mb-2 text-primary-foreground">{video.title}</h4>
-                  <p className="text-xs sm:text-sm text-muted-foreground">{video.author} · {video.timestamp}</p>
-                </div>
-              </motion.div>
-            ))}
+             <Carousel
+              plugins={[plugin.current]}
+              className="w-full"
+              onMouseEnter={plugin.current.stop}
+              onMouseLeave={plugin.current.reset}
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+            >
+              <CarouselContent>
+                {videos.map((video, index) => (
+                  <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                    <div className="p-1">
+                      <div 
+                        className="bg-muted rounded-lg overflow-hidden group shadow-lg"
+                      >
+                        <div className="relative">
+                          <Image 
+                            src={video.thumbnail} 
+                            alt={video.title}
+                            width={400} 
+                            height={225} 
+                            className="w-full h-auto"
+                            data-ai-hint={video.thumbnailAiHint || 'video thumbnail'}
+                          />
+                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Youtube className="h-12 w-12 sm:h-16 sm:w-16 text-white" />
+                          </div>
+                        </div>
+                        <div className="p-4">
+                          <h4 className="font-semibold text-base sm:text-lg mb-2 text-primary-foreground">{video.title}</h4>
+                          <p className="text-xs sm:text-sm text-muted-foreground">{video.author} · {video.timestamp}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-[-1rem] sm:left-[-2rem]"/>
+              <CarouselNext className="right-[-1rem] sm:right-[-2rem]"/>
+            </Carousel>
           </motion.div>
+
   
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className='w-full sm:w-auto'>
               <Button variant="outline" className="w-full sm:w-auto">Load More...</Button>
             </motion.div>
