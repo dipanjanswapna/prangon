@@ -3,48 +3,29 @@
 
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Loader2, User, Mail, LogOut, ShieldCheck, Gem, UserCheck } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
-import { getUserData } from '../admin/users/actions';
-import { AppUser } from '@/lib/types';
 
 
 export default function AccountPage() {
     const { user, loading, logout } = useAuth();
     const router = useRouter();
-    const [appUser, setAppUser] = useState<AppUser | null>(null);
-    const [pageLoading, setPageLoading] = useState(true);
 
     useEffect(() => {
         if (!loading && !user) {
             router.push('/login');
-        } else if (user) {
-            getUserData(user.uid).then(data => {
-                if (data) {
-                    setAppUser(data);
-                }
-                setPageLoading(false);
-            })
         }
     }, [user, loading, router]);
 
-    if (loading || pageLoading) {
+    if (loading || !user) {
         return (
             <div className="flex h-screen items-center justify-center">
                 <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
-        );
-    }
-    
-    if (!user) {
-         return (
-            <div className="flex h-screen items-center justify-center">
-                <p>Redirecting to login...</p>
             </div>
         );
     }
@@ -112,7 +93,7 @@ export default function AccountPage() {
                                         <UserCheck className="h-5 w-5 text-muted-foreground mr-3" />
                                         <div>
                                             <p className="text-sm text-muted-foreground">Your User ID</p>
-                                            <p className="font-mono text-xs">{appUser?.customId || 'N/A'}</p>
+                                            <p className="font-mono text-xs">{user.customId || 'N/A'}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -126,12 +107,12 @@ export default function AccountPage() {
                                     <div>
                                         <p className="font-medium">Current Plan</p>
                                         <p className="text-sm text-muted-foreground">
-                                            {appUser?.subscription?.planName ? `You are subscribed to the ${appUser.subscription.planName} plan.` : 'You are on the Standard plan.'}
+                                            {user.subscription?.planName ? `You are subscribed to the ${user.subscription.planName} plan.` : 'You are on the Standard plan.'}
                                         </p>
                                     </div>
-                                    <Badge variant={appUser?.subscription?.planName ? 'default' : 'secondary'} className="gap-1">
-                                        {appUser?.subscription?.planName && <Gem className="h-3 w-3"/>}
-                                        {appUser?.subscription?.planName || 'Standard'}
+                                    <Badge variant={user.subscription?.planName ? 'default' : 'secondary'} className="gap-1">
+                                        {user.subscription?.planName && <Gem className="h-3 w-3"/>}
+                                        {user.subscription?.planName || 'Standard'}
                                     </Badge>
                                 </div>
                                 <Button className="mt-4 w-full" variant="outline" onClick={() => router.push('/subscribe')}>Manage Subscription</Button>

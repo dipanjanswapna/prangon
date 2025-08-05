@@ -6,9 +6,13 @@ import { onAuthStateChanged, User, signInWithEmailAndPassword, signOut, GoogleAu
 import { auth } from '@/lib/auth';
 import { Loader2 } from 'lucide-react';
 import { findOrCreateUser } from '@/app/admin/users/actions';
+import { AppUser } from '@/lib/types';
+
+
+type AppUserWithFirebase = User & AppUser;
 
 interface AuthContextType {
-  user: User | null;
+  user: AppUserWithFirebase | null;
   loading: boolean;
   login: (email: string, pass: string) => Promise<any>;
   signup: (email: string, pass: string, displayName: string) => Promise<any>;
@@ -19,14 +23,15 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AppUserWithFirebase | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        await findOrCreateUser(firebaseUser);
-        setUser(firebaseUser);
+        // Get our custom user data and merge it with the firebase user object
+        const appUserData = await findOrCreateUser(firebaseUser);
+        setUser({ ...firebaseUser, ...appUserData });
       } else {
         setUser(null);
       }
@@ -44,8 +49,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
     if (userCredential.user) {
         await updateProfile(userCredential.user, { displayName });
-        // The onAuthStateChanged listener will handle user creation in our DB.
-        setUser({ ...userCredential.user, displayName });
+        // The onAuthStateChanged listener will handle creating the user in our DB
+        // and setting the user state.
     }
     return userCredential;
   };
