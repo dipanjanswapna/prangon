@@ -124,7 +124,7 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
   );
 };
 
-const SkillsSection = ({ skills } : { skills: string[] }) => {
+const SkillsSection = ({ skills }: { skills: string[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -583,14 +583,14 @@ const SubscriptionSection = () => {
         <div ref={containerRef} className="relative bg-background text-foreground py-20 sm:py-32 overflow-hidden">
             <motion.div className="absolute inset-0 z-0">
                 <Image
-                    src="https://i.pinimg.com/1200x/b5/02/aa/b502aa040d85af2e24210889d0f1ab12.jpg"
+                    src="https://i.pinimg.com/1200x/5d/4c/cf/5d4ccf1e420b6111429f7526ea2369ec.jpg"
                     alt="Subscription background"
                     layout="fill"
                     objectFit="cover"
-                    className="opacity-20"
-                    data-ai-hint="fantasy castle night"
+                    className="opacity-35"
+                    data-ai-hint="fantasy landscape night"
                 />
-                <div className="absolute inset-0 bg-background/50" />
+                <div className="absolute inset-0 bg-background/60" />
             </motion.div>
 
             <div className="container mx-auto px-4 relative z-10">
