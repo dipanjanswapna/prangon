@@ -2,7 +2,7 @@
 'use client';
 
 import './globals.css';
-import './i18n';
+import '@/lib/i18n';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
