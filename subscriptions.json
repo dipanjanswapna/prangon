@@ -12,7 +12,8 @@
       "Monthly newsletter",
       "Cancel anytime"
     ],
-    "isPopular": false
+    "isPopular": false,
+    "promoCodes": []
   },
   {
     "id": "2",
@@ -26,6 +27,7 @@
       "Monthly Q&A with authors",
       "Your name in our patrons list"
     ],
-    "isPopular": true
+    "isPopular": true,
+    "promoCodes": []
   }
 ]
