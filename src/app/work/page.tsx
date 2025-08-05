@@ -2,7 +2,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Briefcase, Paintbrush, TrendingUp, Trophy, ArrowRight, ExternalLink, Shield } from 'lucide-react';
+import { Briefcase, Paintbrush, TrendingUp, Trophy, ArrowRight, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -10,15 +10,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { getExperiences } from '@/app/admin/experiences/actions';
 import { getAchievements } from '@/app/achievements/actions';
-import { Experience, Achievement } from '@/lib/types';
+import { getProjects } from '@/app/admin/projects/actions';
+import { getVisualArts } from '@/app/admin/visual-arts/actions';
+import { Experience, Achievement, Project, VisualArt } from '@/lib/types';
 import { useState, useEffect } from 'react';
-
-
-const visualArts = [
-  { imageUrl: 'https://placehold.co/400x400.png', imageAiHint: 'abstract art', title: 'Cosmic Dream' },
-  { imageUrl: 'https://placehold.co/400x400.png', imageAiHint: 'portrait painting', title: 'Serenity' },
-  { imageUrl: 'https://placehold.co/400x400.png', imageAiHint: 'landscape illustration', title: 'Silent Valley' },
-];
 
 // Animation Variants
 const containerVariants = {
@@ -49,12 +44,16 @@ const SectionHeader = ({ icon, title, description }: { icon: React.ReactNode; ti
 );
 
 export default function WorkPage() {
-  const [homeExperiences, setHomeExperiences] = useState<Experience[]>([]);
-  const [homeAchievements, setHomeAchievements] = useState<Achievement[]>([]);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [visualArts, setVisualArts] = useState<VisualArt[]>([]);
 
   useEffect(() => {
-    getExperiences().then(data => setHomeExperiences(data.slice(0, 3)));
-    getAchievements().then(data => setHomeAchievements(data.slice(0, 3)));
+    getExperiences().then(data => setExperiences(data.slice(0, 3)));
+    getAchievements().then(data => setAchievements(data.slice(0, 3)));
+    getProjects().then(data => setProjects(data.slice(0, 3)));
+    getVisualArts().then(data => setVisualArts(data.slice(0, 3)));
   }, []);
 
   return (
@@ -63,7 +62,7 @@ export default function WorkPage() {
         src="https://cdna.artstation.com/p/assets/images/images/047/764/192/large/srabon-arafat-uploded-file.jpg?1648398231"
         alt="Work background"
         fill
-        className="absolute inset-0 z-0 object-cover opacity-25"
+        className="absolute inset-0 z-0 object-cover opacity-15"
         data-ai-hint="abstract background"
       />
       <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">
@@ -90,6 +89,48 @@ export default function WorkPage() {
                 title="Professional Projects"
                 description="A selection of my best client work, ranging from UI/UX design to complete branding projects."
             />
+             <motion.div 
+                variants={containerVariants}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              >
+              {projects.map(project => (
+                <motion.div key={project.id} variants={itemVariants}>
+                  <Card className="bg-muted/30 backdrop-blur-sm shadow-lg h-full flex flex-col group overflow-hidden transition-all duration-300 hover:shadow-primary/20 hover:border-primary/20">
+                    <div className="relative h-48 overflow-hidden">
+                      <Image
+                        src={project.imageUrl}
+                        alt={project.title}
+                        layout="fill"
+                        objectFit="cover"
+                        data-ai-hint={project.imageAiHint}
+                        className="transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <CardTitle className="text-xl font-bold text-primary-foreground group-hover:text-primary transition-colors">{project.title}</CardTitle>
+                        {project.link && (
+                          <Link href={project.link} target="_blank" rel="noopener noreferrer">
+                            <Button variant="ghost" size="icon">
+                              <ExternalLink className="h-5 w-5 text-muted-foreground" />
+                            </Button>
+                          </Link>
+                        )}
+                      </div>
+                      <CardDescription className="font-semibold text-primary">{project.client}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                      <p className="text-muted-foreground mb-4 line-clamp-3">{project.description}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {project.tags.map(tag => (
+                          <Badge key={tag} variant="secondary">{tag}</Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </motion.div>
             <div className="text-center mt-8">
                 <Link href={"/work/projects"}>
                     <Button size="lg">View Full Portfolio</Button>
@@ -136,7 +177,7 @@ export default function WorkPage() {
                 description="A timeline of my professional journey, including freelance work, teaching, and leadership roles."
             />
             <div className="relative border-l-2 border-primary/20 pl-8 space-y-12">
-              {homeExperiences.map((exp, index) => (
+              {experiences.map((exp) => (
                 <motion.div key={exp.id} variants={itemVariants} className="relative">
                    <div className="absolute -left-[38px] top-1 h-4 w-4 rounded-full bg-primary ring-8 ring-background" />
                    <h3 className="text-xl font-bold text-primary-foreground">{exp.role}</h3>
@@ -161,7 +202,7 @@ export default function WorkPage() {
                 description="A collection of my awards, certifications, and other notable recognitions."
             />
             <div className="space-y-4">
-              {homeAchievements.map((ach, index) => (
+              {achievements.map((ach) => (
                  <motion.div key={ach.id} variants={itemVariants}>
                     <Card className="bg-muted/30 hover:bg-muted/50 transition-colors backdrop-blur-sm">
                         <CardContent className="p-4 flex items-center justify-between">
