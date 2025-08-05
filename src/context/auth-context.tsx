@@ -27,30 +27,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        // Just get the user data from our DB. Creation is handled on login/signup.
-        const appUserData = await getAppUser(firebaseUser.uid);
-        if (appUserData) {
-            setUser({ ...firebaseUser, ...appUserData });
+        setLoading(true);
+        if (firebaseUser) {
+            try {
+                let appUserData = await getAppUser(firebaseUser.uid);
+                
+                if (!appUserData) {
+                    // This can happen if the user exists in Firebase Auth but not in our DB (e.g., first login after signup).
+                    // This is a recovery and creation mechanism.
+                    appUserData = await createUserInDB(firebaseUser);
+                }
+                
+                setUser({ ...firebaseUser, ...appUserData });
+            } catch (error) {
+                console.error("Failed to fetch or create user data", error);
+                setUser(null); // Or handle error appropriately
+            } finally {
+                setLoading(false);
+            }
         } else {
-            // This can happen if the user exists in Firebase Auth but not in our DB.
-            // This is a recovery mechanism.
-            const newAppUser = await createUserInDB(firebaseUser);
-            setUser({ ...firebaseUser, ...newAppUser });
+            setUser(null);
+            setLoading(false);
         }
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
     });
 
     return () => unsubscribe();
-  }, []);
+}, []);
+
 
   const login = async (email: string, pass: string) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, pass);
     if(userCredential.user) {
-        // Ensure user exists in our DB
+        // Ensure user exists in our DB, this will also be caught by onAuthStateChanged
         await createUserInDB(userCredential.user);
     }
     return userCredential;
@@ -61,7 +69,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (userCredential.user) {
         await updateProfile(userCredential.user, { displayName });
         // Create the user in our DB right after signup
-        await createUserInDB(userCredential.user);
+        await createUserInDB({ ...userCredential.user, displayName });
     }
     return userCredential;
   };

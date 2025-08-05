@@ -38,7 +38,7 @@ export async function getAllUsers(): Promise<AppUser[]> {
  * Creates a user in our DB if they don't exist.
  * This is called after a user signs up or logs in for the first time.
  */
-export async function createUserInDB(firebaseUser: User): Promise<AppUser> {
+export async function createUserInDB(firebaseUser: User | (User & {displayName: string | null})): Promise<AppUser> {
     const users = await readUsers();
     let appUser = users.find(u => u.uid === firebaseUser.uid);
 
