@@ -9,16 +9,18 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Trash2, PlusCircle, Loader2, Edit, X } from 'lucide-react';
+import { Trash2, PlusCircle, Loader2, Edit, X, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from 'react';
+import { generateProjectDescription } from '@/ai/flows/generate-project-description';
 
 type FormValues = Omit<Project, 'id'>;
 
 export function ProjectForm({ projectToEdit }: { projectToEdit?: Project }) {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const defaultValues: FormValues = {
     title: projectToEdit?.title || '',
@@ -40,6 +42,39 @@ export function ProjectForm({ projectToEdit }: { projectToEdit?: Project }) {
     control: form.control,
     name: "tags",
   });
+  
+  const handleGenerateDescription = async () => {
+    setIsGenerating(true);
+    const title = form.getValues('title');
+    const client = form.getValues('client');
+
+    if (!title) {
+        toast({
+            variant: 'destructive',
+            title: "Project Name Required",
+            description: "Please enter a project name to generate a description."
+        });
+        setIsGenerating(false);
+        return;
+    }
+
+    try {
+        const result = await generateProjectDescription({
+            projectName: title,
+            projectDetails: `The client for this project is ${client}.`
+        });
+        form.setValue('description', result.projectDescription, { shouldValidate: true });
+        toast({ title: "Description Generated!", description: "The AI-powered description has been added." });
+    } catch(e) {
+        toast({
+            variant: 'destructive',
+            title: 'Generation Failed',
+            description: 'Could not generate a description. Please try again.'
+        });
+    } finally {
+        setIsGenerating(false);
+    }
+  }
 
   const onSubmit = async (data: FormValues) => {
     const result = projectToEdit
@@ -122,9 +157,15 @@ export function ProjectForm({ projectToEdit }: { projectToEdit?: Project }) {
                         name="description"
                         render={({ field }) => (
                             <FormItem>
-                            <FormLabel>Description</FormLabel>
-                            <FormControl><Textarea {...field} rows={4} /></FormControl>
-                            <FormMessage />
+                                <div className="flex justify-between items-center">
+                                    <FormLabel>Description</FormLabel>
+                                    <Button type="button" variant="outline" size="sm" onClick={handleGenerateDescription} disabled={isGenerating}>
+                                        {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Sparkles className="mr-2 h-4 w-4" />}
+                                        Generate with AI
+                                    </Button>
+                                </div>
+                                <FormControl><Textarea {...field} rows={4} /></FormControl>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
