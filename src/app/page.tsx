@@ -587,10 +587,9 @@ const SubscriptionSection = () => {
                     alt="Subscription background"
                     layout="fill"
                     objectFit="cover"
-                    className="opacity-50"
+                    className="opacity-70"
                     data-ai-hint="fantasy landscape night"
                 />
-                <div className="absolute inset-0 bg-background/50" />
             </motion.div>
 
             <div className="container mx-auto px-4 relative z-10">
@@ -601,10 +600,10 @@ const SubscriptionSection = () => {
                     transition={{ duration: 0.6 }}
                     className="text-center mb-12"
                 >
-                    <h2 className="text-3xl md:text-5xl font-bold font-headline text-primary-foreground mb-4">
+                    <h2 className="text-3xl md:text-5xl font-bold font-headline text-primary-foreground mb-4" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.5)'}}>
                         Unlock Premium Access
                     </h2>
-                    <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+                    <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.5)'}}>
                         Join our community and get exclusive access to premium content, special features, and more.
                     </p>
                 </motion.div>
@@ -616,7 +615,12 @@ const SubscriptionSection = () => {
                         {plans.map((plan, index) => {
                             const y = index === 0 ? y1 : y2;
                             return (
-                                <motion.div key={plan.id} style={{ y }}>
+                                <motion.div 
+                                    key={plan.id} 
+                                    style={{ y }}
+                                    whileHover={{ y: y.get() -10, scale: 1.03, rotate: index % 2 === 0 ? -1 : 1 }}
+                                    transition={{ type: 'spring', stiffness: 200, damping: 15}}
+                                >
                                     <Card className={cn(
                                         "bg-background/20 backdrop-blur-md border-border/20 flex flex-col h-full shadow-2xl transition-all duration-300 hover:border-primary",
                                         plan.isPopular && "border-primary"
