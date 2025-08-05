@@ -5,9 +5,8 @@ import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { onAuthStateChanged, User, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '@/lib/auth';
 import { Loader2 } from 'lucide-react';
-import { findOrCreateUser } from '@/app/admin/users/actions';
+import { getAppUser } from '@/app/admin/users/actions';
 import { AppUser } from '@/lib/types';
-
 
 type AppUserWithFirebase = User & AppUser;
 
@@ -30,8 +29,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         // Get our custom user data and merge it with the firebase user object
-        const appUserData = await findOrCreateUser(firebaseUser);
-        setUser({ ...firebaseUser, ...appUserData });
+        const appUserData = await getAppUser(firebaseUser);
+        if (appUserData) {
+            setUser({ ...firebaseUser, ...appUserData });
+        } else {
+            // This case should ideally not happen if getAppUser is robust
+            setUser(null);
+        }
       } else {
         setUser(null);
       }

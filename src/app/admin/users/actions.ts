@@ -14,10 +14,8 @@ async function readUsers(): Promise<AppUser[]> {
   try {
     await fs.access(dataFilePath);
     const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    // Ensure we return an array even if the file is empty
     return fileContent ? JSON.parse(fileContent) : [];
   } catch (error) {
-    // If the file doesn't exist, it's not an error, just means no users yet.
     return [];
   }
 }
@@ -36,26 +34,26 @@ export async function getAllUsers(): Promise<AppUser[]> {
     return await readUsers();
 }
 
-export async function getUserData(uid: string): Promise<AppUser | null> {
+/**
+ * Finds a user in our DB from a Firebase User, creating them if they don't exist.
+ * This function is intended to be the single source of truth for user creation.
+ */
+export async function getAppUser(firebaseUser: User): Promise<AppUser | null> {
     const users = await readUsers();
-    return users.find(u => u.uid === uid) || null;
-}
+    let appUser = users.find(u => u.uid === firebaseUser.uid);
 
-export async function findOrCreateUser(firebaseUser: User): Promise<AppUser> {
-    let users = await readUsers();
-    const existingUser = users.find(u => u.uid === firebaseUser.uid);
-
-    if (existingUser) {
-        return existingUser;
+    if (appUser) {
+        return appUser;
     }
 
-    // Create new user if not found
+    // Create a new user if they don't exist.
     const customId = (Math.random().toString(36).substring(2, 8) + Math.random().toString(36).substring(2, 8)).toUpperCase();
     
     const newUser: AppUser = {
         uid: firebaseUser.uid,
         email: firebaseUser.email || '',
         displayName: firebaseUser.displayName || 'No Name',
+        photoURL: firebaseUser.photoURL || null,
         customId: customId,
         subscription: {
             planName: '',
@@ -64,8 +62,8 @@ export async function findOrCreateUser(firebaseUser: User): Promise<AppUser> {
         }
     };
     
-    users.push(newUser);
-    await writeUsers(users);
+    const updatedUsers = [...users, newUser];
+    await writeUsers(updatedUsers);
     
     return newUser;
 }
