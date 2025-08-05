@@ -587,10 +587,10 @@ const SubscriptionSection = () => {
                     alt="Subscription background"
                     layout="fill"
                     objectFit="cover"
-                    className="opacity-35"
+                    className="opacity-50"
                     data-ai-hint="fantasy landscape night"
                 />
-                <div className="absolute inset-0 bg-background/60" />
+                <div className="absolute inset-0 bg-background/50" />
             </motion.div>
 
             <div className="container mx-auto px-4 relative z-10">
