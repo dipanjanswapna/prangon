@@ -19,7 +19,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { LogIn, UserPlus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/use-auth';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Image from 'next/image';
@@ -75,6 +75,7 @@ export default function LoginPage() {
   const { toast } = useToast();
   const { login, signup, loginWithGoogle, user, loading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isAdminLogin, setIsAdminLogin] = useState(false);
   const [activeTab, setActiveTab] = useState('login');
 
@@ -89,11 +90,10 @@ export default function LoginPage() {
   });
   
   useEffect(() => {
-    const query = new URLSearchParams(window.location.search);
-    if (query.get('flow') === 'admin') {
+    if (searchParams.get('flow') === 'admin') {
       setIsAdminLogin(true);
     }
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     if (!loading && user) {

@@ -35,19 +35,19 @@ export async function getAllUsers(): Promise<AppUser[]> {
 }
 
 /**
- * Finds a user in our DB from a Firebase User, creating them if they don't exist.
- * This function is intended to be the single source of truth for user creation.
+ * Creates a user in our DB if they don't exist.
+ * This is called after a user signs up or logs in for the first time.
  */
-export async function getAppUser(firebaseUser: User): Promise<AppUser | null> {
+export async function createUserInDB(firebaseUser: User): Promise<AppUser> {
     const users = await readUsers();
     let appUser = users.find(u => u.uid === firebaseUser.uid);
 
     if (appUser) {
-        return appUser;
+        return appUser; // User already exists
     }
 
     // Create a new user if they don't exist.
-    const customId = (Math.random().toString(36).substring(2, 8) + Math.random().toString(36).substring(2, 8)).toUpperCase();
+    const customId = (Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6)).toUpperCase();
     
     const newUser: AppUser = {
         uid: firebaseUser.uid,
@@ -62,10 +62,20 @@ export async function getAppUser(firebaseUser: User): Promise<AppUser | null> {
         }
     };
     
-    const updatedUsers = [...users, newUser];
-    await writeUsers(updatedUsers);
+    await writeUsers([...users, newUser]);
     
     return newUser;
+}
+
+
+/**
+ * Finds a user in our DB from a Firebase User UID.
+ * This function does NOT create a user.
+ */
+export async function getAppUser(uid: string): Promise<AppUser | null> {
+    const users = await readUsers();
+    const appUser = users.find(u => u.uid === uid);
+    return appUser || null;
 }
 
 

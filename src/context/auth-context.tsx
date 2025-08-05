@@ -5,7 +5,7 @@ import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { onAuthStateChanged, User, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '@/lib/auth';
 import { Loader2 } from 'lucide-react';
-import { getAppUser } from '@/app/admin/users/actions';
+import { getAppUser, createUserInDB } from '@/app/admin/users/actions';
 import { AppUser } from '@/lib/types';
 
 type AppUserWithFirebase = User & AppUser;
@@ -28,13 +28,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        // Get our custom user data and merge it with the firebase user object
-        const appUserData = await getAppUser(firebaseUser);
+        // Just get the user data from our DB. Creation is handled on login/signup.
+        const appUserData = await getAppUser(firebaseUser.uid);
         if (appUserData) {
             setUser({ ...firebaseUser, ...appUserData });
         } else {
-            // This case should ideally not happen if getAppUser is robust
-            setUser(null);
+            // This can happen if the user exists in Firebase Auth but not in our DB.
+            // This is a recovery mechanism.
+            const newAppUser = await createUserInDB(firebaseUser);
+            setUser({ ...firebaseUser, ...newAppUser });
         }
       } else {
         setUser(null);
@@ -45,23 +47,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
-  const login = (email: string, pass: string) => {
-    return signInWithEmailAndPassword(auth, email, pass);
+  const login = async (email: string, pass: string) => {
+    const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+    if(userCredential.user) {
+        // Ensure user exists in our DB
+        await createUserInDB(userCredential.user);
+    }
+    return userCredential;
   };
   
   const signup = async (email: string, pass: string, displayName: string) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
     if (userCredential.user) {
         await updateProfile(userCredential.user, { displayName });
-        // The onAuthStateChanged listener will handle creating the user in our DB
-        // and setting the user state.
+        // Create the user in our DB right after signup
+        await createUserInDB(userCredential.user);
     }
     return userCredential;
   };
 
-  const loginWithGoogle = () => {
+  const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+     if(result.user) {
+        // Ensure user exists in our DB
+        await createUserInDB(result.user);
+    }
+    return result;
   };
 
   const logout = () => {
