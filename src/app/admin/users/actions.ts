@@ -14,8 +14,10 @@ async function readUsers(): Promise<AppUser[]> {
   try {
     await fs.access(dataFilePath);
     const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    return JSON.parse(fileContent);
+    // Ensure we return an array even if the file is empty
+    return fileContent ? JSON.parse(fileContent) : [];
   } catch (error) {
+    // If the file doesn't exist, it's not an error, just means no users yet.
     return [];
   }
 }
@@ -41,27 +43,33 @@ export async function getUserData(uid: string): Promise<AppUser | null> {
 
 export async function findOrCreateUser(firebaseUser: User): Promise<AppUser> {
     const users = await readUsers();
-    let appUser = users.find(u => u.uid === firebaseUser.uid);
+    const existingUser = users.find(u => u.uid === firebaseUser.uid);
 
-    if (!appUser) {
-        // Create new user
-        const customId = Math.random().toString(36).substring(2, 8) + Math.random().toString(36).substring(2, 8);
-        appUser = {
-            uid: firebaseUser.uid,
-            email: firebaseUser.email || '',
-            displayName: firebaseUser.displayName || 'No Name',
-            customId: customId.toUpperCase(),
-            subscription: {
-                planName: '',
-                startDate: '',
-                endDate: '',
-            }
-        };
-        users.push(appUser);
-        await writeUsers(users);
+    if (existingUser) {
+        return existingUser;
     }
-    return appUser;
+
+    // Create new user if not found
+    const customId = (Math.random().toString(36).substring(2, 8) + Math.random().toString(36).substring(2, 8)).toUpperCase();
+    
+    const newUser: AppUser = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email || '',
+        displayName: firebaseUser.displayName || 'No Name',
+        customId: customId,
+        subscription: {
+            planName: '',
+            startDate: '',
+            endDate: '',
+        }
+    };
+    
+    const updatedUsers = [...users, newUser];
+    await writeUsers(updatedUsers);
+    
+    return newUser;
 }
+
 
 export async function manageSubscription(userId: string, action: 'grant' | 'revoke', planId?: string) {
     const users = await readUsers();
