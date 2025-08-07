@@ -286,6 +286,7 @@ export const appUserSchema = z.object({
     email: z.string().email(),
     displayName: z.string(),
     photoURL: z.string().url().nullable(),
+    role: z.enum(['admin', 'user']),
     subscription: z.object({
         planName: z.string().default(''),
         startDate: z.string().optional(),

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Home, Settings, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch, HelpCircle, Users, Menu } from 'lucide-react';
+import { Home, Settings, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch, HelpCircle, Users, Menu, ShieldAlert } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
@@ -50,19 +50,29 @@ export default function AdminLayout({
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login?flow=admin');
+    if (!loading) {
+      if (!user) {
+        // Not logged in, redirect to login
+        router.push('/login?flow=admin');
+      } else if (user.role !== 'admin') {
+        // Logged in, but not an admin, redirect to home
+        router.push('/');
+      }
     }
   }, [user, loading, router]);
 
-  if (loading || !user) {
+  if (loading || !user || user.role !== 'admin') {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="flex h-screen items-center justify-center bg-background">
+        <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto" />
+            <p className="mt-2 text-muted-foreground">Verifying access...</p>
+        </div>
       </div>
     );
   }
-
+  
+  // If we reach here, user is logged in and is an admin.
   return (
     <SidebarProvider>
         <div className="flex min-h-screen w-full flex-col bg-muted/40">

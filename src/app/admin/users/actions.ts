@@ -45,6 +45,9 @@ export async function createUserInDB(firebaseUser: User | (User & {displayName: 
     if (appUser) {
         return appUser; // User already exists
     }
+    
+    // Assign admin role to specific user, otherwise default to user
+    const userRole = firebaseUser.email === 'dipanjanprangon@gmail.com' ? 'admin' : 'user';
 
     // Create a new user if they don't exist.
     const customId = (Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6) + Math.random().toString(36).substring(2, 6)).toUpperCase();
@@ -55,6 +58,7 @@ export async function createUserInDB(firebaseUser: User | (User & {displayName: 
         displayName: firebaseUser.displayName || 'No Name',
         photoURL: firebaseUser.photoURL || null,
         customId: customId,
+        role: userRole,
         subscription: {
             planName: '',
             startDate: '',

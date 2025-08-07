@@ -16,7 +16,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LogIn, UserPlus } from 'lucide-react';
+import { LogIn, UserPlus, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -98,7 +98,11 @@ export default function LoginPage() {
   useEffect(() => {
     if (!loading && user) {
         if (isAdminLogin) {
-            router.push('/admin/dashboard');
+            if (user.role === 'admin') {
+                router.push('/admin/dashboard');
+            } else {
+                router.push('/'); // Not an admin, redirect to home
+            }
         } else {
             router.push('/');
         }
@@ -109,11 +113,7 @@ export default function LoginPage() {
     try {
       await login(values.email, values.password);
       toast({ title: 'Login Successful!', description: "Welcome back!" });
-       if (isAdminLogin) {
-            router.push('/admin/dashboard');
-        } else {
-            router.push('/');
-        }
+       // Redirection is handled by the useEffect hook
     } catch (error) {
       toast({ variant: 'destructive', title: 'Login Failed', description: 'Invalid email or password.' });
     }
@@ -123,7 +123,7 @@ export default function LoginPage() {
     try {
       await signup(values.email, values.password, values.name);
       toast({ title: 'Signup Successful!', description: "Welcome to the community!" });
-      router.push('/');
+      // Redirection is handled by the useEffect hook
     } catch (error: any) {
       toast({ variant: 'destructive', title: 'Signup Failed', description: error.message });
     }
@@ -133,11 +133,7 @@ export default function LoginPage() {
     try {
       await loginWithGoogle();
       toast({ title: 'Login Successful!', description: "Welcome!" });
-      if (isAdminLogin) {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/');
-      }
+      // Redirection is handled by the useEffect hook
     } catch (error) {
       toast({ variant: 'destructive', title: 'Login Failed', description: 'Could not log in with Google.' });
     }
@@ -147,6 +143,11 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center p-4 lg:p-8 bg-background">
+      { loading && 
+        <div className="absolute inset-0 z-50 bg-black/50 flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      }
       <div className="absolute inset-0 z-0">
           <Image
               src={currentImage.src}

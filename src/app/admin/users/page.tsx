@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Search, SlidersHorizontal, UserPlus, Gem, Star } from 'lucide-react';
+import { Loader2, Search, SlidersHorizontal, UserPlus, Gem, Star, ShieldCheck } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
@@ -168,6 +168,7 @@ export default function AdminUsersPage() {
                                     <TableHead>Display Name</TableHead>
                                     <TableHead>Email</TableHead>
                                     <TableHead>User ID</TableHead>
+                                    <TableHead>Role</TableHead>
                                     <TableHead>Subscription</TableHead>
                                     <TableHead className="text-right">Actions</TableHead>
                                 </TableRow>
@@ -179,6 +180,13 @@ export default function AdminUsersPage() {
                                             <TableCell className="font-medium">{user.displayName}</TableCell>
                                             <TableCell>{user.email}</TableCell>
                                             <TableCell><code className="text-xs">{user.customId}</code></TableCell>
+                                            <TableCell>
+                                                {user.role === 'admin' ? (
+                                                    <Badge variant="destructive" className="gap-1"><ShieldCheck className="h-3 w-3"/>Admin</Badge>
+                                                ) : (
+                                                    <Badge variant="secondary">User</Badge>
+                                                )}
+                                            </TableCell>
                                             <TableCell>
                                                 {user.subscription?.planName ? (
                                                     <Badge><Gem className="mr-1 h-3 w-3"/>{user.subscription.planName}</Badge>
@@ -193,7 +201,7 @@ export default function AdminUsersPage() {
                                     ))
                                 ) : (
                                     <TableRow>
-                                        <TableCell colSpan={5} className="text-center h-24">No users found.</TableCell>
+                                        <TableCell colSpan={6} className="text-center h-24">No users found.</TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>

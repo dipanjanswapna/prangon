@@ -30,18 +30,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setLoading(true);
         if (firebaseUser) {
             try {
+                // First, try to get user data from our DB
                 let appUserData = await getAppUser(firebaseUser.uid);
                 
                 if (!appUserData) {
                     // This can happen if the user exists in Firebase Auth but not in our DB (e.g., first login after signup).
-                    // This is a recovery and creation mechanism.
+                    // Or if there was a race condition. This will create the user in our DB.
                     appUserData = await createUserInDB(firebaseUser);
                 }
                 
+                // Combine Firebase user object with our custom user data
                 setUser({ ...firebaseUser, ...appUserData });
             } catch (error) {
-                console.error("Failed to fetch or create user data", error);
-                setUser(null); // Or handle error appropriately
+                console.error("Failed to fetch or create user data in DB:", error);
+                // Log out the user if DB operations fail to prevent inconsistent state
+                await signOut(auth);
+                setUser(null);
             }
         } else {
             setUser(null);
@@ -54,12 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
   const login = async (email: string, pass: string) => {
-    const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-    if(userCredential.user) {
-        // Ensure user exists in our DB, this will also be caught by onAuthStateChanged
-        await createUserInDB(userCredential.user);
-    }
-    return userCredential;
+    return await signInWithEmailAndPassword(auth, email, pass);
   };
   
   const signup = async (email: string, pass: string, displayName: string) => {
@@ -67,6 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (userCredential.user) {
         await updateProfile(userCredential.user, { displayName });
         // Create the user in our DB right after signup
+        // Pass the updated user object with displayName
         await createUserInDB({ ...userCredential.user, displayName });
     }
     return userCredential;
@@ -75,21 +75,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
-    const result = await signInWithPopup(auth, provider);
-     if(result.user) {
-        // Ensure user exists in our DB
-        await createUserInDB(result.user);
-    }
-    return result;
+    return await signInWithPopup(auth, provider);
   };
 
   const logout = () => {
     return signOut(auth);
   };
 
+  // The initial loading screen will be shown until onAuthStateChanged is complete
   if (loading) {
      return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex h-screen w-full items-center justify-center bg-background">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
