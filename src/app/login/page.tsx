@@ -89,23 +89,34 @@ export default function LoginPage() {
     defaultValues: { name: '', email: '', password: '' },
   });
   
+  // This effect checks for the 'flow=admin' param and sets the state.
+  // It's important for handling redirects after Google login.
   useEffect(() => {
     if (searchParams.get('flow') === 'admin') {
       setIsAdminLogin(true);
     }
   }, [searchParams]);
 
+  // This effect handles redirecting the user once they are authenticated.
   useEffect(() => {
-    if (!loading && user) {
-        if (isAdminLogin && user.role === 'admin') {
-            router.push('/admin/dashboard');
-        } else if (isAdminLogin && user.role !== 'admin') {
-            toast({ variant: 'destructive', title: 'Access Denied', description: 'You do not have permission to access the admin panel.' });
-            router.push('/');
+    if (loading) {
+      // Do nothing while auth state is loading to prevent premature redirects.
+      return;
+    }
+    
+    if (user) {
+      if (isAdminLogin) {
+        if (user.role === 'admin') {
+          router.push('/admin/dashboard');
+        } else {
+          // If a non-admin tries the admin flow, show an error and send them home.
+          toast({ variant: 'destructive', title: 'Access Denied', description: 'You do not have permission to access the admin panel.' });
+          router.push('/');
         }
-        else {
-            router.push('/');
-        }
+      } else {
+        // Default redirect for regular users.
+        router.push('/account');
+      }
     }
   }, [user, loading, router, isAdminLogin, toast]);
 
@@ -113,6 +124,7 @@ export default function LoginPage() {
     try {
       await login(values.email, values.password);
       toast({ title: 'Login Successful!', description: "Welcome back!" });
+      // The useEffect above will handle redirection.
     } catch (error) {
       toast({ variant: 'destructive', title: 'Login Failed', description: 'Invalid email or password.' });
     }
@@ -122,6 +134,7 @@ export default function LoginPage() {
     try {
       await signup(values.email, values.password, values.name);
       toast({ title: 'Signup Successful!', description: "Welcome to the community!" });
+       // The useEffect above will handle redirection.
     } catch (error: any) {
       toast({ variant: 'destructive', title: 'Signup Failed', description: error.message });
     }
@@ -131,16 +144,19 @@ export default function LoginPage() {
     try {
       await loginWithGoogle();
       toast({ title: 'Login Successful!', description: "Welcome!" });
+       // The useEffect above will handle redirection.
     } catch (error) {
       toast({ variant: 'destructive', title: 'Login Failed', description: 'Could not log in with Google.' });
     }
   }
   
   const currentImage = images[activeTab as keyof typeof images];
+  
+  const isProcessing = loginForm.formState.isSubmitting || signupForm.formState.isSubmitting || loading;
 
   return (
     <div className="relative flex min-h-screen items-center justify-center p-4 lg:p-8 bg-background">
-      { loginForm.formState.isSubmitting && 
+      { isProcessing && 
         <div className="absolute inset-0 z-50 bg-black/50 flex items-center justify-center">
             <Loader2 className="h-8 w-8 animate-spin" />
         </div>
@@ -205,7 +221,7 @@ export default function LoginPage() {
                             className="py-4 space-y-4"
                         >
                             <motion.div variants={itemVariants}>
-                                <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
+                                <Button variant="outline" className="w-full" onClick={handleGoogleLogin} disabled={isProcessing}>
                                     <GoogleIcon className="mr-2 h-5 w-5" /> Continue with Google
                                 </Button>
                             </motion.div>
@@ -221,7 +237,7 @@ export default function LoginPage() {
                                     <FormField control={loginForm.control} name="email" render={({ field }) => (
                                         <FormItem>
                                         <FormLabel>Email</FormLabel>
-                                        <FormControl><Input type="email" placeholder="you@example.com" {...field} /></FormControl>
+                                        <FormControl><Input type="email" placeholder="you@example.com" {...field} disabled={isProcessing} /></FormControl>
                                         <FormMessage />
                                         </FormItem>
                                     )} />
@@ -230,13 +246,13 @@ export default function LoginPage() {
                                     <FormField control={loginForm.control} name="password" render={({ field }) => (
                                         <FormItem>
                                         <FormLabel>Password</FormLabel>
-                                        <FormControl><Input type="password" placeholder="••••••••" {...field} /></FormControl>
+                                        <FormControl><Input type="password" placeholder="••••••••" {...field} disabled={isProcessing} /></FormControl>
                                         <FormMessage />
                                         </FormItem>
                                     )} />
                                 </motion.div>
                                 <motion.div variants={itemVariants}>
-                                    <Button type="submit" className="w-full" disabled={loginForm.formState.isSubmitting}>
+                                    <Button type="submit" className="w-full" disabled={isProcessing}>
                                         {loginForm.formState.isSubmitting ? 'Logging in...' : 'Login'}
                                     </Button>
                                 </motion.div>
@@ -253,7 +269,7 @@ export default function LoginPage() {
                             className="py-4 space-y-4"
                         >
                             <motion.div variants={itemVariants}>
-                                <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
+                                <Button variant="outline" className="w-full" onClick={handleGoogleLogin} disabled={isProcessing}>
                                     <GoogleIcon className="mr-2 h-5 w-5" /> Sign up with Google
                                 </Button>
                             </motion.div>
@@ -269,7 +285,7 @@ export default function LoginPage() {
                                     <FormField control={signupForm.control} name="name" render={({ field }) => (
                                         <FormItem>
                                         <FormLabel>Name</FormLabel>
-                                        <FormControl><Input placeholder="Your Name" {...field} /></FormControl>
+                                        <FormControl><Input placeholder="Your Name" {...field} disabled={isProcessing}/></FormControl>
                                         <FormMessage />
                                         </FormItem>
                                     )} />
@@ -278,7 +294,7 @@ export default function LoginPage() {
                                     <FormField control={signupForm.control} name="email" render={({ field }) => (
                                         <FormItem>
                                         <FormLabel>Email</FormLabel>
-                                        <FormControl><Input type="email" placeholder="you@example.com" {...field} /></FormControl>
+                                        <FormControl><Input type="email" placeholder="you@example.com" {...field} disabled={isProcessing} /></FormControl>
                                         <FormMessage />
                                         </FormItem>
                                     )} />
@@ -287,13 +303,13 @@ export default function LoginPage() {
                                     <FormField control={signupForm.control} name="password" render={({ field }) => (
                                         <FormItem>
                                         <FormLabel>Password</FormLabel>
-                                        <FormControl><Input type="password" placeholder="••••••••" {...field} /></FormControl>
+                                        <FormControl><Input type="password" placeholder="••••••••" {...field} disabled={isProcessing} /></FormControl>
                                         <FormMessage />
                                         </FormItem>
                                     )} />
                                 </motion.div>
                                 <motion.div variants={itemVariants}>
-                                    <Button type="submit" className="w-full" disabled={signupForm.formState.isSubmitting}>
+                                    <Button type="submit" className="w-full" disabled={isProcessing}>
                                         {signupForm.formState.isSubmitting ? 'Creating account...' : 'Create Account'}
                                     </Button>
                                 </motion.div>

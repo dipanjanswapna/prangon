@@ -50,17 +50,23 @@ export default function AdminLayout({
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!loading) {
-      if (!user) {
-        // Not logged in, redirect to login
-        router.push('/login?flow=admin');
-      } else if (user.role !== 'admin') {
-        // Logged in, but not an admin, redirect to home
-        router.push('/');
-      }
+    // We don't want to redirect while the auth state is still loading.
+    if (loading) return;
+
+    // If auth state is loaded, but there's no user, redirect to login.
+    if (!user) {
+      router.push('/login?flow=admin');
+      return;
+    }
+
+    // If there is a user, but they are not an admin, redirect to home.
+    if (user.role !== 'admin') {
+      router.push('/');
     }
   }, [user, loading, router]);
 
+  // While loading, or if the user is not an admin, show a loading/verification screen.
+  // This prevents a flash of admin content for non-admin users.
   if (loading || !user || user.role !== 'admin') {
     return (
       <div className="flex h-screen items-center justify-center bg-background">
@@ -72,7 +78,7 @@ export default function AdminLayout({
     );
   }
   
-  // If we reach here, user is logged in and is an admin.
+  // If we reach here, user is confirmed to be an admin.
   return (
     <SidebarProvider>
         <div className="flex min-h-screen w-full flex-col bg-muted/40">

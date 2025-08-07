@@ -13,7 +13,7 @@ import { useAuth } from '@/hooks/use-auth';
 export function Footer() {
   const { toast } = useToast();
   const [showSalute, setShowSalute] = useState(false);
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText('your-email@example.com');
@@ -40,6 +40,35 @@ export function Footer() {
       {name: 'Terms', href: '/terms-of-service'},
       {name: 'Return Policy', href: '/return-policy'},
   ];
+
+  const renderAdminButton = () => {
+    if (loading) return null; // Don't render anything while checking auth state
+
+    if (user && user.role === 'admin') {
+      return (
+        <Link href="/admin/dashboard">
+          <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
+            <LayoutDashboard className="mr-2 h-4 w-4" />
+            Go to Dashboard
+          </Button>
+        </Link>
+      );
+    }
+    
+    if (!user) {
+      return (
+        <Link href="/login?flow=admin">
+          <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
+            <LogIn className="mr-2 h-4 w-4" />
+            Admin Login
+          </Button>
+        </Link>
+      );
+    }
+
+    // Regular user is logged in, don't show any button.
+    return null;
+  };
 
   return (
     <footer id="page-footer" className="relative text-foreground pt-20 pb-8 overflow-hidden">
@@ -98,21 +127,7 @@ export function Footer() {
                 </div>
 
                 <div className="flex justify-center items-center space-x-4">
-                     {user?.role === 'admin' ? (
-                        <Link href="/admin/dashboard">
-                           <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
-                             <LayoutDashboard className="mr-2 h-4 w-4" />
-                             Go to Dashboard
-                           </Button>
-                        </Link>
-                     ) : !user ? (
-                      <Link href="/login?flow=admin">
-                         <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
-                           <LogIn className="mr-2 h-4 w-4" />
-                          Admin Login
-                        </Button>
-                      </Link>
-                    ) : null}
+                     {renderAdminButton()}
                 </div>
 
                 <div className="flex justify-center md:justify-end items-center space-x-4 md:space-x-6">
@@ -162,5 +177,3 @@ export function Footer() {
     </footer>
   );
 }
-
-    
