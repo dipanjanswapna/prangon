@@ -67,8 +67,11 @@ export function AboutPageForm({ initialData }: { initialData: AboutPageData }) {
             <FormField control={form.control} name="profileImageUrl" render={({ field }) => (
               <FormItem><FormLabel>Profile Image URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
             )}/>
+             <FormField control={form.control} name="coverPhotoUrl" render={({ field }) => (
+              <FormItem><FormLabel>Cover Photo URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+            )}/>
              <FormField control={form.control} name="backgroundImageUrl" render={({ field }) => (
-              <FormItem><FormLabel>Background Image URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+              <FormItem><FormLabel>Background Image URL (Fallback)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
             )}/>
           </CardContent>
         </Card>

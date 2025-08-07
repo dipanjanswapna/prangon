@@ -157,6 +157,7 @@ export const aboutPageSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
   tagline: z.string().min(1, 'Tagline is required.'),
   profileImageUrl: z.string().url('Must be a valid URL.'),
+  coverPhotoUrl: z.string().url('Must be a valid URL.').optional(),
   backgroundImageUrl: z.string().url('Must be a valid URL.'),
   academia: z.object({
     title: z.string().min(1, 'Title is required.'),

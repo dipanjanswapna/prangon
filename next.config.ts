@@ -25,6 +25,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'scontent.fdac138-2.fna.fbcdn.net',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'assets.about.me',
         port: '',
         pathname: '/**',

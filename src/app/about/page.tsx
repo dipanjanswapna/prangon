@@ -57,15 +57,18 @@ export default function AboutPage() {
   }
 
   return (
-    <div className="relative min-h-screen py-16 md:py-24">
-        <Image
-            src={data.backgroundImageUrl}
-            alt="About background"
-            fill
-            className="absolute inset-0 z-0 object-cover opacity-30"
-            data-ai-hint="abstract background"
-        />
-      <div className="relative z-10 container mx-auto px-4">
+    <div className="min-h-screen">
+        <div className="relative h-64 md:h-80 w-full">
+            <Image
+                src={data.coverPhotoUrl || data.backgroundImageUrl}
+                alt="About background"
+                fill
+                className="object-cover"
+                data-ai-hint="abstract background"
+            />
+            <div className="absolute inset-0 bg-black/50" />
+        </div>
+      <div className="relative container mx-auto px-4 -mt-24">
           <div className="max-w-5xl mx-auto">
             <motion.div
               variants={containerVariants}
