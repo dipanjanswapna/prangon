@@ -66,5 +66,19 @@
       }
     ]
   },
-  "biography": "Everyone knows Dipanjan Swapna Prangon as Prangon. Prangon (born 10 July 2007) is a Bangladeshi student, artist. He attended Government Science College in Class 12. Prangon was born on 10 july to the Bengali Hindu \"das\" family of Bhandaria in Bangladesh. His father is Dipankar Das and his mother is Sabita Biswas. Prangon grew up in Bhandaria during her early childhood under the care of her mother and relatives. He has no brother and sister."
+  "biography": "Everyone knows Dipanjan Swapna Prangon as Prangon. Prangon (born 10 July 2007) is a Bangladeshi student, artist. He attended Government Science College in Class 12. Prangon was born on 10 july to the Bengali Hindu \"das\" family of Bhandaria in Bangladesh. His father is Dipankar Das and his mother is Sabita Biswas. Prangon grew up in Bhandaria during her early childhood under the care of her mother and relatives. He has no brother and sister.",
+  "education": [
+    {
+      "institution": "Government Science College",
+      "degree": "Higher Secondary Certificate (HSC)",
+      "period": "2022 - 2024",
+      "details": "Science Group, Class 11-12"
+    },
+    {
+      "institution": "Bhandaria Bihari Pilot High School",
+      "degree": "Secondary School Certificate (SSC)",
+      "period": "2017 - 2022",
+      "details": "Science Group, Class 6-10"
+    }
+  ]
 }

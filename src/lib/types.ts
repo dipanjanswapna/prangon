@@ -153,6 +153,13 @@ const aboutPageAccordionItemSchema = z.object({
   content: z.string().min(1, 'Content is required.'),
 });
 
+const educationItemSchema = z.object({
+  institution: z.string().min(1, 'Institution is required.'),
+  degree: z.string().min(1, 'Degree or program is required.'),
+  period: z.string().min(1, 'Period is required.'),
+  details: z.string().optional(),
+});
+
 export const aboutPageSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
   tagline: z.string().min(1, 'Tagline is required.'),
@@ -171,6 +178,7 @@ export const aboutPageSchema = z.object({
     features: z.array(aboutPageFeatureSchema),
   }),
   biography: z.string().min(1, 'Biography is required.'),
+  education: z.array(educationItemSchema).optional(),
 });
 
 export type AboutPageData = z.infer<typeof aboutPageSchema>;

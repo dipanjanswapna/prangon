@@ -68,7 +68,7 @@ export default function AboutPage() {
             />
             <div className="absolute inset-0 bg-black/50" />
         </div>
-      <div className="relative container mx-auto px-4 -mt-24">
+      <div className="relative container mx-auto px-4 -mt-24 pb-12">
           <div className="max-w-5xl mx-auto">
             <motion.div
               variants={containerVariants}
@@ -181,6 +181,34 @@ export default function AboutPage() {
                   </CardContent>
                 </Card>
               </motion.div>
+
+            {data.education && data.education.length > 0 && (
+                <motion.div
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="mt-12"
+                >
+                    <Card className="bg-muted/30 mt-6 border-border shadow-lg backdrop-blur-sm">
+                        <CardHeader className="flex flex-row items-center gap-4">
+                            <GraduationCap className="h-8 w-8 text-primary" />
+                            <CardTitle className="text-2xl md:text-3xl font-headline text-primary-foreground">Education</CardTitle>
+                        </CardHeader>
+                        <CardContent className="relative pl-10">
+                             <div className="absolute left-6 top-6 h-full w-px bg-border" />
+                             {data.education.map((edu, index) => (
+                                <div key={index} className="relative mb-8 last:mb-0">
+                                    <div className="absolute -left-[28px] top-1 h-4 w-4 rounded-full bg-primary ring-4 ring-background"/>
+                                    <p className="font-bold text-lg text-primary-foreground">{edu.institution}</p>
+                                    <p className="font-semibold text-primary">{edu.degree}</p>
+                                    <p className="text-sm text-muted-foreground">{edu.period}</p>
+                                    <p className="text-sm text-muted-foreground mt-1">{edu.details}</p>
+                                </div>
+                             ))}
+                        </CardContent>
+                    </Card>
+                </motion.div>
+            )}
 
           </div>
       </div>

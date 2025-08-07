@@ -31,6 +31,9 @@ export function AboutPageForm({ initialData }: { initialData: AboutPageData }) {
   const { fields: accordionFields, append: appendAccordion, remove: removeAccordion } = useFieldArray({
     control: form.control, name: 'services.accordionItems'
   });
+  const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({
+    control: form.control, name: 'education'
+  });
 
   const onSubmit = async (data: AboutPageData) => {
     const result = await updateAboutPageContent(data);
@@ -167,6 +170,36 @@ export function AboutPageForm({ initialData }: { initialData: AboutPageData }) {
                   <FormItem><FormLabel>Biography Text</FormLabel><FormControl><Textarea rows={5} {...field} /></FormControl><FormMessage /></FormItem>
                 )}/>
             </CardContent>
+        </Card>
+
+         <Card>
+          <CardHeader>
+            <CardTitle>Education Section</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {educationFields.map((field, index) => (
+              <motion.div key={field.id} variants={itemVariants} initial="hidden" animate="visible" className="space-y-4 p-4 border rounded-md relative">
+                <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2" onClick={() => removeEducation(index)}>
+                    <Trash2 className="h-4 w-4" />
+                </Button>
+                <FormField control={form.control} name={`education.${index}.institution`} render={({ field }) => (
+                  <FormItem><FormLabel>Institution</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                )}/>
+                <FormField control={form.control} name={`education.${index}.degree`} render={({ field }) => (
+                  <FormItem><FormLabel>Degree / Program</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                )}/>
+                <FormField control={form.control} name={`education.${index}.period`} render={({ field }) => (
+                  <FormItem><FormLabel>Period</FormLabel><FormControl><Input {...field} placeholder="e.g., 2020 - 2024"/></FormControl><FormMessage /></FormItem>
+                )}/>
+                <FormField control={form.control} name={`education.${index}.details`} render={({ field }) => (
+                  <FormItem><FormLabel>Details (Optional)</FormLabel><FormControl><Input {...field} placeholder="e.g., Science Group" /></FormControl><FormMessage /></FormItem>
+                )}/>
+              </motion.div>
+            ))}
+            <Button type="button" variant="outline" size="sm" onClick={() => appendEducation({ institution: '', degree: '', period: '', details: '' })}>
+              <PlusCircle className="mr-2 h-4 w-4" /> Add Education Entry
+            </Button>
+          </CardContent>
         </Card>
 
         <div className="flex justify-end">
