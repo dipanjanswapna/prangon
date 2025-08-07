@@ -131,7 +131,7 @@ export default function RootLayout({
                           <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
                             <Dribbble className="h-5 w-5" />
                           </Link>
-                          <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                          <Link href="https://www.instagram.com/dipanjanswapna/" className="text-muted-foreground hover:text-primary transition-colors">
                             <Instagram className="h-5 w-5" />
                           </Link>
                           <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
