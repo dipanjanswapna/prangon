@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-        setLoading(true);
         if (firebaseUser) {
             try {
                 // First, try to get user data from our DB
@@ -58,10 +57,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
   const login = async (email: string, pass: string) => {
+    setLoading(true);
     return await signInWithEmailAndPassword(auth, email, pass);
   };
   
   const signup = async (email: string, pass: string, displayName: string) => {
+    setLoading(true);
     const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
     if (userCredential.user) {
         await updateProfile(userCredential.user, { displayName });
@@ -69,31 +70,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Pass the updated user object with displayName
         await createUserInDB({ ...userCredential.user, displayName });
     }
+    // onAuthStateChanged will handle setting the user and loading state
     return userCredential;
   };
 
   const loginWithGoogle = async () => {
+    setLoading(true);
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
     return await signInWithPopup(auth, provider);
   };
 
-  const logout = () => {
-    return signOut(auth);
+  const logout = async () => {
+    await signOut(auth);
+    setUser(null);
+    setLoading(false);
   };
-
-  // The initial loading screen will be shown until onAuthStateChanged is complete
-  if (loading) {
-     return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
 
   return (
     <AuthContext.Provider value={{ user, loading, login, signup, loginWithGoogle, logout }}>
-      {children}
+      {loading ? (
+        <div className="flex h-screen w-full items-center justify-center bg-background">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };
