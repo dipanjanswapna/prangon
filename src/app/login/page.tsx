@@ -97,17 +97,13 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!loading && user) {
-        if (isAdminLogin) {
-            if (user.role === 'admin') {
-                router.push('/admin/dashboard');
-            } else {
-                router.push('/'); // Not an admin, redirect to home
-            }
+        if (user.role === 'admin') {
+            router.push('/admin/dashboard');
         } else {
             router.push('/');
         }
     }
-  }, [user, loading, router, isAdminLogin]);
+  }, [user, loading, router]);
 
   async function onLogin(values: z.infer<typeof loginSchema>) {
     try {
