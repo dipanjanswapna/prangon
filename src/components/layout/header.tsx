@@ -4,22 +4,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Menu, X, LogIn, UserCircle, LogOut, BookOpen } from 'lucide-react';
+import { Menu, X, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useAuth } from '@/hooks/use-auth';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { ThemeToggle } from '../theme-toggle';
 import { LanguageSwitcher } from '../language-switcher';
 
@@ -38,7 +28,6 @@ export function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
-  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,46 +77,6 @@ export function Header() {
            <NavLinks />
            <LanguageSwitcher />
            <ThemeToggle />
-            {user ? (
-                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                            <Avatar className="h-10 w-10">
-                                <AvatarImage src={user.photoURL ?? ''} alt={user.displayName ?? 'User'} />
-                                <AvatarFallback>{user.displayName?.charAt(0)?.toUpperCase() ?? 'U'}</AvatarFallback>
-                            </Avatar>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56" align="end" forceMount>
-                        <DropdownMenuLabel className="font-normal">
-                            <div className="flex flex-col space-y-1">
-                                <p className="text-sm font-medium leading-none">{user.displayName}</p>
-                                <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
-                            </div>
-                        </DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                           <Link href="/account">
-                            <UserCircle className="mr-2 h-4 w-4"/>
-                            My Account
-                           </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                           <Link href="/logout">
-                             <LogOut className="mr-2 h-4 w-4"/>
-                             Logout
-                           </Link>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            ) : (
-                <Button asChild variant="outline" size="sm">
-                  <Link href="/login">
-                    <LogIn className="mr-2 h-4 w-4" />
-                    Login / Sign Up
-                  </Link>
-                </Button>
-            )}
         </div>
 
         <div className="md:hidden flex items-center gap-2">
@@ -167,36 +116,6 @@ export function Header() {
                       </Link>
                     ))}
                   </nav>
-                   <div className="mt-auto pt-8">
-                     {user ? (
-                        <div className="text-center">
-                          <p className="text-white">Welcome, {user.displayName}</p>
-                           <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="text-white mt-2">
-                                        <UserCircle className="mr-2 h-4 w-4"/> My Account
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/account" onClick={() => setIsMobileMenuOpen(false)}>
-                                            View Profile
-                                        </Link>
-                                    </DropdownMenuItem>
-                                     <DropdownMenuItem asChild>
-                                        <Link href="/logout" onClick={() => setIsMobileMenuOpen(false)}>
-                                            Logout
-                                        </Link>
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
-                     ) : (
-                        <Button asChild className="w-full" onClick={() => setIsMobileMenuOpen(false)}>
-                            <Link href="/login">Login / Sign Up</Link>
-                        </Button>
-                     )}
-                   </div>
                 </div>
               </div>
             </SheetContent>

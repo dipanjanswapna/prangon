@@ -4,9 +4,7 @@
 import { Home, Settings, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch, HelpCircle, Users, Menu, ShieldAlert } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useAuth } from '@/hooks/use-auth';
-import { useRouter, usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import {
@@ -19,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarGroup, SidebarMenuSub, SidebarMenuSubItem, SidebarMenuSubButton } from '@/components/ui/sidebar';
-import { Loader2 } from 'lucide-react';
 
 
 const adminNavItems = [
@@ -45,40 +42,8 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, loading } = useAuth();
-  const router = useRouter();
   const pathname = usePathname();
 
-  useEffect(() => {
-    // We don't want to redirect while the auth state is still loading.
-    if (loading) return;
-
-    // If auth state is loaded, but there's no user, redirect to login.
-    if (!user) {
-      router.push('/login?flow=admin');
-      return;
-    }
-
-    // If there is a user, but they are not an admin, redirect to home.
-    if (user.role !== 'admin') {
-      router.push('/');
-    }
-  }, [user, loading, router]);
-
-  // While loading, or if the user is not an admin, show a loading/verification screen.
-  // This prevents a flash of admin content for non-admin users.
-  if (loading || !user || user.role !== 'admin') {
-    return (
-      <div className="flex h-screen items-center justify-center bg-background">
-        <div className="text-center">
-            <Loader2 className="h-8 w-8 animate-spin mx-auto" />
-            <p className="mt-2 text-muted-foreground">Verifying access...</p>
-        </div>
-      </div>
-    );
-  }
-  
-  // If we reach here, user is confirmed to be an admin.
   return (
     <SidebarProvider>
         <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -113,8 +78,8 @@ export default function AdminLayout({
                         <DropdownMenuTrigger asChild>
                             <Button variant="secondary" size="icon" className="rounded-full">
                             <Avatar className="h-8 w-8">
-                                    <AvatarImage src={user.photoURL ?? ''} alt={user.displayName ?? 'User'} />
-                                    <AvatarFallback>{user.displayName?.charAt(0)?.toUpperCase() ?? 'A'}</AvatarFallback>
+                                    <AvatarImage src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg" alt={'Admin'} />
+                                    <AvatarFallback>A</AvatarFallback>
                                 </Avatar>
                                 <span className="sr-only">Toggle user menu</span>
                             </Button>
@@ -127,10 +92,6 @@ export default function AdminLayout({
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <Link href="/admin/settings">Settings</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                                <Link href="/logout">Logout</Link>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

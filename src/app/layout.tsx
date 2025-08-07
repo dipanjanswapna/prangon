@@ -11,7 +11,6 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { HireMeBanner } from '@/components/layout/hire-me-banner';
 import { useRef, useState, useEffect, Suspense } from 'react';
-import { AuthProvider } from '@/context/auth-context';
 import { usePathname } from 'next/navigation';
 import { ThemeProvider } from '@/components/theme-provider';
 import { I18nextProvider } from 'react-i18next';
@@ -29,7 +28,6 @@ export default function RootLayout({
   const [hasInteracted, setHasInteracted] = useState(false);
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith('/admin');
-  const isAuthPage = pathname === '/login' || pathname === '/logout';
 
   useEffect(() => {
     // This effect should only run on the client
@@ -102,8 +100,8 @@ export default function RootLayout({
       <body
         className={cn(
           'font-body antialiased',
-          !isAdminPage && !isAuthPage && 'min-h-screen bg-background flex flex-col',
-          (isAdminPage || isAuthPage) && 'bg-background'
+          !isAdminPage && 'min-h-screen bg-background flex flex-col',
+          isAdminPage && 'bg-background'
         )}
       >
         <ThemeProvider
@@ -112,20 +110,19 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
             <I18nextProvider i18n={i18n}>
                 <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
-                    {!isAdminPage && !isAuthPage && (
+                    {!isAdminPage && (
                        <audio ref={audioRef} src="/mixkit-relax-beat-292.mp3" loop preload="auto" />
                     )}
                     
-                    {!isAdminPage && !isAuthPage && <Header />}
+                    {!isAdminPage && <Header />}
                     
-                    <main className={cn(!isAdminPage && !isAuthPage ? 'flex-grow relative' : '')}>
+                    <main className={cn(!isAdminPage ? 'flex-grow relative' : '')}>
                       {children}
                     </main>
 
-                    {!isAdminPage && !isAuthPage && (
+                    {!isAdminPage && (
                       <>
                         <aside className="fixed left-4 bottom-4 z-50 hidden md:flex flex-col items-center space-y-4">
                           <Link href="https://dribbble.com/dipanjanswapna" className="text-muted-foreground hover:text-primary transition-colors">
@@ -158,7 +155,6 @@ export default function RootLayout({
                     <Toaster />
                 </Suspense>
             </I18nextProvider>
-          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
