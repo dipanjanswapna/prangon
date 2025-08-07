@@ -27,35 +27,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-        // Always start loading when auth state might change.
-        setLoading(true); 
-        
+        setLoading(true);
         if (firebaseUser) {
             try {
-                // Attempt to get the user data from our custom DB.
                 let appUserData = await getAppUser(firebaseUser.uid);
                 
-                // If the user doesn't exist in our DB, create them.
                 if (!appUserData) {
-                    // Pass the displayName from the firebaseUser, which might have been set during signup/Google login.
                     appUserData = await createUserInDB(firebaseUser);
                 }
                 
-                // Combine Firebase user data with our custom app user data.
                 setUser({ ...firebaseUser, ...appUserData });
             } catch (error) {
                 console.error("Failed to fetch or create user data in DB:", error);
-                // If there's an error, sign the user out to prevent an inconsistent state.
                 await signOut(auth);
                 setUser(null);
+            } finally {
+                setLoading(false);
             }
         } else {
-            // No Firebase user found.
             setUser(null);
+            setLoading(false);
         }
-        
-        // Finish loading only after all async operations are complete.
-        setLoading(false); 
     });
 
     return () => unsubscribe();
@@ -69,10 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signup = async (email: string, pass: string, displayName: string) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
     if (userCredential.user) {
-        // We update the Firebase profile first.
         await updateProfile(userCredential.user, { displayName });
-        // Then, we ensure the user is created in our DB with the correct details.
-        // onAuthStateChanged will handle fetching the full user object.
         await createUserInDB({ ...userCredential.user, displayName });
     }
     return userCredential;
@@ -90,12 +79,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider value={{ user, loading, login, signup, loginWithGoogle, logout }}>
-      {loading && (
+      {loading ? (
         <div className="flex h-screen w-full items-center justify-center bg-background">
           <Loader2 className="h-8 w-8 animate-spin" />
         </div>
-      )}
-      {!loading && children}
+      ) : children }
     </AuthContext.Provider>
   );
 };
