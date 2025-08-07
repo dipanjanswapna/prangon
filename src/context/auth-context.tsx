@@ -33,21 +33,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 let appUserData = await getAppUser(firebaseUser.uid);
                 
                 if (!appUserData) {
-                    appUserData = await createUserInDB(firebaseUser);
+                    // This might be a new sign-up or first-time login
+                    // The displayName from the user object might be what we need
+                    const userWithDisplayName = {
+                        ...firebaseUser,
+                        displayName: firebaseUser.displayName,
+                    };
+                    appUserData = await createUserInDB(userWithDisplayName);
                 }
                 
+                // By this point, appUserData should be valid.
                 setUser({ ...firebaseUser, ...appUserData });
+
             } catch (error) {
                 console.error("Failed to fetch or create user data in DB:", error);
                 await signOut(auth);
                 setUser(null);
-            } finally {
-                setLoading(false);
             }
         } else {
             setUser(null);
-            setLoading(false);
         }
+        setLoading(false);
     });
 
     return () => unsubscribe();
@@ -62,7 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
     if (userCredential.user) {
         await updateProfile(userCredential.user, { displayName });
-        await createUserInDB({ ...userCredential.user, displayName });
+        // The onAuthStateChanged listener will handle creating the user in our DB
     }
     return userCredential;
   };
@@ -79,11 +85,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider value={{ user, loading, login, signup, loginWithGoogle, logout }}>
-      {loading ? (
-        <div className="flex h-screen w-full items-center justify-center bg-background">
-          <Loader2 className="h-8 w-8 animate-spin" />
-        </div>
-      ) : children }
+      {children}
     </AuthContext.Provider>
   );
 };

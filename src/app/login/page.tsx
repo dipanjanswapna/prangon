@@ -89,18 +89,14 @@ export default function LoginPage() {
     defaultValues: { name: '', email: '', password: '' },
   });
   
-  // This effect checks for the 'flow=admin' param and sets the state.
-  // It's important for handling redirects after Google login.
   useEffect(() => {
     if (searchParams.get('flow') === 'admin') {
       setIsAdminLogin(true);
     }
   }, [searchParams]);
 
-  // This effect handles redirecting the user once they are authenticated.
   useEffect(() => {
     if (loading) {
-      // Do nothing while auth state is loading to prevent premature redirects.
       return;
     }
     
@@ -109,12 +105,10 @@ export default function LoginPage() {
         if (user.role === 'admin') {
           router.push('/admin/dashboard');
         } else {
-          // If a non-admin tries the admin flow, show an error and send them home.
           toast({ variant: 'destructive', title: 'Access Denied', description: 'You do not have permission to access the admin panel.' });
           router.push('/');
         }
       } else {
-        // Default redirect for regular users.
         router.push('/account');
       }
     }
@@ -124,7 +118,6 @@ export default function LoginPage() {
     try {
       await login(values.email, values.password);
       toast({ title: 'Login Successful!', description: "Welcome back!" });
-      // The useEffect above will handle redirection.
     } catch (error) {
       toast({ variant: 'destructive', title: 'Login Failed', description: 'Invalid email or password.' });
     }
@@ -134,7 +127,6 @@ export default function LoginPage() {
     try {
       await signup(values.email, values.password, values.name);
       toast({ title: 'Signup Successful!', description: "Welcome to the community!" });
-       // The useEffect above will handle redirection.
     } catch (error: any) {
       toast({ variant: 'destructive', title: 'Signup Failed', description: error.message });
     }
@@ -144,7 +136,6 @@ export default function LoginPage() {
     try {
       await loginWithGoogle();
       toast({ title: 'Login Successful!', description: "Welcome!" });
-       // The useEffect above will handle redirection.
     } catch (error) {
       toast({ variant: 'destructive', title: 'Login Failed', description: 'Could not log in with Google.' });
     }
@@ -153,6 +144,14 @@ export default function LoginPage() {
   const currentImage = images[activeTab as keyof typeof images];
   
   const isProcessing = loginForm.formState.isSubmitting || signupForm.formState.isSubmitting || loading;
+
+  if (loading && !user) {
+    return (
+        <div className="flex h-screen items-center justify-center bg-background">
+            <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+    )
+  }
 
   return (
     <div className="relative flex min-h-screen items-center justify-center p-4 lg:p-8 bg-background">
