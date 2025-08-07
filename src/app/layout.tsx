@@ -128,7 +128,7 @@ export default function RootLayout({
                     {!isAdminPage && !isAuthPage && (
                       <>
                         <aside className="fixed left-4 bottom-4 z-50 hidden md:flex flex-col items-center space-y-4">
-                          <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                          <Link href="https://dribbble.com/dipanjanswapna" className="text-muted-foreground hover:text-primary transition-colors">
                             <Dribbble className="h-5 w-5" />
                           </Link>
                           <Link href="https://www.instagram.com/dipanjanswapna/" className="text-muted-foreground hover:text-primary transition-colors">
