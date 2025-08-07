@@ -105,21 +105,14 @@ export function Footer() {
                              Go to Dashboard
                            </Button>
                         </Link>
-                     ) : user ? (
-                      <Link href="/logout">
-                        <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
-                          <LogOut className="mr-2 h-4 w-4" />
-                          Logout
-                        </Button>
-                      </Link>
-                    ) : (
+                     ) : !user ? (
                       <Link href="/login?flow=admin">
                          <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
                            <LogIn className="mr-2 h-4 w-4" />
                           Admin Login
                         </Button>
                       </Link>
-                    )}
+                    ) : null}
                 </div>
 
                 <div className="flex justify-center md:justify-end items-center space-x-4 md:space-x-6">
