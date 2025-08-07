@@ -2,11 +2,13 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Activity, BarChart, Rss, GitBranch, Library, Star } from 'lucide-react';
+import { Rss, GitBranch, Library, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { getDashboardStats } from './actions';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
+import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 
 const StatCardSkeleton = () => (
     <Card>
@@ -37,7 +39,15 @@ const itemVariants = {
 
 export default function DashboardPage() {
     const [stats, setStats] = useState<any>(null);
+    const [chartData, setChartData] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const chartConfig = {
+        total: {
+          label: 'Total',
+          color: 'hsl(var(--chart-1))',
+        },
+    };
 
     useEffect(() => {
         getDashboardStats().then(data => {
@@ -46,6 +56,12 @@ export default function DashboardPage() {
                 { title: 'Projects', value: data.totalProjects, icon: <GitBranch className="h-6 w-6 text-primary" /> },
                 { title: 'Library Items', value: data.totalLibraryItems, icon: <Library className="h-6 w-6 text-primary" /> },
                 { title: 'Subscription Plans', value: data.totalSubscriptionPlans, icon: <Star className="h-6 w-6 text-primary" /> },
+            ]);
+            setChartData([
+                { name: 'Blog', total: data.totalBlogPosts, fill: 'var(--color-blog)' },
+                { name: 'Projects', total: data.totalProjects, fill: 'var(--color-projects)' },
+                { name: 'Library', total: data.totalLibraryItems, fill: 'var(--color-library)' },
+                { name: 'Plans', total: data.totalSubscriptionPlans, fill: 'var(--color-plans)' },
             ]);
             setLoading(false);
         });
@@ -92,10 +108,22 @@ export default function DashboardPage() {
                 <motion.div variants={itemVariants} className="col-span-4">
                      <Card>
                         <CardHeader>
-                            <CardTitle>Overview</CardTitle>
+                            <CardTitle>Content Overview</CardTitle>
+                             <CardDescription>A summary of all content types.</CardDescription>
                         </CardHeader>
                         <CardContent className="pl-2">
-                            <p>Overview chart will be here.</p>
+                            {loading ? (
+                                 <Skeleton className="h-[250px] w-full"/>
+                            ) : (
+                                <ChartContainer config={chartConfig} className="h-[250px] w-full">
+                                    <BarChart accessibilityLayer data={chartData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                                        <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+                                        <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value}`} />
+                                        <Tooltip cursor={{fill: 'hsla(var(--muted))'}} content={<ChartTooltipContent />} />
+                                        <Bar dataKey="total" radius={[4, 4, 0, 0]} />
+                                    </BarChart>
+                                </ChartContainer>
+                            )}
                         </CardContent>
                     </Card>
                 </motion.div>
