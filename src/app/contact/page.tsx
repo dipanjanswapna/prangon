@@ -39,7 +39,7 @@ const socialPlatforms = [
     { name: 'LinkedIn', icon: Linkedin, href: '#' },
     { name: 'Instagram', icon: Instagram, href: '#' },
     { name: 'Twitter', icon: Twitter, href: '#' },
-    { name: 'Facebook', icon: Facebook, href: '#' },
+    { name: 'Facebook', icon: Facebook, href: 'https://www.facebook.com/dipanjanswapna' },
     { name: 'Behance', icon: Briefcase, href: '#' },
     { name: 'YouTube', icon: Youtube, href: '#' },
 ]

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Github, Twitter, Linkedin, Copy, ExternalLink, Facebook, HandHeart, LogIn, LogOut, LayoutDashboard, Shield, Download } from 'lucide-react';
@@ -29,7 +28,7 @@ export function Footer() {
   };
 
   const socialLinks = [
-    { name: 'Facebook', href: '#', icon: Facebook },
+    { name: 'Facebook', href: 'https://www.facebook.com/dipanjanswapna', icon: Facebook },
     { name: 'GitHub', href: '#', icon: Github },
     { name: 'Linkedin', href: '#', icon: Linkedin },
     { name: 'Twitter', href: '#', icon: Twitter },
