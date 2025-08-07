@@ -18,7 +18,7 @@ const Game = () => {
   const animationFrameId = useRef<number | null>(null);
 
   const movePlayer = (e: MouseEvent) => {
-    if (!gameAreaRef.current || gameOver) return;
+    if (!gameAreaRef.current || gameOver || !gameStarted) return;
     const gameArea = gameAreaRef.current;
     let newX = e.clientX - gameArea.getBoundingClientRect().left - 25; // car width / 2
     if (newX < 0) newX = 0;
@@ -27,7 +27,7 @@ const Game = () => {
   };
   
    const movePlayerTouch = (e: TouchEvent) => {
-    if (!gameAreaRef.current || gameOver) return;
+    if (!gameAreaRef.current || gameOver || !gameStarted) return;
     const gameArea = gameAreaRef.current;
     let newX = e.touches[0].clientX - gameArea.getBoundingClientRect().left - 25;
     if (newX < 0) newX = 0;
@@ -41,63 +41,62 @@ const Game = () => {
     setScore(0);
     setGameOver(false);
     setGameStarted(true);
-    if(animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
-    gameLoop();
-  };
-
-  const gameLoop = () => {
-    if (gameOver) {
-        if(animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
-        return;
-    }
-    
-    setOpponents(prevOpponents => {
-      let newOpponents = prevOpponents
-        .map(op => ({ ...op, y: op.y + 5 + Math.floor(score / 100) }))
-        .filter(op => op.y < 600);
-
-      if (Math.random() < 0.05 && (newOpponents.length === 0 || newOpponents[newOpponents.length - 1].y > 150)) {
-        newOpponents.push({
-          id: Date.now(),
-          x: Math.random() * 250,
-          y: -50,
-        });
-      }
-      return newOpponents;
-    });
-
-    setScore(prev => prev + 1);
-
-    animationFrameId.current = requestAnimationFrame(gameLoop);
   };
   
-   useEffect(() => {
-    opponents.forEach(op => {
-      if (
-        !gameOver &&
-        playerPos.x < op.x + 50 &&
-        playerPos.x + 50 > op.x &&
-        playerPos.y < op.y + 50 &&
-        playerPos.y + 50 > op.y
-      ) {
-        setGameOver(true);
-        if(animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
-      }
-    });
-  }, [playerPos, opponents, gameOver]);
-
-
+   // This effect should run only when gameStarted and gameOver state changes.
   useEffect(() => {
-    if (gameStarted && !gameOver) {
-      if(animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
-      animationFrameId.current = requestAnimationFrame(gameLoop);
-    }
-    
-    return () => {
-      if(animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
+    let animationFrame: number;
+
+    const gameLoop = () => {
+      if (!gameStarted || gameOver) {
+        return;
+      }
+
+      setOpponents(prevOpponents => {
+        let newOpponents = prevOpponents
+          .map(op => ({ ...op, y: op.y + 5 + Math.floor(score / 100) }))
+          .filter(op => op.y < 600);
+
+        if (Math.random() < 0.05 && (newOpponents.length === 0 || newOpponents[newOpponents.length - 1].y > 150)) {
+          newOpponents.push({
+            id: Date.now(),
+            x: Math.random() * 250,
+            y: -50,
+          });
+        }
+        
+        // Collision detection
+        for (const op of newOpponents) {
+            if (
+                playerPos.x < op.x + 50 &&
+                playerPos.x + 50 > op.x &&
+                playerPos.y < op.y + 50 &&
+                playerPos.y + 50 > op.y
+              ) {
+                setGameOver(true);
+                return prevOpponents; // Return old state to prevent update before game over
+              }
+        }
+        
+        return newOpponents;
+      });
+
+      setScore(prev => prev + 1);
+      animationFrame = requestAnimationFrame(gameLoop);
     };
-  }, [gameStarted, gameOver]);
-  
+
+    if (gameStarted && !gameOver) {
+      animationFrame = requestAnimationFrame(gameLoop);
+    }
+
+    return () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
+  }, [gameStarted, gameOver, playerPos.x, playerPos.y, score]);
+
+
   useEffect(() => {
     const gameArea = gameAreaRef.current;
     if (!gameArea) return;
@@ -108,7 +107,7 @@ const Game = () => {
       gameArea.removeEventListener('mousemove', movePlayer);
       gameArea.removeEventListener('touchmove', movePlayerTouch);
     };
-  }, [gameAreaRef.current, gameOver]);
+  }, [gameAreaRef, gameOver, gameStarted]);
 
 
   return (
