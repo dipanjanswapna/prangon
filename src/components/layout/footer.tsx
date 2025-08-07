@@ -98,21 +98,20 @@ export function Footer() {
                 </div>
 
                 <div className="flex justify-center items-center space-x-4">
-                     {user ? (
-                      <>
+                     {user?.role === 'admin' ? (
                         <Link href="/admin/dashboard">
                            <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
                              <LayoutDashboard className="mr-2 h-4 w-4" />
-                             Dashboard
+                             Go to Dashboard
                            </Button>
                         </Link>
-                        <Link href="/logout">
-                          <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
-                            <LogOut className="mr-2 h-4 w-4" />
-                            Logout
-                          </Button>
-                        </Link>
-                      </>
+                     ) : user ? (
+                      <Link href="/logout">
+                        <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
+                          <LogOut className="mr-2 h-4 w-4" />
+                          Logout
+                        </Button>
+                      </Link>
                     ) : (
                       <Link href="/login?flow=admin">
                          <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
