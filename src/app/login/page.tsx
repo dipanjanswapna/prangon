@@ -99,17 +99,20 @@ export default function LoginPage() {
     if (!loading && user) {
         if (isAdminLogin && user.role === 'admin') {
             router.push('/admin/dashboard');
-        } else {
+        } else if (isAdminLogin && user.role !== 'admin') {
+            toast({ variant: 'destructive', title: 'Access Denied', description: 'You do not have permission to access the admin panel.' });
+            router.push('/');
+        }
+        else {
             router.push('/');
         }
     }
-  }, [user, loading, router, isAdminLogin]);
+  }, [user, loading, router, isAdminLogin, toast]);
 
   async function onLogin(values: z.infer<typeof loginSchema>) {
     try {
       await login(values.email, values.password);
       toast({ title: 'Login Successful!', description: "Welcome back!" });
-       // Redirection is handled by the useEffect hook
     } catch (error) {
       toast({ variant: 'destructive', title: 'Login Failed', description: 'Invalid email or password.' });
     }
@@ -119,7 +122,6 @@ export default function LoginPage() {
     try {
       await signup(values.email, values.password, values.name);
       toast({ title: 'Signup Successful!', description: "Welcome to the community!" });
-      // Redirection is handled by the useEffect hook
     } catch (error: any) {
       toast({ variant: 'destructive', title: 'Signup Failed', description: error.message });
     }
@@ -129,7 +131,6 @@ export default function LoginPage() {
     try {
       await loginWithGoogle();
       toast({ title: 'Login Successful!', description: "Welcome!" });
-      // Redirection is handled by the useEffect hook
     } catch (error) {
       toast({ variant: 'destructive', title: 'Login Failed', description: 'Could not log in with Google.' });
     }
@@ -139,7 +140,7 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center p-4 lg:p-8 bg-background">
-      { loading && 
+      { loginForm.formState.isSubmitting && 
         <div className="absolute inset-0 z-50 bg-black/50 flex items-center justify-center">
             <Loader2 className="h-8 w-8 animate-spin" />
         </div>

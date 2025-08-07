@@ -27,29 +27,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        setLoading(true); // Start loading whenever auth state changes
         if (firebaseUser) {
             try {
-                // First, try to get user data from our DB
                 let appUserData = await getAppUser(firebaseUser.uid);
                 
                 if (!appUserData) {
-                    // This can happen if the user exists in Firebase Auth but not in our DB (e.g., first login after signup).
-                    // Or if there was a race condition. This will create the user in our DB.
                     appUserData = await createUserInDB(firebaseUser);
                 }
                 
-                // Combine Firebase user object with our custom user data
                 setUser({ ...firebaseUser, ...appUserData });
             } catch (error) {
                 console.error("Failed to fetch or create user data in DB:", error);
-                // Log out the user if DB operations fail to prevent inconsistent state
                 await signOut(auth);
                 setUser(null);
             }
         } else {
             setUser(null);
         }
-        setLoading(false);
+        setLoading(false); // Finish loading after all operations
     });
 
     return () => unsubscribe();
@@ -66,11 +62,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
     if (userCredential.user) {
         await updateProfile(userCredential.user, { displayName });
-        // Create the user in our DB right after signup
-        // Pass the updated user object with displayName
         await createUserInDB({ ...userCredential.user, displayName });
     }
-    // onAuthStateChanged will handle setting the user and loading state
     return userCredential;
   };
 
@@ -84,7 +77,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     await signOut(auth);
     setUser(null);
-    setLoading(false);
   };
 
   return (
