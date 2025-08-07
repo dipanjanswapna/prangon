@@ -42,13 +42,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             } catch (error) {
                 console.error("Failed to fetch or create user data", error);
                 setUser(null); // Or handle error appropriately
-            } finally {
-                setLoading(false);
             }
         } else {
             setUser(null);
-            setLoading(false);
         }
+        setLoading(false);
     });
 
     return () => unsubscribe();

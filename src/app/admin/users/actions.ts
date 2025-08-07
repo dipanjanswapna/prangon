@@ -62,7 +62,8 @@ export async function createUserInDB(firebaseUser: User | (User & {displayName: 
         }
     };
     
-    await writeUsers([...users, newUser]);
+    users.push(newUser);
+    await writeUsers(users);
     
     return newUser;
 }
