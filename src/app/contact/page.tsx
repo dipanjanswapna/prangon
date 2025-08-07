@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -41,7 +42,7 @@ const socialPlatforms = [
     { name: 'Twitter', icon: Twitter, href: '#' },
     { name: 'Facebook', icon: Facebook, href: 'https://www.facebook.com/dipanjanswapna' },
     { name: 'Behance', icon: Briefcase, href: '#' },
-    { name: 'YouTube', icon: Youtube, href: '#' },
+    { name: 'YouTube', icon: Youtube, href: 'https://www.youtube.com/@dipanjanswapna' },
 ]
 
 export default function ContactPage() {
