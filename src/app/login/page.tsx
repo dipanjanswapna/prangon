@@ -52,7 +52,7 @@ const images = {
         aiHint: "fantasy character"
     },
     signup: {
-        src: "https://i.pinimg.com/1200x/a9/d8/46/a9d846d03604c81f09ec1f49914df77f.jpg",
+        src: "https://i.pinimg.com/1200x/a9/d8/46/a9d846d03604c81f09ec1p49914df77f.jpg",
         alt: "Signup illustration",
         aiHint: "fantasy landscape"
     }
@@ -97,13 +97,13 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!loading && user) {
-        if (user.role === 'admin') {
+        if (isAdminLogin && user.role === 'admin') {
             router.push('/admin/dashboard');
         } else {
             router.push('/');
         }
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, isAdminLogin]);
 
   async function onLogin(values: z.infer<typeof loginSchema>) {
     try {
@@ -308,5 +308,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    
