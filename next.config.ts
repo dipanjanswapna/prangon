@@ -106,6 +106,12 @@ const nextConfig: NextConfig = {
         hostname: 'i.ytimg.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.dribbble.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
