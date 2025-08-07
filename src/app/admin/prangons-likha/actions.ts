@@ -53,6 +53,7 @@ export async function addPrangonsLikhaPost(data: Omit<PrangonsLikhaPost, 'id' | 
     try {
         await writeData(posts);
         revalidatePath('/prangons-likha');
+        revalidatePath(`/prangons-likha/category/${encodeURIComponent(newPost.category)}`);
         revalidatePath('/admin/prangons-likha');
         return { success: true, post: newPost };
     } catch (error: any) {
@@ -83,7 +84,8 @@ export async function updatePrangonsLikhaPost(id: string, data: Omit<PrangonsLik
     try {
         await writeData(posts);
         revalidatePath('/prangons-likha');
-        revalidatePath(`/prangons-likha/${updatedPost.slug}`);
+        revalidatePath(`/prangons-likha/post/${updatedPost.slug}`);
+        revalidatePath(`/prangons-likha/category/${encodeURIComponent(updatedPost.category)}`);
         revalidatePath('/admin/prangons-likha');
         return { success: true, post: updatedPost };
     } catch (error: any) {
@@ -93,6 +95,11 @@ export async function updatePrangonsLikhaPost(id: string, data: Omit<PrangonsLik
 
 export async function deletePrangonsLikhaPost(id: string) {
     const posts = await readData();
+    const postToDelete = posts.find(p => p.id === id);
+    if (!postToDelete) {
+      return { success: false, error: 'Post not found.' };
+    }
+
     const updatedPosts = posts.filter(p => p.id !== id);
 
     if (posts.length === updatedPosts.length) {
@@ -102,6 +109,7 @@ export async function deletePrangonsLikhaPost(id: string) {
     try {
         await writeData(updatedPosts);
         revalidatePath('/prangons-likha');
+        revalidatePath(`/prangons-likha/category/${encodeURIComponent(postToDelete.category)}`);
         revalidatePath('/admin/prangons-likha');
         return { success: true };
     } catch (error: any) {

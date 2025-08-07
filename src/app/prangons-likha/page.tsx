@@ -33,7 +33,7 @@ const itemVariants = {
 function PostCard({ post }: { post: PrangonsLikhaPost }) {
     return (
         <motion.div variants={itemVariants} className="h-full">
-            <Link href={`/prangons-likha/${post.slug}`} className="block h-full">
+            <Link href={`/prangons-likha/post/${post.slug}`} className="block h-full">
                 <Card className="h-full group relative overflow-hidden rounded-lg shadow-lg bg-muted/30 hover:shadow-primary/20 transition-all duration-300 flex flex-col">
                     <div className="relative h-48 w-full">
                         <Image 
@@ -87,7 +87,7 @@ function Section({ title, posts }: { title: string, posts: PrangonsLikhaPost[] }
         >
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl md:text-3xl font-bold font-headline text-primary-foreground">{title}</h2>
-                <Link href={`/prangons-likha/category/${title}`}>
+                <Link href={`/prangons-likha/category/${encodeURIComponent(title)}`}>
                     <Button variant="ghost" className="text-primary">
                         See All <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
@@ -159,7 +159,7 @@ export default function PrangonsLikhaPage() {
                     <CarouselContent>
                         {featuredPosts.map(post => (
                             <CarouselItem key={post.id} className="md:basis-1/2 lg:basis-1/3">
-                                 <Link href={`/prangons-likha/${post.slug}`} className="block group">
+                                 <Link href={`/prangons-likha/post/${post.slug}`} className="block group">
                                     <div className="relative overflow-hidden rounded-lg h-80">
                                         <Image
                                             src={post.coverImage}
