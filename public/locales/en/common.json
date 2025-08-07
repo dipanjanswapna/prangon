@@ -1,14 +1,62 @@
 {
-    "contact_title": "Contact Me",
-    "contact_description": "Have a project in mind or just want to say hi?",
-    "contact_name_label": "Name",
-    "contact_name_placeholder": "Your Name",
-    "contact_email_label": "Email",
-    "contact_email_placeholder": "your.email@example.com",
-    "contact_message_label": "Message",
-    "contact_message_placeholder": "Tell me about your project or idea...",
+    "contact_title": "Get in Touch",
+    "contact_description": "Have a question, a project proposal, or just want to say hello? I'd love to hear from you.",
+    "contact_name_label": "Your Name",
+    "contact_name_placeholder": "Enter your full name",
+    "contact_email_label": "Your Email",
+    "contact_email_placeholder": "you@example.com",
+    "contact_message_label": "Your Message",
+    "contact_message_placeholder": "Type your message here...",
     "contact_send_button": "Send Message",
-    "contact_find_me_on": "Find me on",
-    "contact_connect_with_me": "Connect with me on social media or check out my work.",
-    "contact_hire_me_button": "Hire Me Now"
+    "contact_find_me_on": "Find Me On",
+    "contact_connect_with_me": "Connect with me on other platforms as well",
+    "contact_hire_me_button": "Hire Me",
+    "terms_of_service": {
+        "title": "Terms of Service",
+        "lastUpdated": "August 1, 2024",
+        "sections": [
+            {
+                "title": "1. Acceptance of Terms",
+                "content": "By accessing and using the PRANGON CENTRE website, you accept and agree to be bound by the terms and provision of this agreement. In addition, when using this website's particular services, you shall be subject to any posted guidelines or rules applicable to such services."
+            },
+            {
+                "title": "2. Intellectual Property",
+                "content": "All content on this site, including text, graphics, logos, and digital downloads, is the property of PRANGON CENTRE and is protected by international copyright laws. Unauthorized use, reproduction, or distribution of any content is strictly prohibited and will result in legal action, including a direct penalty of 10,000 BDT as mentioned in our copyright notice."
+            },
+            {
+                "title": "3. User Conduct",
+                "content": "You agree not to use the website in any way that is unlawful, or harms PRANGON CENTRE, its service providers, its suppliers, its affiliates, or any other user. You are prohibited from attempting to gain unauthorized access to any part of the website or its related systems or networks."
+            },
+            {
+                "title": "4. Subscription and Payment",
+                "content": "For services that require payment, you agree to provide current, complete, and accurate purchase and account information. You agree to promptly update your account and other information, including your email address and payment method details, so that we can complete your transactions and contact you as needed."
+            },
+            {
+                "title": "5. Disclaimer of Warranties",
+                "content": "The website and its content are provided \"as is\" and \"as available\" without any warranties of any kind, including that the website will operate error-free or that the website, its servers, or its content are free of computer viruses or similar contamination or destructive features."
+            }
+        ]
+    },
+    "return_policy": {
+        "title": "Return and Refund Policy",
+        "lastUpdated": "August 1, 2024",
+        "sections": [
+            {
+                "title": "Digital Products",
+                "content": "Due to the nature of digital products, including but not limited to e-books, PDF files, and premium content subscriptions, all sales are final. We do not offer returns or refunds for any digital products once the order is confirmed and the product is sent or access is granted."
+            },
+            {
+                "title": "Subscription Services",
+                "content": "Subscription fees are non-refundable. You may cancel your subscription at any time through your account settings. Upon cancellation, you will continue to have access to the service until the end of your current billing period. No partial or pro-rata refunds will be provided for cancellations made during a billing cycle."
+            },
+            {
+                "title": "Exceptional Circumstances",
+                "content": "In rare cases of technical issues where you are unable to access the purchased digital content, please contact our support team within 7 days of purchase. We will work with you to resolve the issue. If we are unable to provide you with access to the content, a refund may be considered at our sole discretion."
+            },
+            {
+                "title": "Contact Us",
+                "content": "If you have any questions about our Return and Refund Policy, please contact us through the contact form on our website. We are here to help and ensure you have a positive experience with PRANGON CENTRE."
+            }
+        ]
+    }
 }

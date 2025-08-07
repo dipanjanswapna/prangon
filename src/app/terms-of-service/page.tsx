@@ -5,38 +5,8 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FileSignature, FileText } from 'lucide-react';
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const policyContent = {
-  title: 'Terms of Service',
-  lastUpdated: 'August 1, 2024',
-  sections: [
-    {
-      title: '1. Acceptance of Terms',
-      content:
-        'By accessing and using the PRANGON CENTRE website, you accept and agree to be bound by the terms and provision of this agreement. In addition, when using this website\'s particular services, you shall be subject to any posted guidelines or rules applicable to such services.',
-    },
-    {
-      title: '2. Intellectual Property',
-      content:
-        'All content on this site, including text, graphics, logos, and digital downloads, is the property of PRANGON CENTRE and is protected by international copyright laws. Unauthorized use, reproduction, or distribution of any content is strictly prohibited and will result in legal action, including a direct penalty of 10,000 BDT as mentioned in our copyright notice.',
-    },
-    {
-      title: '3. User Conduct',
-      content:
-        'You agree not to use the website in any way that is unlawful, or harms PRANGON CENTRE, its service providers, its suppliers, its affiliates, or any other user. You are prohibited from attempting to gain unauthorized access to any part of the website or its related systems or networks.',
-    },
-    {
-      title: '4. Subscription and Payment',
-      content:
-        'For services that require payment, you agree to provide current, complete, and accurate purchase and account information. You agree to promptly update your account and other information, including your email address and payment method details, so that we can complete your transactions and contact you as needed.',
-    },
-    {
-      title: '5. Disclaimer of Warranties',
-      content:
-        'The website and its content are provided "as is" and "as available" without any warranties of any kind, including that the website will operate error-free or that the website, its servers, or its content are free of computer viruses or similar contamination or destructive features.',
-    },
-  ],
-};
 
 const WordByWordAnimation: FC<{ text: string }> = ({ text }) => {
   const words = text.split(' ');
@@ -70,6 +40,14 @@ const WordByWordAnimation: FC<{ text: string }> = ({ text }) => {
 };
 
 export default function TermsOfServicePage() {
+    const { t } = useTranslation();
+  
+    const policyContent = {
+      title: t('terms_of_service.title'),
+      lastUpdated: t('terms_of_service.lastUpdated'),
+      sections: t('terms_of_service.sections', { returnObjects: true }) as Array<{title: string, content: string}> || [],
+    }
+
   return (
     <div className="relative bg-background min-h-screen py-16 md:py-24">
       <Image
@@ -93,7 +71,7 @@ export default function TermsOfServicePage() {
         </header>
 
         <div className="space-y-8">
-          {policyContent.sections.map((section, index) => (
+          { Array.isArray(policyContent.sections) && policyContent.sections.map((section, index) => (
             <section key={index}>
               <motion.h2
                 initial={{ opacity: 0, x: -20 }}

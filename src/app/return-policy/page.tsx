@@ -5,33 +5,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Undo2, FileText } from 'lucide-react';
 import { FC } from 'react';
-
-const policyContent = {
-  title: 'Return and Refund Policy',
-  lastUpdated: 'August 1, 2024',
-  sections: [
-    {
-      title: 'Digital Products',
-      content:
-        'Due to the nature of digital products, including but not limited to e-books, PDF files, and premium content subscriptions, all sales are final. We do not offer returns or refunds for any digital products once the order is confirmed and the product is sent or access is granted.',
-    },
-    {
-      title: 'Subscription Services',
-      content:
-        'Subscription fees are non-refundable. You may cancel your subscription at any time through your account settings. Upon cancellation, you will continue to have access to the service until the end of your current billing period. No partial or pro-rata refunds will be provided for cancellations made during a billing cycle.',
-    },
-    {
-      title: 'Exceptional Circumstances',
-      content:
-        'In rare cases of technical issues where you are unable to access the purchased digital content, please contact our support team within 7 days of purchase. We will work with you to resolve the issue. If we are unable to provide you with access to the content, a refund may be considered at our sole discretion.',
-    },
-    {
-      title: 'Contact Us',
-      content:
-        'If you have any questions about our Return and Refund Policy, please contact us through the contact form on our website. We are here to help and ensure you have a positive experience with PRANGON CENTRE.',
-    },
-  ],
-};
+import { useTranslation } from 'react-i18next';
 
 const WordByWordAnimation: FC<{ text: string }> = ({ text }) => {
   const words = text.split(' ');
@@ -65,6 +39,15 @@ const WordByWordAnimation: FC<{ text: string }> = ({ text }) => {
 };
 
 export default function ReturnPolicyPage() {
+  const { t } = useTranslation();
+  
+  const policyContent = {
+    title: t('return_policy.title'),
+    lastUpdated: t('return_policy.lastUpdated'),
+    sections: t('return_policy.sections', { returnObjects: true }) as Array<{title: string, content: string}> || [],
+  }
+
+
   return (
     <div className="relative bg-background min-h-screen py-16 md:py-24">
       <Image
@@ -88,7 +71,7 @@ export default function ReturnPolicyPage() {
         </header>
 
         <div className="space-y-8">
-          {policyContent.sections.map((section, index) => (
+          {Array.isArray(policyContent.sections) && policyContent.sections.map((section, index) => (
             <section key={index}>
               <motion.h2
                 initial={{ opacity: 0, x: -20 }}

@@ -8,14 +8,6 @@ import HttpApi from 'i18next-http-backend';
 export const supportedLngs = {
     en: 'English',
     bn: 'বাংলা',
-    fr: 'Français',
-    de: 'Deutsch',
-    hi: 'हिन्दी',
-    it: 'Italiano',
-    ja: '日本語',
-    ko: '한국어',
-    ru: 'Русский',
-    es: 'Español',
 };
 
 
