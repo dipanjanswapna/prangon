@@ -160,6 +160,11 @@ const educationItemSchema = z.object({
   details: z.string().optional(),
 });
 
+const personalInfoItemSchema = z.object({
+    label: z.string().min(1, 'Label is required.'),
+    value: z.string().min(1, 'Value is required.'),
+});
+
 export const aboutPageSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
   tagline: z.string().min(1, 'Tagline is required.'),
@@ -178,6 +183,7 @@ export const aboutPageSchema = z.object({
     features: z.array(aboutPageFeatureSchema),
   }),
   biography: z.string().min(1, 'Biography is required.'),
+  personalInfo: z.array(personalInfoItemSchema).optional(),
   education: z.array(educationItemSchema).optional(),
 });
 

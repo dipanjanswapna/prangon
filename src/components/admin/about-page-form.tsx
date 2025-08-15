@@ -34,6 +34,9 @@ export function AboutPageForm({ initialData }: { initialData: AboutPageData }) {
   const { fields: educationFields, append: appendEducation, remove: removeEducation } = useFieldArray({
     control: form.control, name: 'education'
   });
+  const { fields: personalInfoFields, append: appendPersonalInfo, remove: removePersonalInfo } = useFieldArray({
+      control: form.control, name: 'personalInfo'
+  });
 
   const onSubmit = async (data: AboutPageData) => {
     const result = await updateAboutPageContent(data);
@@ -169,6 +172,33 @@ export function AboutPageForm({ initialData }: { initialData: AboutPageData }) {
                  <FormField control={form.control} name="biography" render={({ field }) => (
                   <FormItem><FormLabel>Biography Text</FormLabel><FormControl><Textarea rows={5} {...field} /></FormControl><FormMessage /></FormItem>
                 )}/>
+            </CardContent>
+        </Card>
+        
+        <Card>
+            <CardHeader>
+                <CardTitle>Personal Information</CardTitle>
+                <CardDescription>Add personal details like birth date, occupation, etc.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                 {personalInfoFields.map((field, index) => (
+                  <motion.div key={field.id} variants={itemVariants} initial="hidden" animate="visible" className="space-y-4 p-4 border rounded-md relative">
+                    <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2" onClick={() => removePersonalInfo(index)}>
+                        <Trash2 className="h-4 w-4" />
+                    </Button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField control={form.control} name={`personalInfo.${index}.label`} render={({ field }) => (
+                          <FormItem><FormLabel>Label</FormLabel><FormControl><Input {...field} placeholder="e.g., Born" /></FormControl><FormMessage /></FormItem>
+                        )}/>
+                        <FormField control={form.control} name={`personalInfo.${index}.value`} render={({ field }) => (
+                          <FormItem><FormLabel>Value</FormLabel><FormControl><Textarea rows={1} {...field} placeholder="e.g., 10 July 2007" /></FormControl><FormMessage /></FormItem>
+                        )}/>
+                    </div>
+                  </motion.div>
+                ))}
+                <Button type="button" variant="outline" size="sm" onClick={() => appendPersonalInfo({ label: '', value: '' })}>
+                  <PlusCircle className="mr-2 h-4 w-4" /> Add Personal Info
+                </Button>
             </CardContent>
         </Card>
 

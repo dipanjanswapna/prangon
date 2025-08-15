@@ -1,3 +1,4 @@
+
 {
   "name": "Dipanjan Swapna Prangon",
   "tagline": "Dipanjan Swapna Prangon A passionate student, writer, and EdTech innovator from Dhaka, Bangladesh, dedicated to bridging creative design with education.",
@@ -67,6 +68,28 @@
     ]
   },
   "biography": "Everyone knows Dipanjan Swapna Prangon as Prangon. Prangon (born 10 July 2007) is a Bangladeshi student, artist. He attended Government Science College in Class 12. Prangon was born on 10 july to the Bengali Hindu \"das\" family of Bhandaria in Bangladesh. His father is Dipankar Das and his mother is Sabita Biswas. Prangon grew up in Bhandaria during her early childhood under the care of her mother and relatives. He has no brother and sister.",
+  "personalInfo": [
+    {
+      "label": "Native name",
+      "value": "দীপanjan স্বপ্ন প্রাঙ্গন"
+    },
+    {
+      "label": "Born",
+      "value": "10 July 2007"
+    },
+    {
+      "label": "Occupation",
+      "value": "Student\nWriter\nEdTech Innovator\nUI/UX Designer"
+    },
+    {
+      "label": "Years active",
+      "value": "2019-present"
+    },
+    {
+      "label": "Parents",
+      "value": "Dipankar Das (father)\nSabita Biswas (mother)"
+    }
+  ],
   "education": [
     {
       "institution": "Government Science College",

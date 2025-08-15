@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Star, Target, BrainCircuit, Users, Lightbulb, GraduationCap, Briefcase, Award, MessageSquare, Handshake, DollarSign, Clock, UserCircle, Loader2 } from 'lucide-react';
+import { Star, Target, BrainCircuit, Users, Lightbulb, GraduationCap, Briefcase, Award, MessageSquare, Handshake, DollarSign, Clock, UserCircle, Loader2, Info } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { getAboutPageContent } from '../admin/about/actions';
@@ -181,6 +181,32 @@ export default function AboutPage() {
                   </CardContent>
                 </Card>
               </motion.div>
+
+            {data.personalInfo && data.personalInfo.length > 0 && (
+                 <motion.div
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="mt-12"
+                >
+                    <Card className="bg-muted/30 mt-6 border-border shadow-lg backdrop-blur-sm">
+                        <CardHeader className="flex flex-row items-center gap-4">
+                            <Info className="h-8 w-8 text-primary" />
+                            <CardTitle className="text-2xl md:text-3xl font-headline text-primary-foreground">Personal Information</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="divide-y divide-border">
+                                {data.personalInfo.map((info, index) => (
+                                    <div key={index} className="grid grid-cols-3 gap-4 py-3">
+                                        <dt className="font-semibold text-muted-foreground col-span-1">{info.label}</dt>
+                                        <dd className="text-primary-foreground col-span-2 whitespace-pre-line">{info.value}</dd>
+                                    </div>
+                                ))}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </motion.div>
+            )}
 
             {data.education && data.education.length > 0 && (
                 <motion.div
