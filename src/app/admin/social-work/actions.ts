@@ -5,17 +5,21 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { revalidatePath } from 'next/cache';
 import { socialWorkPageSchema, SocialWorkPageData } from '@/lib/types';
-import defaultData from '@/../data/social-work.json';
 
 const dataFilePath = path.join(process.cwd(), 'data/social-work.json');
 
 async function readData(): Promise<SocialWorkPageData> {
   try {
     const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    return JSON.parse(fileContent);
+    const fileData = JSON.parse(fileContent);
+    // Ensure both initiatives and testimonials arrays exist
+    return {
+        initiatives: fileData.initiatives || [],
+        testimonials: fileData.testimonials || [],
+    };
   } catch (error) {
     console.warn('Could not read social-work.json, returning default data.', error);
-    return defaultData as SocialWorkPageData;
+    return { initiatives: [], testimonials: [] };
   }
 }
 
@@ -30,8 +34,7 @@ async function writeData(data: SocialWorkPageData) {
 }
 
 export async function getSocialWorkPageData(): Promise<SocialWorkPageData> {
-  const fileData = await readData();
-  return { ...defaultData, ...fileData };
+  return await readData();
 }
 
 export async function updateSocialWorkPageData(data: SocialWorkPageData) {
