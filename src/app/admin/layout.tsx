@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Home, Settings, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch, HelpCircle, Users, Menu, ShieldAlert, X } from 'lucide-react';
@@ -96,7 +95,7 @@ export default function AdminLayout({
                     >
                          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 p-4">
                             {adminNavItems.map(item => (
-                                <Link key={item.href} href={item.href}>
+                                <Link key={item.href} href={item.href} onClick={() => setIsMenuOpen(false)}>
                                      <div className={cn("flex flex-col items-center justify-center gap-1 p-2 rounded-lg", pathname === item.href ? 'bg-primary text-primary-foreground' : 'hover:bg-accent')}>
                                         {item.icon}
                                         <span className="text-xs text-center">{item.label}</span>
