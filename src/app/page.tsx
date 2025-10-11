@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, animate } from 'framer-motion';
-import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost, Check, Crown, HelpCircle, CalendarDays } from 'lucide-react';
+import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost, Check, Crown, HelpCircle, CalendarDays, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getHomePageContent } from './admin/home/actions';
@@ -830,6 +830,25 @@ export default function Home() {
           </motion.h1>
           <TypingAnimation texts={content.heroAnimatedTexts} />
         </div>
+        <motion.div
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center cursor-pointer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.5, duration: 1 }}
+            onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+        >
+            <span className="text-sm text-white/70 mb-2 animate-pulse">Scroll Down</span>
+            <motion.div
+                animate={{ y: [0, 10, 0] }}
+                transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    repeatType: 'loop'
+                }}
+            >
+                <ChevronDown className="w-8 h-8 text-white" />
+            </motion.div>
+        </motion.div>
       </div>
       <AboutMe 
         text={content.aboutMeText} 
@@ -846,4 +865,3 @@ export default function Home() {
     </>
   );
 }
-
