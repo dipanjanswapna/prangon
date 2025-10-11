@@ -17,6 +17,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 
 const adminNavItems = [
@@ -43,101 +44,62 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen w-full bg-muted/40">
-        <div className="flex flex-col flex-1">
-            <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
-                 <Link href="/" className="flex items-center gap-2 text-lg font-semibold md:text-base mr-4">
-                     <Image src="/logo.png" alt="PRANGON CENTRE Logo" width={32} height={32} className="rounded-full" />
-                     <span className="hidden sm:inline-block">PRANGON CENTRE</span>
-                </Link>
-                <div className="relative ml-auto flex-1 md:grow-0">
-                </div>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="secondary" size="icon" className="rounded-full">
-                        <Avatar className="h-8 w-8">
-                                <AvatarImage src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg" alt={'Admin'} />
-                                <AvatarFallback>A</AvatarFallback>
-                            </Avatar>
-                            <span className="sr-only">Toggle user menu</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <Link href="/account">Profile</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Link href="/admin/settings">Settings</Link>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </header>
-            <main className="flex-1 p-4 pt-14 sm:px-6 pb-24">
-                {children}
-            </main>
-        </div>
-
-        {/* Bottom Navigation */}
-        <div className="bottom-nav">
-            <div className="bottom-nav-inner">
-                <AnimatePresence>
-                {isMenuOpen && (
-                    <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="absolute bottom-full w-full bg-muted/80 backdrop-blur-lg rounded-t-2xl overflow-hidden"
-                    >
-                         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 p-4">
-                            {adminNavItems.map(item => (
-                                <Link key={item.href} href={item.href} onClick={() => setIsMenuOpen(false)}>
-                                     <div className={cn("flex flex-col items-center justify-center gap-1 p-2 rounded-lg", pathname === item.href ? 'bg-primary text-primary-foreground' : 'hover:bg-accent')}>
-                                        {item.icon}
-                                        <span className="text-xs text-center">{item.label}</span>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
-                </AnimatePresence>
-                <div className="flex justify-around items-center h-full">
-                    <div className="sm:hidden"> {/* This div is for mobile to have a similar layout to desktop */}
-                         <div className="grid grid-flow-col auto-cols-fr gap-2 h-full">
-                            {adminNavItems.slice(0, 4).map(item => (
-                                <Link key={item.href} href={item.href} className={cn("flex flex-col items-center justify-center gap-1 h-full", pathname === item.href ? 'text-primary' : 'text-muted-foreground')}>
-                                   {item.icon}
-                                   <span className="text-[10px]">{item.label}</span>
-                                </Link>
-                            ))}
-                         </div>
-                    </div>
-                     <div className="hidden sm:flex justify-around items-center h-full w-full">
-                        {adminNavItems.map(item => (
-                            <Link key={item.href} href={item.href} className={cn("flex flex-col items-center justify-center gap-1 h-full px-2", pathname === item.href ? 'text-primary' : 'text-muted-foreground hover:text-primary')}>
-                                {item.icon}
-                                <span className="text-xs">{item.label}</span>
-                            </Link>
-                        ))}
-                    </div>
-
-                    <div className="sm:hidden absolute left-1/2 -translate-x-1/2 top-[-20px]">
-                        <Button
-                            size="icon"
-                            className="rounded-full h-14 w-14 shadow-lg"
-                            onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        >
-                            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                        </Button>
-                    </div>
-                </div>
+    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
+             <Link href="/" className="flex items-center gap-2 text-lg font-semibold md:text-base mr-4">
+                 <Image src="/logo.png" alt="PRANGON CENTRE Logo" width={32} height={32} className="rounded-full" />
+                 <span className="hidden sm:inline-block">PRANGON CENTRE</span>
+            </Link>
+            <div className="relative ml-auto flex-1 md:grow-0">
             </div>
-        </div>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="secondary" size="icon" className="rounded-full">
+                    <Avatar className="h-8 w-8">
+                            <AvatarImage src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg" alt={'Admin'} />
+                            <AvatarFallback>A</AvatarFallback>
+                        </Avatar>
+                        <span className="sr-only">Toggle user menu</span>
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                        <Link href="/account">Profile</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                        <Link href="/admin/settings">Settings</Link>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </header>
+
+        <nav className="border-b bg-background sticky top-14 z-20">
+            <ScrollArea className="w-full whitespace-nowrap">
+                <div className="flex h-12 items-center gap-4 px-4 sm:px-6">
+                    {adminNavItems.map(item => (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className={cn(
+                                "flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary",
+                                pathname === item.href ? 'text-primary' : 'text-muted-foreground'
+                            )}
+                        >
+                            {item.icon}
+                            {item.label}
+                        </Link>
+                    ))}
+                </div>
+            </ScrollArea>
+        </nav>
+
+        <main className="flex-1 p-4 sm:px-6">
+            {children}
+        </main>
     </div>
   );
 }
