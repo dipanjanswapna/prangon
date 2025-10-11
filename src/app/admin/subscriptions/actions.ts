@@ -6,7 +6,7 @@ import path from 'path';
 import { revalidatePath } from 'next/cache';
 import { subscriptionPlanSchema, SubscriptionPlan } from '@/lib/types';
 
-const dataFilePath = path.join(process.cwd(), 'subscriptions.json');
+const dataFilePath = path.join(process.cwd(), 'data/subscriptions.json');
 
 async function readData(): Promise<SubscriptionPlan[]> {
   try {

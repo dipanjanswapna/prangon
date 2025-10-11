@@ -6,7 +6,7 @@ import path from 'path';
 import { revalidatePath } from 'next/cache';
 import { experienceSchema, Experience } from '@/lib/types';
 
-const dataFilePath = path.join(process.cwd(), 'experiences.json');
+const dataFilePath = path.join(process.cwd(), 'data/experiences.json');
 
 async function readData(): Promise<Experience[]> {
   try {

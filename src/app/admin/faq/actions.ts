@@ -4,10 +4,9 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { revalidatePath } from 'next/cache';
-import { faqPageSchema, FAQPageData } from '@/lib/types';
-import defaultData from '@/../faq.json';
+import { faqPageSchema, FAQPageData, FAQItem } from '@/lib/types';
 
-const dataFilePath = path.join(process.cwd(), 'faq.json');
+const dataFilePath = path.join(process.cwd(), 'data/faq.json');
 
 async function readData(): Promise<FAQPageData> {
   try {
@@ -18,7 +17,7 @@ async function readData(): Promise<FAQPageData> {
     };
   } catch (error) {
     console.warn('Could not read faq.json, returning default data.', error);
-    return defaultData as FAQPageData;
+    return { faqs: [] };
   }
 }
 
@@ -35,7 +34,7 @@ async function writeData(data: FAQPageData) {
 export async function getFAQPageData(): Promise<FAQPageData> {
   const fileData = await readData();
   return { 
-    faqs: fileData.faqs || defaultData.faqs,
+    faqs: fileData.faqs || [],
   };
 }
 

@@ -5,9 +5,9 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { revalidatePath } from 'next/cache';
 import { homePageSchema, HomePageData } from '@/lib/types';
-import defaultData from '@/lib/home-page-data.json';
+import defaultData from '@/../data/home-page.json';
 
-const dataFilePath = path.join(process.cwd(), 'src/lib/home-page-data.json');
+const dataFilePath = path.join(process.cwd(), 'data/home-page.json');
 
 // Helper function to read the data file
 async function readData(): Promise<HomePageData> {
@@ -15,7 +15,7 @@ async function readData(): Promise<HomePageData> {
     const fileContent = await fs.readFile(dataFilePath, 'utf-8');
     return JSON.parse(fileContent);
   } catch (error) {
-    console.warn('Could not read home-page-data.json, returning default data.', error);
+    console.warn('Could not read home-page.json, returning default data.', error);
     // If the file doesn't exist or is invalid, return the default data from the import
     return defaultData as HomePageData;
   }
@@ -27,7 +27,7 @@ async function writeData(data: HomePageData) {
     const jsonString = JSON.stringify(data, null, 2);
     await fs.writeFile(dataFilePath, jsonString, 'utf-8');
   } catch (error) {
-    console.error('Failed to write to home-page-data.json', error);
+    console.error('Failed to write to home-page.json', error);
     throw new Error('Failed to update content in database.');
   }
 }

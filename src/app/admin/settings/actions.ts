@@ -6,7 +6,7 @@ import path from 'path';
 import { revalidatePath } from 'next/cache';
 import { paymentSettingsSchema, PaymentSettings } from '@/lib/types';
 
-const dataFilePath = path.join(process.cwd(), 'payment-settings.json');
+const dataFilePath = path.join(process.cwd(), 'data/payment-settings.json');
 
 const defaultSettings: PaymentSettings = {
     card: { enabled: true },

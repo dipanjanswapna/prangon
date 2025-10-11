@@ -6,7 +6,7 @@ import path from 'path';
 import { revalidatePath } from 'next/cache';
 import { achievementSchema, Achievement } from '@/lib/types';
 
-const dataFilePath = path.join(process.cwd(), 'achievements.json');
+const dataFilePath = path.join(process.cwd(), 'data/achievements.json');
 
 async function readData(): Promise<Achievement[]> {
   try {

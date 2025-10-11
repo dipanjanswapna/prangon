@@ -5,9 +5,9 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { revalidatePath } from 'next/cache';
 import { socialWorkPageSchema, SocialWorkPageData } from '@/lib/types';
-import defaultData from '@/../social-work.json';
+import defaultData from '@/../data/social-work.json';
 
-const dataFilePath = path.join(process.cwd(), 'social-work.json');
+const dataFilePath = path.join(process.cwd(), 'data/social-work.json');
 
 async function readData(): Promise<SocialWorkPageData> {
   try {

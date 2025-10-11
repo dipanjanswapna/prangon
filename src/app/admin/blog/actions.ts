@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { blogPostSchema, BlogPost } from '@/lib/types';
 import slugify from 'slugify';
 
-const dataFilePath = path.join(process.cwd(), 'blog.json');
+const dataFilePath = path.join(process.cwd(), 'data/blog.json');
 
 async function readData(): Promise<BlogPost[]> {
   try {

@@ -6,7 +6,7 @@ import path from 'path';
 import { revalidatePath } from 'next/cache';
 import { projectSchema, Project } from '@/lib/types';
 
-const dataFilePath = path.join(process.cwd(), 'projects.json');
+const dataFilePath = path.join(process.cwd(), 'data/projects.json');
 
 async function readData(): Promise<Project[]> {
   try {

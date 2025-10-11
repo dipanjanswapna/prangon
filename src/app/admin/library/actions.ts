@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { libraryItemSchema, LibraryItem } from '@/lib/types';
 import slugify from 'slugify';
 
-const dataFilePath = path.join(process.cwd(), 'library.json');
+const dataFilePath = path.join(process.cwd(), 'data/library.json');
 
 async function readData(): Promise<LibraryItem[]> {
   try {

@@ -5,7 +5,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { Achievement } from '@/lib/types';
 
-const dataFilePath = path.join(process.cwd(), 'achievements.json');
+const dataFilePath = path.join(process.cwd(), 'data/achievements.json');
 
 export async function getAchievements(): Promise<Achievement[]> {
   try {

@@ -5,9 +5,9 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { revalidatePath } from 'next/cache';
 import { aboutPageSchema, AboutPageData } from '@/lib/types';
-import defaultData from '@/../about-page-data.json';
+import defaultData from '@/../data/about-page.json';
 
-const dataFilePath = path.join(process.cwd(), 'about-page-data.json');
+const dataFilePath = path.join(process.cwd(), 'data/about-page.json');
 
 // Helper function to read the data file
 async function readData(): Promise<AboutPageData> {
@@ -15,7 +15,7 @@ async function readData(): Promise<AboutPageData> {
     const fileContent = await fs.readFile(dataFilePath, 'utf-8');
     return JSON.parse(fileContent);
   } catch (error) {
-    console.warn('Could not read about-page-data.json, returning default data.', error);
+    console.warn('Could not read about-page.json, returning default data.', error);
     // If the file doesn't exist or is invalid, return the default data from the import
     return defaultData as AboutPageData;
   }
@@ -27,7 +27,7 @@ async function writeData(data: AboutPageData) {
     const jsonString = JSON.stringify(data, null, 2);
     await fs.writeFile(dataFilePath, jsonString, 'utf-8');
   } catch (error) {
-    console.error('Failed to write to about-page-data.json', error);
+    console.error('Failed to write to about-page.json', error);
     throw new Error('Failed to update content in database.');
   }
 }

@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { prangonsLikhaPostSchema, PrangonsLikhaPost } from '@/lib/types';
 import slugify from 'slugify';
 
-const dataFilePath = path.join(process.cwd(), 'prangons-likha.json');
+const dataFilePath = path.join(process.cwd(), 'data/prangons-likha.json');
 
 async function readData(): Promise<PrangonsLikhaPost[]> {
   try {
