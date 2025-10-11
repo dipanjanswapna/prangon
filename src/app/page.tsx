@@ -358,103 +358,6 @@ const WhatTheySaidSection = ({ testimonials }: { testimonials: any[] }) => {
   );
 };
   
-const InfoSection = ({ toolboxItems, readsImage, hobbiesImage } : { toolboxItems: {name: string}[], readsImage: string, hobbiesImage: string }) => {
-    const cardVariants = {
-        hidden: { opacity: 0, y: 50 },
-        visible: (i: number) => ({ 
-            opacity: 1, 
-            y: 0, 
-            transition: { duration: 0.6, delay: i * 0.1 } 
-        })
-    };
-  
-    return (
-      <div className="bg-background text-foreground p-4 sm:p-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          
-          <motion.div
-            custom={0}
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            className="bg-muted rounded-2xl p-6 flex flex-col justify-between col-span-1 lg:row-span-2 shadow-lg"
-          >
-            <div>
-              <h3 className="flex items-center text-xl font-bold mb-2">
-                <Sparkles className="h-5 w-5 mr-2 text-primary" />
-                My Reads
-              </h3>
-              <p className="text-muted-foreground mb-4">Explore the books shaping my perspectives.</p>
-            </div>
-            <Image 
-              src={readsImage}
-              alt="Atomic Habits book cover" 
-              width={400} 
-              height={600} 
-              className="w-full h-auto rounded-lg object-cover mt-auto" 
-              data-ai-hint="book cover" 
-            />
-          </motion.div>
-  
-          <motion.div
-            custom={1}
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            className="bg-muted rounded-2xl p-6 col-span-1 lg:col-span-2 shadow-lg"
-          >
-            <h3 className="flex items-center text-xl font-bold mb-2">
-              <Sparkles className="h-5 w-5 mr-2 text-primary" />
-              My Toolbox
-            </h3>
-            <p className="text-muted-foreground mb-6">Explore the technologies and tools I use to create awesome digital experiences.</p>
-            <div className="flex flex-wrap gap-2 sm:gap-4">
-              {toolboxItems.map((item, index) => (
-                <motion.div 
-                    key={item.name} 
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.05 }}
-                    className="bg-background rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm flex items-center"
-                >
-                  {item.name}
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-  
-          <motion.div
-            custom={2}
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            className="bg-muted rounded-2xl p-6 col-span-1 lg:col-span-2 relative overflow-hidden min-h-[200px] md:h-auto flex flex-col justify-center shadow-lg"
-          >
-             <div className="relative z-10">
-                <h3 className="flex items-center text-xl font-bold mb-2">
-                    <Sparkles className="h-5 w-5 mr-2 text-primary" />
-                    My Hobbies
-                </h3>
-                <p className="text-muted-foreground">Explore my interests, hobbies, and other things I enjoy doing beyond the digital realm.</p>
-             </div>
-             <Image 
-                src={hobbiesImage}
-                alt="Map of Dhaka"
-                className="object-cover opacity-10 z-0"
-                data-ai-hint="map Dhaka"
-                fill
-             />
-          </motion.div>
-  
-        </div>
-      </div>
-    );
-}
-
 const UpcomingEventsSection = ({ data }: { data: HomePageData['upcomingEvents'] }) => {
   if (!data) {
     return null;
@@ -909,7 +812,6 @@ export default function Home() {
       <SkillsSection skills={content.skills} />
       <StatsSection happyCustomers={content.stats.happyCustomers} servicesProvided={content.stats.servicesProvided} />
       <WhatTheySaidSection testimonials={content.testimonials}/>
-      <InfoSection toolboxItems={content.toolboxItems} readsImage={content.readsImage} hobbiesImage={content.hobbiesImage} />
       {content.upcomingEvents && <UpcomingEventsSection data={content.upcomingEvents} />}
       <LatestVideosSection videos={content.videos} />
       <SubscriptionSection />

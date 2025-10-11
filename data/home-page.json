@@ -36,18 +36,6 @@
       "imageAiHint": "woman portrait"
     }
   ],
-  "toolboxItems": [
-    { "name": "Figma" },
-    { "name": "Next.js" },
-    { "name": "React" },
-    { "name": "Firebase" },
-    { "name": "Tailwind CSS" },
-    { "name": "Adobe Suite" },
-    { "name": "VS Code" },
-    { "name": "Genkit" }
-  ],
-  "readsImage": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385l/40121378.jpg",
-  "hobbiesImage": "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/2a170a142011959.Y3JvcCw4MDgsNjMyLDAsMA.jpg",
   "videos": [
     {
       "title": "How to Design a Modern UI",

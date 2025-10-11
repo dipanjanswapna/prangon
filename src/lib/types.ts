@@ -9,10 +9,6 @@ const testimonialSchema = z.object({
   imageAiHint: z.string().optional(),
 });
 
-const toolboxItemSchema = z.object({
-    name: z.string().min(1, 'Toolbox item name is required.')
-});
-
 const videoSchema = z.object({
     title: z.string().min(1, 'Video title is required.'),
     author: z.string().min(1, 'Video author is required.'),
@@ -44,9 +40,6 @@ export const homePageSchema = z.object({
   skills: z.array(z.string().min(1, 'Skill cannot be empty.')).min(1, 'At least one skill is required.'),
   stats: statsSchema,
   testimonials: z.array(testimonialSchema),
-  toolboxItems: z.array(toolboxItemSchema),
-  readsImage: z.string().url('Must be a valid URL.'),
-  hobbiesImage: z.string().url('Must be a valid URL.'),
   videos: z.array(videoSchema),
   upcomingEvents: upcomingEventsSchema,
 });

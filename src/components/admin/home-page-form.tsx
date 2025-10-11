@@ -37,11 +37,6 @@ export function HomePageForm({ initialData }: { initialData: HomePageData }) {
     name: 'testimonials',
   });
   
-    const { fields: toolboxFields, append: appendToolbox, remove: removeToolbox } = useFieldArray({
-    control: form.control,
-    name: 'toolboxItems',
-  });
-
   const { fields: videoFields, append: appendVideo, remove: removeVideo } = useFieldArray({
     control: form.control,
     name: 'videos',
@@ -318,68 +313,6 @@ export function HomePageForm({ initialData }: { initialData: HomePageData }) {
                 </Button>
             </CardContent>
         </Card>
-
-         <Card>
-            <CardHeader>
-                <CardTitle>Info Section</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-                <div>
-                    <h3 className="text-lg font-semibold mb-2">Toolbox Items</h3>
-                    {toolboxFields.map((field, index) => (
-                        <motion.div key={field.id} variants={itemVariants} initial="hidden" animate="visible" className="flex items-center gap-2 mb-2">
-                             <FormField
-                                control={form.control}
-                                name={`toolboxItems.${index}.name`}
-                                render={({ field }) => (
-                                    <FormItem className="flex-grow">
-                                        <FormControl>
-                                            <Input {...field} placeholder={`Tool #${index + 1}`} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <Button type="button" variant="destructive" size="icon" onClick={() => removeToolbox(index)}>
-                                <Trash2 className="h-4 w-4" />
-                            </Button>
-                        </motion.div>
-                    ))}
-                    <Button type="button" variant="outline" size="sm" onClick={() => appendToolbox({ name: '' })}>
-                        <PlusCircle className="mr-2 h-4 w-4" /> Add Tool
-                    </Button>
-                </div>
-                <Separator />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                        control={form.control}
-                        name="readsImage"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>My Reads Image URL</FormLabel>
-                            <FormControl>
-                                <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="hobbiesImage"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>My Hobbies Image URL</FormLabel>
-                            <FormControl>
-                                <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-            </CardContent>
-         </Card>
 
         <Card>
             <CardHeader>
