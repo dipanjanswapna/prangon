@@ -92,7 +92,7 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
               >
                   <p className="text-sm tracking-[0.3em] mb-6 text-muted-foreground uppercase">About Me</p>
                   <motion.h2 
-                      className="font-sans text-xl md:text-2xl font-normal leading-relaxed text-left max-w-2xl text-primary-foreground/80"
+                      className="font-sans text-lg md:text-xl font-normal leading-relaxed text-left max-w-2xl text-primary-foreground/80"
                       variants={containerVariants}
                       initial="hidden"
                       whileInView="visible"
