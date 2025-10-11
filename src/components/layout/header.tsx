@@ -114,14 +114,60 @@ export function Header() {
 
   return (
     <header className={cn(
-        "fixed top-4 left-1/2 -translate-x-1/2 z-50 w-auto transition-all duration-300 ease-in-out"
+        "fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] sm:w-auto transition-all duration-300 ease-in-out"
     )}>
-       <div className="flex items-center gap-2 bg-neutral-900/50 backdrop-blur-md border border-neutral-700 rounded-full px-4 py-1 sm:p-2">
-            {mainNavItems.map(item => (
-              <NavItem key={item.href} href={item.href} label={item.label} />
-            ))}
-            <ResourcesDropdown />
-            <NavItem href={contactNavItem.href} label={contactNavItem.label} isContact />
+       <div className="flex items-center justify-center gap-2 bg-neutral-900/50 backdrop-blur-md border border-neutral-700 rounded-full px-4 py-1 sm:p-2">
+            <div className="hidden sm:flex items-center gap-2">
+                {mainNavItems.map(item => (
+                  <NavItem key={item.href} href={item.href} label={item.label} />
+                ))}
+                <ResourcesDropdown />
+                <NavItem href={contactNavItem.href} label={contactNavItem.label} isContact />
+            </div>
+
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="sm:hidden text-white">
+                    <Menu />
+                    <span className="sr-only">Open Menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="bottom" className="bg-neutral-900/80 backdrop-blur-lg border-neutral-700 text-white rounded-t-2xl h-auto">
+                 <div className="flex flex-col items-center gap-4 py-4">
+                    {[...mainNavItems, ...resourcesNavItems].map(item => (
+                       <Link key={item.href} href={item.href} passHref>
+                          <div
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={cn(
+                              "text-lg font-medium w-full text-center py-2",
+                              pathname.startsWith(item.href) ? "text-primary" : "text-neutral-300"
+                            )}
+                          >
+                            {item.label}
+                          </div>
+                        </Link>
+                    ))}
+                    <Link href={contactNavItem.href} passHref>
+                      <div onClick={() => setIsMobileMenuOpen(false)} className="mt-4">
+                       <div
+                         className="gradient-border-button px-6 py-2"
+                        >
+                         {contactNavItem.label}
+                       </div>
+                      </div>
+                    </Link>
+                 </div>
+              </SheetContent>
+            </Sheet>
+
+            <div className="sm:hidden flex-grow flex justify-center items-center">
+                 <Link href="/" className="flex items-center gap-2">
+                    <Image src="/logo.png" alt="Logo" width={32} height={32} className="rounded-full"/>
+                 </Link>
+            </div>
+             <div className="sm:hidden">
+                <ThemeToggle />
+            </div>
         </div>
     </header>
   );
