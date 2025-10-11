@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@/firebase/provider';
+import { useAuth } from '@/firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -9,10 +9,14 @@ import { Chrome } from 'lucide-react';
 import Image from 'next/image';
 
 export default function LoginPage() {
-  const { auth } = useAuth();
+  const auth = useAuth();
   const router = useRouter();
 
   const handleGoogleSignIn = async () => {
+    if (!auth) {
+        console.error("Auth service is not available.");
+        return;
+    }
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
