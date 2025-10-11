@@ -76,14 +76,6 @@ body {
   50% { border-color: hsl(var(--primary)); }
 }
 
-.typing-text-container {
-    height: 1.5rem; /* Adjust based on font size */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1rem;
-}
-
 .typing-text {
   font-size: 1.5rem;
   font-weight: 700;
