@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Menu, X, BookOpen, ChevronDown } from 'lucide-react';
+import { Menu, X, BookOpen, ChevronDown, LogOut, UserCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
@@ -17,7 +17,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu";
+import { useUser } from '@/firebase/auth/use-user';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 
 const mainNavItems = [
@@ -39,22 +42,7 @@ const contactNavItem = { href: '/contact', label: 'Say Hello' };
 export function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setHasScrolled(true);
-      } else {
-        setHasScrolled(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+  const { user } = useUser();
 
   const NavItem = ({ href, label, isContact = false }: { href: string, label: string, isContact?: boolean }) => {
     const isActive = pathname === href;
@@ -111,6 +99,37 @@ export function Header() {
         </DropdownMenuContent>
       </DropdownMenu>
     );
+  }
+  
+  const UserMenu = () => {
+      if (user) {
+          return (
+             <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                        <Avatar className="h-8 w-8">
+                            <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
+                            <AvatarFallback>{user.displayName?.charAt(0) || 'U'}</AvatarFallback>
+                        </Avatar>
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuItem asChild>
+                        <Link href="/account"><UserCircle className="mr-2 h-4 w-4" /> My Account</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                       <Link href="/logout"><LogOut className="mr-2 h-4 w-4" /> Logout</Link>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+          )
+      }
+      return (
+        <Link href="/login" passHref>
+             <Button variant="outline" size="sm">Login</Button>
+        </Link>
+      )
   }
 
   return (
@@ -173,8 +192,11 @@ export function Header() {
                     <Image src="/logo.png" alt="Logo" width={32} height={32} className="rounded-full"/>
                  </Link>
             </div>
-             <div className="sm:hidden">
+             <div className="flex items-center gap-2">
                 <ThemeToggle />
+                <div className="hidden sm:block">
+                  <UserMenu />
+                </div>
             </div>
         </div>
     </header>
