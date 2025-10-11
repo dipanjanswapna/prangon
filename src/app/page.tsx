@@ -809,6 +809,11 @@ export default function Home() {
            {titleWords.map((word, index) => (
              <span
                 key={index}
+                style={
+                    word.toUpperCase() !== 'SWAPNA'
+                    ? { color: 'rgb(184, 172, 152)' }
+                    : {}
+                }
                 className={cn(
                     "inline-block",
                     word.toUpperCase() === "SWAPNA" && "text-red-500"
@@ -841,3 +846,4 @@ export default function Home() {
     </>
   );
 }
+
