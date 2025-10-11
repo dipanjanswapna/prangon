@@ -91,7 +91,7 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
                   className="w-full md:w-2/5 flex justify-center relative order-1 md:order-2"
               >
                   <Image
-                      src="https://i.postimg.cc/dtjybvc2/photo-2025-10-11-09-11-41-removebg-preview.png"
+                      src={imageUrl}
                       alt="Dipanjan Prangon"
                       width={400}
                       height={500}
@@ -128,41 +128,29 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
 };
 
 const SkillsSection = ({ skills }: { skills: string[] }) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-      target: containerRef,
-      offset: ["start end", "end start"],
-    });
-  
-    const x = useTransform(scrollYProgress, [0, 1], ["-100%", "100%"]);
-  
     return (
-      <div ref={containerRef} className="relative bg-background py-16 sm:py-24 overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold font-headline text-primary-foreground mb-8">My Skills</h2>
-            <motion.div
-              className="flex whitespace-nowrap"
-              style={{ x }}
-              animate={{ x: ["-100%", "100%"] }}
-              transition={{
-                x: {
-                  repeat: Infinity,
-                  repeatType: "loop",
-                  duration: 20,
-                  ease: "linear",
-                },
-              }}
-            >
-              {[...skills, ...skills].map((skill, index) => (
-                <span key={index} className="text-2xl font-semibold mx-8 text-muted-foreground">
-                  {skill}
-                </span>
-              ))}
-            </motion.div>
+        <div className="bg-background py-16 sm:py-24">
+            <div className="container mx-auto px-4">
+                <div className="grid grid-cols-1 divide-y divide-border">
+                    {skills.map((skill, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, x: -50 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                            className="py-4 md:py-6"
+                        >
+                            <h3 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase text-primary-foreground/80 hover:text-primary transition-colors duration-300">
+                                {skill}
+                            </h3>
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
         </div>
-      </div>
     );
-  };
+};
 
 function AnimatedCounter({ to, suffix }: { to: number, suffix?: string }) {
     const nodeRef = useRef<HTMLParagraphElement>(null);
@@ -213,10 +201,10 @@ const StatsSection = ({ happyCustomers, servicesProvided }: { happyCustomers: nu
     const totalWritings = libraryItems.length + prangonLikhaItems.length;
 
     const stats = [
-        { name: 'Happy Customers', value: happyCustomers, suffix: '+', icon: <Heart className="h-8 w-8 text-red-400" />, href: null },
-        { name: 'Services Provided', value: servicesProvided, suffix: '+', icon: <Briefcase className="h-8 w-8 text-blue-400" />, href: null },
-        { name: 'Books & Writings', value: loading ? 0 : totalWritings, suffix: '+', icon: <BookCopy className="h-8 w-8 text-green-400" />, href: null },
-        { name: 'Subscription Packages', value: loading ? 0 : subscriptionPlans.length, suffix: '+', icon: <Star className="h-8 w-8 text-yellow-400" />, href: '/subscribe' },
+        { name: 'Happy Customers', value: happyCustomers, suffix: '+', icon: <Heart className="h-6 w-6 text-red-400" />, href: null },
+        { name: 'Services Provided', value: servicesProvided, suffix: '+', icon: <Briefcase className="h-6 w-6 text-blue-400" />, href: null },
+        { name: 'Books & Writings', value: loading ? 0 : totalWritings, suffix: '+', icon: <BookCopy className="h-6 w-6 text-green-400" />, href: null },
+        { name: 'Subscription Packages', value: loading ? 0 : subscriptionPlans.length, suffix: '+', icon: <Star className="h-6 w-6 text-yellow-400" />, href: '/subscribe' },
     ];
 
     const containerVariants = {
@@ -252,7 +240,7 @@ const StatsSection = ({ happyCustomers, servicesProvided }: { happyCustomers: nu
                         const StatCardContent = (
                             <motion.div key={stat.name} variants={itemVariants} className="liquid-card h-full">
                                 <div className="p-4 sm:p-6 text-center flex flex-col items-center justify-center h-full">
-                                    <div className="mb-2 sm:mb-4">
+                                    <div className="mb-2">
                                         {stat.icon}
                                     </div>
                                     <AnimatedCounter to={stat.value} suffix={stat.suffix} />
@@ -370,7 +358,7 @@ const UpcomingEventsSection = ({ data }: { data: HomePageData['upcomingEvents'] 
         className="object-cover"
         data-ai-hint="audience event"
       />
-       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/50" />
       <div className="relative z-10 container mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -808,8 +796,8 @@ export default function Home() {
         </div>
       </div>
       <AboutMe text={content.aboutMeText} imageUrl={content.aboutMeImageUrl}/>
-      <SkillsSection skills={content.skills} />
       <StatsSection happyCustomers={content.stats.happyCustomers} servicesProvided={content.stats.servicesProvided} />
+      <SkillsSection skills={content.skills} />
       <WhatTheySaidSection testimonials={content.testimonials}/>
       {content.upcomingEvents && <UpcomingEventsSection data={content.upcomingEvents} />}
       <LatestVideosSection videos={content.videos} />
@@ -818,11 +806,3 @@ export default function Home() {
     </>
   );
 }
-
-    
-
-    
-
-
-
-
