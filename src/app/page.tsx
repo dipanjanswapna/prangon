@@ -82,13 +82,30 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
 
   return (
       <div ref={aboutRef} className="min-h-screen bg-background flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32">
-          <div className="flex flex-col md:flex-row items-center gap-12 max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-8 max-w-6xl mx-auto">
+              <motion.div 
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.8 }}
+                  className="w-full md:w-2/5 flex justify-center relative order-1 md:order-2"
+              >
+                  <Image
+                      src="https://i.postimg.cc/dtjybvc2/photo-2025-10-11-09-11-41-removebg-preview.png"
+                      alt="Dipanjan Prangon"
+                      width={500}
+                      height={600}
+                      className="object-contain w-[400px] h-[500px] sm:w-[500px] sm:h-[600px]"
+                      data-ai-hint="profile picture"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-background to-transparent" />
+              </motion.div>
               <motion.div 
                   initial={{ opacity: 0, x: -50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.8 }}
-                  className="md:w-1/2 order-2 md:order-1"
+                  className="w-full md:w-3/5 order-2 md:order-1"
               >
                   <p className="text-sm tracking-[0.3em] mb-6 text-muted-foreground uppercase">About Me</p>
                   <motion.h2 
@@ -104,23 +121,6 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
                           </motion.span>
                       ))}
                   </motion.h2>
-              </motion.div>
-              <motion.div 
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.8 }}
-                  className="md:w-1/2 flex justify-center relative order-1 md:order-2"
-              >
-                  <Image
-                      src="https://i.postimg.cc/dtjybvc2/photo-2025-10-11-09-11-41-removebg-preview.png"
-                      alt="Dipanjan Prangon"
-                      width={500}
-                      height={600}
-                      className="object-contain w-[400px] h-[500px] sm:w-[500px] sm:h-[600px]"
-                      data-ai-hint="profile picture"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-background to-transparent" />
               </motion.div>
           </div>
       </div>
@@ -819,5 +819,7 @@ export default function Home() {
     </>
   );
 }
+
+    
 
     
