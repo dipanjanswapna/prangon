@@ -1,10 +1,10 @@
 
 'use client';
 
-import { Home, Settings, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch, HelpCircle, Users, Menu, ShieldAlert, X, LayoutDashboard, ChevronDown } from 'lucide-react';
+import { Home, Settings, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch, HelpCircle, Users, Menu, ShieldAlert, X, LayoutDashboard, ChevronDown, LogOut } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import {
@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useUser } from '@/firebase/auth/use-user';
+import { Loader2 } from 'lucide-react';
 
 const adminNavItems = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: <Home className="h-5 w-5" /> },
@@ -42,6 +44,32 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, appUser, loading } = useUser();
+
+  if (loading) {
+    return (
+        <div className="flex h-screen items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+    );
+  }
+
+  if (!user || appUser?.role !== 'admin') {
+      if (typeof window !== 'undefined') {
+        router.push('/admin/login');
+      }
+      return (
+        <div className="flex h-screen items-center justify-center">
+            <p>Redirecting to login...</p>
+        </div>
+      );
+  }
+  
+  if (pathname === '/admin/login') {
+      return <>{children}</>;
+  }
+
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -86,8 +114,8 @@ export default function AdminLayout({
                 <DropdownMenuTrigger asChild>
                     <Button variant="secondary" size="icon" className="rounded-full">
                     <Avatar className="h-8 w-8">
-                            <AvatarImage src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg" alt={'Dipanjan Swapna Prangon'} />
-                            <AvatarFallback>DP</AvatarFallback>
+                            <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
+                            <AvatarFallback>{user.displayName?.charAt(0) || 'A'}</AvatarFallback>
                         </Avatar>
                         <span className="sr-only">Toggle user menu</span>
                     </Button>
@@ -100,6 +128,10 @@ export default function AdminLayout({
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                         <Link href="/admin/settings">Settings</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                       <Link href="/logout"><LogOut className="mr-2 h-4 w-4" /> Logout</Link>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

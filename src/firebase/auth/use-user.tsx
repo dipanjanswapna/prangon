@@ -15,27 +15,54 @@ export function useUser() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!auth || !firestore) {
+      // Firebase might not be initialized yet
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
       if (user) {
-        const userRef = doc(firestore, 'users', user.uid);
-        const docSnap = await getDoc(userRef);
+        // First, check if the user is in the 'admins' collection
+        const adminRef = doc(firestore, 'admins', user.uid);
+        const adminSnap = await getDoc(adminRef);
 
-        if (docSnap.exists()) {
-          setAppUser(docSnap.data() as AppUser);
-        } else {
-          // Create user profile if it doesn't exist
-          const newUser: AppUser = {
+        if (adminSnap.exists()) {
+          // This is an admin
+          const adminData = {
             uid: user.uid,
             email: user.email!,
-            displayName: user.displayName || 'New User',
+            displayName: user.displayName || 'Admin',
             photoURL: user.photoURL,
-            role: 'user', // Assign default role
-            subscription: { planName: '' },
-            customId: '', // You might want to generate a custom ID
+            role: 'admin' as const,
           };
-          await setDoc(userRef, newUser);
-          setAppUser(newUser);
+          setAppUser(adminData);
+          
+          // Ensure a corresponding user profile exists for consistency
+          const userRef = doc(firestore, 'users', user.uid);
+          const userSnap = await getDoc(userRef);
+          if (!userSnap.exists()) {
+              await setDoc(userRef, adminData, { merge: true });
+          }
+
+        } else {
+          // This is a regular user
+          const userRef = doc(firestore, 'users', user.uid);
+          const docSnap = await getDoc(userRef);
+
+          if (docSnap.exists()) {
+            setAppUser(docSnap.data() as AppUser);
+          } else {
+            // Create user profile if it doesn't exist
+            const newUser: AppUser = {
+              uid: user.uid,
+              email: user.email!,
+              displayName: user.displayName || 'New User',
+              photoURL: user.photoURL,
+              role: 'user', // Assign default role
+            };
+            await setDoc(userRef, newUser);
+            setAppUser(newUser);
+          }
         }
       } else {
         setAppUser(null);

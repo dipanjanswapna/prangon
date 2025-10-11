@@ -290,16 +290,10 @@ export type FAQPageData = z.infer<typeof faqPageSchema>;
 // This combines the Firebase User object with our custom AppUser data
 export const appUserSchema = z.object({
     uid: z.string(),
-    customId: z.string(),
     email: z.string().email(),
     displayName: z.string(),
     photoURL: z.string().url().nullable(),
     role: z.enum(['admin', 'user']),
-    subscription: z.object({
-        planName: z.string().default(''),
-        startDate: z.string().optional(),
-        endDate: z.string().optional(),
-    }),
 });
 
 export type AppUser = z.infer<typeof appUserSchema>;
