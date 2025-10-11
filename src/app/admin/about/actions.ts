@@ -5,8 +5,6 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import { aboutPageSchema, AboutPageData } from '@/lib/types';
 import { initializeFirebase } from '@/firebase';
-import { errorEmitter } from '@/firebase/error-emitter';
-import { FirestorePermissionError } from '@/firebase/errors';
 
 async function getFirestoreInstance() {
   const { firestore } = await initializeFirebase();
@@ -15,17 +13,18 @@ async function getFirestoreInstance() {
 
 const docRef = async () => doc(await getFirestoreInstance(), 'pages', 'about');
 
-export async function getAboutPageContent(): Promise<AboutPageData> {
+type ActionResult<T> = { success: true; data: T; } | { success: false; error: { message: string; context?: any } };
+
+export async function getAboutPageContent(): Promise<ActionResult<AboutPageData>> {
   const reference = await docRef();
   try {
     const docSnap = await getDoc(reference);
 
     if (docSnap.exists()) {
-      return docSnap.data() as AboutPageData;
+      return { success: true, data: docSnap.data() as AboutPageData };
     } else {
       console.log("No 'about' page document found! Using default data.");
-      // If document doesn't exist, return default data.
-      return {
+      const defaultData: AboutPageData = {
           name: "Dipanjan Swapna Prangon",
           tagline: "A passionate student, writer, and EdTech innovator from Dhaka, Bangladesh, dedicated to bridging creative design with education.",
           profileImageUrl: "https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg",
@@ -70,49 +69,46 @@ export async function getAboutPageContent(): Promise<AboutPageData> {
               { institution: "Bhandaria Bihari Pilot High School", degree: "Secondary School Certificate (SSC)", period: "2017 - 2022", details: "Science Group, Class 6-10" }
           ]
       };
+      return { success: true, data: defaultData };
     }
   } catch(error: any) {
      if (error.code === 'permission-denied') {
-        const permissionError = new FirestorePermissionError({
-            path: reference.path,
-            operation: 'get',
-        });
-        errorEmitter.emit('permission-error', permissionError);
+        return { success: false, error: { message: 'permission-denied', context: { path: reference.path, operation: 'get' } } };
      }
-     // Re-throw other errors or handle them as needed
-     throw error;
+     console.error("Error getting document: ", error);
+     return { success: false, error: { message: error.message || 'An unknown error occurred' } };
   }
 }
 
-export async function updateAboutPageContent(data: AboutPageData) {
+export async function updateAboutPageContent(data: AboutPageData): Promise<ActionResult<{}>> {
   const validation = aboutPageSchema.safeParse(data);
 
   if (!validation.success) {
-    return { success: false, error: validation.error.flatten() };
+    return { success: false, error: { message: "Validation failed", context: validation.error.flatten() } };
   }
 
   const reference = await docRef();
   
-  setDoc(reference, validation.data, { merge: true }).catch(async (serverError) => {
+  try {
+    await setDoc(reference, validation.data, { merge: true });
+    revalidatePath('/about');
+    revalidatePath('/admin/about');
+    return { success: true, data: {} };
+  } catch (serverError: any) {
     if (serverError.code === 'permission-denied') {
-        const permissionError = new FirestorePermissionError({
+      return { 
+        success: false, 
+        error: { 
+          message: 'permission-denied', 
+          context: { 
             path: reference.path,
             operation: 'update',
             requestResourceData: validation.data
-        });
-        errorEmitter.emit('permission-error', permissionError);
-    } else {
-        // Handle other errors (e.g., network issues)
-        // For now, we'll just re-throw them so they appear in the console.
-        throw serverError;
+          } 
+        } 
+      };
     }
-  });
-
-  // Revalidate paths optimistically, before the write completes.
-  revalidatePath('/about');
-  revalidatePath('/admin/about');
-  
-  // Note: We are not awaiting the setDoc call. 
-  // This provides an optimistic UI update. The error is handled in the .catch() block.
-  return { success: true };
+    console.error("Error setting document: ", serverError);
+    return { success: false, error: { message: serverError.message || 'An unknown error occurred' } };
+  }
 }

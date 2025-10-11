@@ -14,6 +14,9 @@ import { Separator } from '@/components/ui/separator';
 import { Trash2, PlusCircle, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
+
 
 export function AboutPageForm({ initialData }: { initialData: AboutPageData }) {
   const { toast } = useToast();
@@ -43,11 +46,16 @@ export function AboutPageForm({ initialData }: { initialData: AboutPageData }) {
     if (result.success) {
       toast({ title: 'Success', description: 'About page content updated successfully.' });
     } else {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to update content. Please check the form for errors.',
-      });
+      if (result.error.message === 'permission-denied') {
+        const permissionError = new FirestorePermissionError(result.error.context as SecurityRuleContext);
+        errorEmitter.emit('permission-error', permissionError);
+      } else {
+        toast({
+            variant: 'destructive',
+            title: 'Error updating content',
+            description: result.error.message,
+        });
+      }
       console.error(result.error);
     }
   };

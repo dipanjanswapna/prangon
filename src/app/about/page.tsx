@@ -12,6 +12,8 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { getAboutPageContent } from '../admin/about/actions';
 import { AboutPageData } from '@/lib/types';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
 
 
 const iconMap: { [key: string]: React.ReactElement } = {
@@ -30,9 +32,25 @@ const iconMap: { [key: string]: React.ReactElement } = {
 
 export default function AboutPage() {
   const [data, setData] = useState<AboutPageData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-      getAboutPageContent().then(setData);
+      async function fetchData() {
+        setLoading(true);
+        const result = await getAboutPageContent();
+        if (result.success) {
+            setData(result.data);
+        } else {
+            if (result.error.message === 'permission-denied') {
+                const permissionError = new FirestorePermissionError(result.error.context as SecurityRuleContext);
+                errorEmitter.emit('permission-error', permissionError);
+            }
+            console.error("Failed to fetch about page content:", result.error);
+            // Optionally, set some default data or show an error state
+        }
+        setLoading(false);
+      }
+      fetchData();
   }, [])
 
   const containerVariants = {
@@ -48,10 +66,18 @@ export default function AboutPage() {
     visible: { y: 0, opacity: 1 }
   };
   
-  if (!data) {
+  if (loading) {
     return (
         <div className="flex h-screen items-center justify-center">
             <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+    );
+  }
+
+  if (!data) {
+    return (
+        <div className="flex h-screen items-center justify-center">
+            <p>Could not load page data. Please check permissions.</p>
         </div>
     );
   }
