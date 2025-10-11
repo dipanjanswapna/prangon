@@ -81,7 +81,7 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
   };
 
   return (
-      <div ref={aboutRef} className="min-h-screen bg-background flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32">
+      <div ref={aboutRef} className="bg-background flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32 py-16 sm:py-24">
           <div className="flex flex-col md:flex-row items-center gap-8 max-w-6xl mx-auto">
               <motion.div 
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -823,3 +823,4 @@ export default function Home() {
     
 
     
+
