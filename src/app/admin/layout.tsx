@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Home, Settings, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch, HelpCircle, Users, Menu, ShieldAlert, X } from 'lucide-react';
+import { Home, Settings, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch, HelpCircle, Users, Menu, ShieldAlert, X, LayoutDashboard, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -16,10 +16,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ScrollArea } from '@/components/ui/scroll-area';
-
 
 const adminNavItems = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: <Home className="h-5 w-5" /> },
@@ -53,6 +49,34 @@ export default function AdminLayout({
                  <Image src="/logo.png" alt="PRANGON CENTRE Logo" width={32} height={32} className="rounded-full" />
                  <span className="hidden sm:inline-block">PRANGON CENTRE</span>
             </Link>
+
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline">
+                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                        Admin Panel
+                        <ChevronDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-64">
+                    <DropdownMenuLabel>Admin Navigation</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {adminNavItems.map(item => (
+                         <Link href={item.href} key={item.href} passHref>
+                            <DropdownMenuItem
+                                className={cn(
+                                    "flex items-center gap-2",
+                                    pathname === item.href && "bg-accent"
+                                )}
+                            >
+                                {item.icon}
+                                <span>{item.label}</span>
+                            </DropdownMenuItem>
+                         </Link>
+                    ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
+
             <div className="relative ml-auto flex-1 md:grow-0">
             </div>
             <DropdownMenu>
@@ -78,25 +102,7 @@ export default function AdminLayout({
             </DropdownMenu>
         </header>
 
-        <nav className="border-b bg-background sticky top-14 z-20">
-            <div className="flex flex-wrap items-center gap-4 px-4 sm:px-6 py-2">
-                {adminNavItems.map(item => (
-                    <Link
-                        key={item.href}
-                        href={item.href}
-                        className={cn(
-                            "flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary",
-                            pathname === item.href ? 'text-primary' : 'text-muted-foreground'
-                        )}
-                    >
-                        {item.icon}
-                        {item.label}
-                    </Link>
-                ))}
-            </div>
-        </nav>
-
-        <main className="flex-1 p-4 sm:px-6">
+        <main className="flex-1 p-4 sm:px-6 sm:py-0">
             {children}
         </main>
     </div>
