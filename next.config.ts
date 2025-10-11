@@ -124,6 +124,12 @@ const nextConfig: NextConfig = {
         hostname: 'cdn.dribbble.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.postimg.cc',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
