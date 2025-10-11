@@ -1,0 +1,24 @@
+{
+  "faqs": [
+    {
+      "id": "1",
+      "question": "What payment methods do you accept?",
+      "answer": "We plan to accept all major credit cards (Visa, MasterCard, American Express), PayPal, and other popular digital wallets. All payments are processed securely."
+    },
+    {
+      "id": "2",
+      "question": "Can I cancel my subscription anytime?",
+      "answer": "Yes, you can cancel your subscription at any time from your account page. Your access will continue until the end of the current billing period."
+    },
+    {
+      "id": "3",
+      "question": "What happens if I cancel?",
+      "answer": "If you cancel, you will retain access to all premium features until your current subscription period ends. After that, your account will be downgraded to the free plan."
+    },
+    {
+      "id": "4",
+      "question": "Do you offer refunds?",
+      "answer": "Due to the nature of digital content, we generally do not offer refunds. However, if you have a special circumstance, please contact our support team."
+    }
+  ]
+}

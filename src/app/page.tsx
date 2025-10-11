@@ -93,9 +93,9 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
                   <Image
                       src="https://i.postimg.cc/dtjybvc2/photo-2025-10-11-09-11-41-removebg-preview.png"
                       alt="Dipanjan Prangon"
-                      width={500}
-                      height={600}
-                      className="object-contain w-[400px] h-[500px] sm:w-[500px] sm:h-[600px]"
+                      width={400}
+                      height={500}
+                      className="object-contain w-[300px] h-[400px] sm:w-[400px] sm:h-[500px]"
                       data-ai-hint="profile picture"
                   />
                   <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-background to-transparent" />
@@ -356,7 +356,7 @@ const UpcomingEventsSection = ({ data }: { data: HomePageData['upcomingEvents'] 
         className="object-cover"
         data-ai-hint="audience event"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
       <div className="relative z-10 container mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -807,5 +807,6 @@ export default function Home() {
     
 
     
+
 
 
