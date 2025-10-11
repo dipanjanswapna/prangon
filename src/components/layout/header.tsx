@@ -21,6 +21,7 @@ import {
 
 
 const mainNavItems = [
+  { href: '/', label: 'Home'},
   { href: '/work', label: 'Work' },
 ];
 
@@ -56,7 +57,7 @@ export function Header() {
   }, []);
 
   const NavItem = ({ href, label, isContact = false }: { href: string, label: string, isContact?: boolean }) => {
-    const isActive = pathname.startsWith(href);
+    const isActive = pathname === href;
 
     if (isContact) {
       return (
@@ -118,6 +119,11 @@ export function Header() {
     )}>
        <div className="flex items-center justify-center gap-2 bg-neutral-900/50 backdrop-blur-md border border-neutral-700 rounded-full px-4 py-1 sm:p-2">
             <div className="hidden sm:flex items-center gap-2">
+                <Link href="/" passHref>
+                  <motion.div whileHover={{ rotate: 360, scale: 1.1 }} transition={{ duration: 0.5 }}>
+                     <Image src="/logo.png" alt="Logo" width={32} height={32} className="rounded-full cursor-pointer"/>
+                  </motion.div>
+                </Link>
                 {mainNavItems.map(item => (
                   <NavItem key={item.href} href={item.href} label={item.label} />
                 ))}
