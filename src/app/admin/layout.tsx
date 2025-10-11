@@ -47,8 +47,8 @@ export default function AdminLayout({
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
              <Link href="/" className="flex items-center gap-2 text-lg font-semibold md:text-base mr-4">
-                 <Image src="/logo.png" alt="PRANGON CENTRE Logo" width={32} height={32} className="rounded-full" />
-                 <span className="hidden sm:inline-block">PRANGON CENTRE</span>
+                 <Image src="/logo.png" alt="Dipanjan Swapna Prangon Logo" width={32} height={32} className="rounded-full" />
+                 <span className="hidden sm:inline-block">DIPANJAN SWAPNA PRANGON</span>
             </Link>
 
             <DropdownMenu>
@@ -86,8 +86,8 @@ export default function AdminLayout({
                 <DropdownMenuTrigger asChild>
                     <Button variant="secondary" size="icon" className="rounded-full">
                     <Avatar className="h-8 w-8">
-                            <AvatarImage src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg" alt={'Admin'} />
-                            <AvatarFallback>A</AvatarFallback>
+                            <AvatarImage src="https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg" alt={'Dipanjan Swapna Prangon'} />
+                            <AvatarFallback>DP</AvatarFallback>
                         </Avatar>
                         <span className="sr-only">Toggle user menu</span>
                     </Button>
@@ -105,9 +105,9 @@ export default function AdminLayout({
             </DropdownMenu>
         </header>
 
-        <main className="flex-1 p-4 sm:px-6 sm:py-0 pt-14">
+        <div className="flex-1">
             {children}
-        </main>
+        </div>
     </div>
   );
 }

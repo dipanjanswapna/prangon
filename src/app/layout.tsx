@@ -87,9 +87,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
       <head>
-        <title>PRANGON CENTRE - Creative Design, EdTech, and Digital Innovation</title>
-        <meta name="description" content='Welcome to PRANGON CENTRE, the home of Dipanjan "Swapna Prangon" Prangon. We specialize in creative design, EdTech innovation, branding, and digital tools for students and educators in Dhaka, Bangladesh and beyond.' />
-        <meta name="keywords" content="PRANGON CENTRE, Dipanjan Swapna Prangon, EdTech, creative design, branding, web development, Bangladesh, Dhaka, student resources, educator tools" />
+        <title>Dipanjan Swapna Prangon - Official Portfolio | EdTech Innovator & Creative Designer</title>
+        <meta name="description" content='The official portfolio of Dipanjan Swapna Prangon, a passionate student, writer, and EdTech innovator from Dhaka, Bangladesh. Explore my work in creative design, EdTech, branding, and digital innovation.' />
+        <meta name="keywords" content="Dipanjan Swapna Prangon, Prangon, Prangon's Ecosystem, portfolio, EdTech, creative design, branding, web development, UI/UX, Dhaka, Bangladesh, student innovator" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -118,7 +118,7 @@ export default function RootLayout({
                     
                     {!isAdminPage && <Header />}
                     
-                    <main className={cn(!isAdminPage ? 'flex-grow relative' : '')}>
+                    <main className={cn('flex-1', isAdminPage && 'pt-14')}>
                       {children}
                     </main>
 
