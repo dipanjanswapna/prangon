@@ -455,6 +455,9 @@ const InfoSection = ({ toolboxItems, readsImage, hobbiesImage } : { toolboxItems
 }
 
 const UpcomingEventsSection = ({ data }: { data: HomePageData['upcomingEvents'] }) => {
+  if (!data) {
+    return null;
+  }
   return (
     <div className="relative py-20 sm:py-32">
       <Image 
@@ -906,7 +909,7 @@ export default function Home() {
       <StatsSection happyCustomers={content.stats.happyCustomers} servicesProvided={content.stats.servicesProvided} />
       <WhatTheySaidSection testimonials={content.testimonials}/>
       <InfoSection toolboxItems={content.toolboxItems} readsImage={content.readsImage} hobbiesImage={content.hobbiesImage} />
-      <UpcomingEventsSection data={content.upcomingEvents} />
+      {content.upcomingEvents && <UpcomingEventsSection data={content.upcomingEvents} />}
       <LatestVideosSection videos={content.videos} />
       <SubscriptionSection />
       <FAQSection />
