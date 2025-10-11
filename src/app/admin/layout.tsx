@@ -77,7 +77,7 @@ export default function AdminLayout({
                     </DropdownMenuContent>
                 </DropdownMenu>
             </header>
-            <main className="flex-1 p-4 sm:px-6 pb-24">
+            <main className="flex-1 p-4 pt-14 sm:px-6 pb-24">
                 {children}
             </main>
         </div>
