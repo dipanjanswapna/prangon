@@ -139,7 +139,7 @@ const AboutMe = ({ text, imageUrl, backgroundUrl } : { text: string, imageUrl: s
                     className="mt-8"
                   >
                     <Link href="/about">
-                      <Button variant="outline" size="lg">
+                      <Button size="lg" className="bg-gradient-to-r from-primary to-rose-500 text-primary-foreground hover:from-primary/90 hover:to-rose-500/90 transition-all duration-300 transform hover:scale-105">
                         Read Full Biography <ArrowRight className="ml-2 h-5 w-5" />
                       </Button>
                     </Link>
@@ -278,7 +278,7 @@ const StatsSection = ({ happyCustomers, servicesProvided }: { happyCustomers: nu
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.3 }}
-                    className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
+                    className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
                 >
                     {stats.map((stat, index) => {
                         const StatCardContent = (
@@ -878,4 +878,3 @@ export default function Home() {
     </>
   );
 }
-
