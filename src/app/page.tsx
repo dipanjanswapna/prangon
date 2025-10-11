@@ -88,7 +88,7 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.8 }}
-                  className="md:w-3/5"
+                  className="md:w-1/2 md:order-2"
               >
                   <p className="text-sm tracking-[0.3em] mb-6 text-muted-foreground uppercase">About Me</p>
                   <motion.h2 
@@ -110,7 +110,7 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.8 }}
-                  className="md:w-2/5 flex justify-center relative"
+                  className="md:w-1/2 flex justify-center relative md:order-1"
               >
                   <Image
                       src="https://i.postimg.cc/dtjybvc2/photo-2025-10-11-09-11-41-removebg-preview.png"
@@ -371,7 +371,7 @@ const UpcomingEventsSection = ({ data }: { data: HomePageData['upcomingEvents'] 
         className="object-cover"
         data-ai-hint="audience event"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
       <div className="relative z-10 container mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
