@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Home, Settings, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch, HelpCircle, Users, Menu, ShieldAlert, X } from 'lucide-react';
