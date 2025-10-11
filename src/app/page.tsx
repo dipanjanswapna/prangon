@@ -465,10 +465,10 @@ const UpcomingEventsSection = ({ data }: { data: HomePageData['upcomingEvents'] 
         src={data.backgroundImageUrl}
         alt="Upcoming events background"
         layout="fill"
-        className="object-cover opacity-20"
+        className="object-cover"
         data-ai-hint="audience event"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
       <div className="relative z-10 container mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
