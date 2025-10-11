@@ -116,7 +116,7 @@ export function Header() {
     <header className={cn(
         "fixed top-4 left-1/2 -translate-x-1/2 z-50 w-auto transition-all duration-300 ease-in-out"
     )}>
-       <div className="flex items-center gap-2 bg-neutral-900/50 backdrop-blur-md border border-neutral-700 rounded-full p-2">
+       <div className="flex items-center gap-2 bg-neutral-900/50 backdrop-blur-md border border-neutral-700 rounded-full px-4 py-1 sm:p-2">
             {mainNavItems.map(item => (
               <NavItem key={item.href} href={item.href} label={item.label} />
             ))}
