@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, animate } from 'framer-motion';
-import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost, Check, Crown, HelpCircle, CalendarDays, ChevronDown } from 'lucide-react';
+import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost, Check, Crown, HelpCircle, CalendarDays, ChevronDown, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getHomePageContent } from './admin/home/actions';
@@ -91,7 +91,7 @@ const AboutMe = ({ text, imageUrl, backgroundUrl } : { text: string, imageUrl: s
           data-ai-hint="dark interior background"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background z-0"/>
-        <div className="relative bg-transparent flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32 pb-16 sm:pb-24">
+        <div className="relative bg-transparent flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32">
           <div className="flex flex-col md:flex-row items-center gap-8 max-w-6xl mx-auto">
               <motion.div 
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -131,6 +131,19 @@ const AboutMe = ({ text, imageUrl, backgroundUrl } : { text: string, imageUrl: s
                           </motion.span>
                       ))}
                   </motion.h2>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                    className="mt-8"
+                  >
+                    <Link href="/about">
+                      <Button variant="outline" size="lg">
+                        Read Full Biography <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </Link>
+                  </motion.div>
               </motion.div>
           </div>
       </div>
@@ -865,3 +878,4 @@ export default function Home() {
     </>
   );
 }
+
