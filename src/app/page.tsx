@@ -88,7 +88,7 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.8 }}
-                  className="md:w-1/2 md:order-2"
+                  className="md:w-1/2 order-2 md:order-1"
               >
                   <p className="text-sm tracking-[0.3em] mb-6 text-muted-foreground uppercase">About Me</p>
                   <motion.h2 
@@ -110,7 +110,7 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.8 }}
-                  className="md:w-1/2 flex justify-center relative md:order-1"
+                  className="md:w-1/2 flex justify-center relative order-1 md:order-2"
               >
                   <Image
                       src="https://i.postimg.cc/dtjybvc2/photo-2025-10-11-09-11-41-removebg-preview.png"
