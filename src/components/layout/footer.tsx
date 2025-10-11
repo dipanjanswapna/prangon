@@ -8,10 +8,12 @@ import { useToast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useUser } from '@/firebase/auth/use-user';
 
 export function Footer() {
   const { toast } = useToast();
   const [showSalute, setShowSalute] = useState(false);
+  const { user } = useUser();
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText('your-email@example.com');
@@ -96,12 +98,29 @@ export function Footer() {
                 </div>
 
                 <div className="flex justify-center items-center space-x-4">
-                     <Link href="/admin/dashboard">
-                        <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
-                            <LayoutDashboard className="mr-2 h-4 w-4" />
-                            Admin Panel
-                        </Button>
-                    </Link>
+                     {user ? (
+                        <>
+                           <Link href="/admin/dashboard">
+                                <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
+                                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                                    Admin Panel
+                                </Button>
+                            </Link>
+                             <Link href="/logout">
+                                <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
+                                    <LogOut className="mr-2 h-4 w-4" />
+                                    Logout
+                                </Button>
+                            </Link>
+                        </>
+                    ) : (
+                         <Link href="/login">
+                            <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10">
+                                <Shield className="mr-2 h-4 w-4" />
+                                Admin Login
+                            </Button>
+                        </Link>
+                    )}
                 </div>
 
                 <div className="flex justify-center md:justify-end items-center space-x-4 md:space-x-6">

@@ -1,0 +1,260 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Represents a user's profile in the application.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "The user's unique ID from Firebase Authentication."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "photoURL": {
+          "type": "string",
+          "format": "uri",
+          "description": "The URL of the user's profile picture."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "user"],
+          "description": "The user's role in the application."
+        }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "A professional project.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "client": { "type": "string" },
+        "description": { "type": "string" },
+        "imageUrl": { "type": "string", "format": "uri" },
+        "imageAiHint": { "type": "string" },
+        "category": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "link": { "type": "string", "format": "uri" }
+      },
+      "required": ["id", "title", "client", "description", "imageUrl", "category", "tags"]
+    },
+    "Achievement": {
+      "title": "Achievement",
+      "description": "An award, certification, or recognition.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "issuer": { "type": "string" },
+        "date": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string", "enum": ["Award", "Certification", "Academic", "Leadership"] },
+        "link": { "type": "string", "format": "uri" },
+        "imageUrl": { "type": "string", "format": "uri" },
+        "imageAiHint": { "type": "string" }
+      },
+      "required": ["id", "title", "issuer", "date", "description", "category", "imageUrl"]
+    },
+    "Experience": {
+      "title": "Experience",
+      "description": "A professional experience or role.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "role": { "type": "string" },
+        "entity": { "type": "string" },
+        "period": { "type": "string" },
+        "category": { "type": "string", "enum": ["Professional", "Freelance", "Content Creation", "Leadership"] },
+        "description": { "type": "array", "items": { "type": "string" } },
+        "achievements": { "type": "array", "items": { "type": "string" } },
+        "link": { "type": "string", "format": "uri" }
+      },
+      "required": ["id", "role", "entity", "period", "category", "description"]
+    },
+    "BlogPost": {
+        "title": "Blog Post",
+        "description": "A single blog post.",
+        "type": "object",
+        "properties": {
+            "id": { "type": "string" },
+            "slug": { "type": "string" },
+            "title": { "type": "string" },
+            "author": { "type": "string" },
+            "category": { "type": "string" },
+            "coverImage": { "type": "string", "format": "uri" },
+            "imageAiHint": { "type": "string" },
+            "content": { "type": "string" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "isFeatured": { "type": "boolean" },
+            "isPremium": { "type": "boolean" },
+            "date": { "type": "string", "format": "date" }
+        },
+        "required": ["id", "slug", "title", "author", "category", "coverImage", "content", "tags", "date"]
+    },
+    "PrangonsLikhaPost": {
+        "title": "Prangons Likha Post",
+        "description": "A literary post in Bengali.",
+        "type": "object",
+        "properties": {
+            "id": { "type": "string" },
+            "slug": { "type": "string" },
+            "title": { "type": "string" },
+            "author": { "type": "string" },
+            "category": { "type": "string" },
+            "coverImage": { "type": "string", "format": "uri" },
+            "imageAiHint": { "type": "string" },
+            "content": { "type": "string" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "isFeatured": { "type": "boolean" },
+            "isPremium": { "type": "boolean" }
+        },
+        "required": ["id", "slug", "title", "author", "category", "coverImage", "content", "tags"]
+    },
+    "LibraryItem": {
+        "title": "Library Item",
+        "description": "An item in the digital library (book, magazine, etc.).",
+        "type": "object",
+        "properties": {
+            "id": { "type": "string" },
+            "slug": { "type": "string" },
+            "title": { "type": "string" },
+            "author": { "type": "string" },
+            "category": { "type": "string", "enum": ["Book", "Weekly Magazine", "Monthly Magazine", "Comic Book"] },
+            "coverImage": { "type": "string", "format": "uri" },
+            "imageAiHint": { "type": "string" },
+            "content": { "type": "string" },
+            "pdfUrl": { "type": "string", "format": "uri" },
+            "documentAiHint": { "type": "string" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "isFeatured": { "type": "boolean" },
+            "isPremium": { "type": "boolean" }
+        },
+        "required": ["id", "slug", "title", "author", "category", "coverImage"]
+    },
+    "SubscriptionPlan": {
+        "title": "Subscription Plan",
+        "description": "A subscription plan for premium content.",
+        "type": "object",
+        "properties": {
+            "id": { "type": "string" },
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "priceMonthly": { "type": "number" },
+            "priceYearly": { "type": "number" },
+            "features": { "type": "array", "items": { "type": "string" } },
+            "isPopular": { "type": "boolean" }
+        },
+        "required": ["id", "name", "description", "priceMonthly", "priceYearly", "features"]
+    },
+    "VisualArt": {
+        "title": "Visual Art",
+        "description": "A piece of visual artwork.",
+        "type": "object",
+        "properties": {
+            "id": { "type": "string" },
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "imageUrl": { "type": "string", "format": "uri" },
+            "imageAiHint": { "type": "string" },
+            "category": { "type": "string", "enum": ["Handmade Art", "Illustration", "Photography", "Graphics Design", "UI/UX Design"] },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "tools": { "type": "array", "items": { "type": "string" } },
+            "date": { "type": "string", "format": "date" },
+            "likes": { "type": "number" },
+            "comments": { "type": "array", "items": { "type": "object", "properties": { "author": {"type": "string"}, "text": {"type": "string"} } } }
+        },
+        "required": ["id", "title", "imageUrl", "category", "date"]
+    },
+    "SocialWorkInitiative": {
+      "title": "Social Work Initiative",
+      "description": "A social work project or initiative.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string", "enum": ["Education", "Environment", "Humanitarian", "Health", "Community"] },
+        "description": { "type": "string" },
+        "impact": { "type": "string" },
+        "imageUrl": { "type": "string", "format": "uri" },
+        "imageAiHint": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["id", "title", "category", "description", "impact", "imageUrl", "tags"]
+    }
+  },
+  "auth": {
+    "providers": ["Google"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Stores user profile information."
+    },
+    "/projects": {
+      "schema": {
+        "$ref": "#/entities/Project"
+      },
+      "description": "Collection of all professional projects."
+    },
+    "/achievements": {
+      "schema": {
+        "$ref": "#/entities/Achievement"
+      },
+      "description": "Collection of all achievements."
+    },
+    "/experiences": {
+      "schema": {
+        "$ref": "#/entities/Experience"
+      },
+      "description": "Collection of all professional experiences."
+    },
+    "/blogPosts": {
+        "schema": {
+            "$ref": "#/entities/BlogPost"
+        },
+        "description": "Collection of all blog posts."
+    },
+    "/prangonsLikha": {
+        "schema": {
+            "$ref": "#/entities/PrangonsLikhaPost"
+        },
+        "description": "Collection of all Bengali literary posts."
+    },
+    "/libraryItems": {
+        "schema": {
+            "$ref": "#/entities/LibraryItem"
+        },
+        "description": "Collection of all library items."
+    },
+    "/subscriptionPlans": {
+        "schema": {
+            "$ref": "#/entities/SubscriptionPlan"
+        },
+        "description": "Collection of all subscription plans."
+    },
+    "/visualArts": {
+        "schema": {
+            "$ref": "#/entities/VisualArt"
+        },
+        "description": "Collection of all visual art pieces."
+    },
+    "/socialWorkInitiatives": {
+        "schema": {
+            "$ref": "#/entities/SocialWorkInitiative"
+        },
+        "description": "Collection of all social work initiatives."
+    }
+  }
+}

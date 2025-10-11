@@ -16,6 +16,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/lib/i18n';
 import { Loader2 } from 'lucide-react';
+import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 
 export default function RootLayout({
@@ -110,6 +111,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <FirebaseClientProvider>
             <I18nextProvider i18n={i18n}>
                 <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
                     {!isAdminPage && (
@@ -155,6 +157,7 @@ export default function RootLayout({
                     <Toaster />
                 </Suspense>
             </I18nextProvider>
+          </FirebaseClientProvider>
         </ThemeProvider>
       </body>
     </html>
