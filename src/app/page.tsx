@@ -4,16 +4,17 @@
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, animate } from 'framer-motion';
-import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost, Check, Crown, HelpCircle, CalendarDays, ChevronDown, ArrowRight } from 'lucide-react';
+import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost, Check, Crown, HelpCircle, CalendarDays, ChevronDown, ArrowRight, Paintbrush } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getHomePageContent } from './admin/home/actions';
-import { HomePageData, LibraryItem, PrangonsLikhaPost, SubscriptionPlan, FAQItem } from '@/lib/types';
+import { HomePageData, LibraryItem, PrangonsLikhaPost, SubscriptionPlan, FAQItem, VisualArt } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getLibraryItems } from './library/actions';
 import { getPrangonsLikhaPosts } from './admin/prangons-likha/actions';
 import { getSubscriptionPlans } from './admin/subscriptions/actions';
 import { getFAQPageData } from './admin/faq/actions';
+import { getVisualArts } from './admin/visual-arts/actions';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
@@ -234,6 +235,61 @@ const WorkAdvertisement = () => {
   );
 };
 
+
+const VisualArtsMarquee = () => {
+    const [arts, setArts] = useState<VisualArt[]>([]);
+
+    useEffect(() => {
+        getVisualArts().then(data => {
+            // Duplicate the array for a seamless loop
+            setArts([...data, ...data]);
+        });
+    }, []);
+
+    if (arts.length === 0) {
+        return null; // Or a loading skeleton
+    }
+
+    return (
+        <div className="py-20 bg-background overflow-hidden">
+            <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold font-headline text-primary-foreground">Visual Arts Gallery</h2>
+                <p className="text-muted-foreground mt-2">A glimpse into my creative world.</p>
+            </div>
+            <div className="relative w-full">
+                <div className="flex animate-marquee hover:pause">
+                    {arts.map((art, index) => (
+                        <div key={`${art.id}-${index}`} className="flex-shrink-0 w-80 mx-4">
+                           <Link href="/visual-arts">
+                            <Card className="overflow-hidden group">
+                                <CardContent className="p-0">
+                                    <Image 
+                                        src={art.imageUrl} 
+                                        alt={art.title} 
+                                        width={400} 
+                                        height={400} 
+                                        className="w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105"
+                                        data-ai-hint={art.imageAiHint}
+                                    />
+                                </CardContent>
+                                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
+                                    <h3 className="font-bold text-white text-lg truncate">{art.title}</h3>
+                                    <Badge variant="secondary" className="mt-1">{art.category}</Badge>
+                                </div>
+                            </Card>
+                           </Link>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className="text-center mt-12">
+                <Link href="/visual-arts">
+                    <Button variant="outline">View Full Gallery <Paintbrush className="ml-2 h-4 w-4" /></Button>
+                </Link>
+            </div>
+        </div>
+    );
+}
 
 function AnimatedCounter({ to, suffix }: { to: number, suffix?: string }) {
     const nodeRef = useRef<HTMLParagraphElement>(null);
@@ -910,6 +966,7 @@ export default function Home() {
       <StatsSection happyCustomers={content.stats.happyCustomers} servicesProvided={content.stats.servicesProvided} />
       <SkillsSection skills={content.skills} />
       <WorkAdvertisement />
+      <VisualArtsMarquee />
       <WhatTheySaidSection testimonials={content.testimonials}/>
       {content.upcomingEvents && <UpcomingEventsSection data={content.upcomingEvents} />}
       <LatestVideosSection videos={content.videos} />
