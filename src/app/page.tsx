@@ -196,6 +196,45 @@ const SkillsSection = ({ skills }: { skills: string[] }) => {
     );
 };
 
+const WorkAdvertisement = () => {
+  return (
+    <div className="bg-background py-16">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.8 }}
+          className="relative rounded-2xl p-8 md:p-12 overflow-hidden bg-gray-900"
+        >
+          <div className="absolute -right-1/4 -top-1/4 -bottom-1/4 w-1/2 bg-gradient-to-l from-green-400/30 via-purple-500/30 to-pink-500/30 blur-3xl transform rotate-12"></div>
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="md:w-3/5 text-center md:text-left">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-3">
+                Check Out My Work
+              </h2>
+              <p className="text-lg text-white/70">
+                Explore a portfolio of my creative projects and professional accomplishments.
+              </p>
+            </div>
+            <div className="flex-shrink-0">
+              <Link href="/work">
+                <Button
+                  size="lg"
+                  className="bg-white text-black hover:bg-gray-200 rounded-full text-lg px-8 py-6"
+                >
+                  View Portfolio
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+
 function AnimatedCounter({ to, suffix }: { to: number, suffix?: string }) {
     const nodeRef = useRef<HTMLParagraphElement>(null);
   
@@ -870,6 +909,7 @@ export default function Home() {
       />
       <StatsSection happyCustomers={content.stats.happyCustomers} servicesProvided={content.stats.servicesProvided} />
       <SkillsSection skills={content.skills} />
+      <WorkAdvertisement />
       <WhatTheySaidSection testimonials={content.testimonials}/>
       {content.upcomingEvents && <UpcomingEventsSection data={content.upcomingEvents} />}
       <LatestVideosSection videos={content.videos} />
