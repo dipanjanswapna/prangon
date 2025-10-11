@@ -20,6 +20,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { cn } from '@/lib/utils';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { Badge } from '@/components/ui/badge';
 
 
 const TypingAnimation = ({ texts }: { texts: string[] }) => {
@@ -277,7 +278,7 @@ const VisualArtsMarquee = () => {
                                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
                                     <h3 className="font-bold text-white text-lg truncate">{art.title}</h3>
                                     <Badge variant="secondary" className="mt-1">{art.category}</Badge>
-                                </div>
+                                 </div>
                             </Card>
                            </Link>
                         </div>
@@ -891,14 +892,16 @@ export default function Home() {
     <>
       <div className="relative w-full h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <Image
-            src={content.heroBackgroundImageUrl}
-            alt="Hero background"
-            className="object-cover opacity-30"
-            priority
-            data-ai-hint="man portrait"
-            fill
-          />
+          {content.heroBackgroundImageUrl && (
+            <Image
+                src={content.heroBackgroundImageUrl}
+                alt="Hero background"
+                className="object-cover opacity-30"
+                priority
+                data-ai-hint="man portrait"
+                fill
+            />
+          )}
            <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
         </div>
         <div className="relative z-10 text-center px-4 text-primary-foreground">
@@ -960,11 +963,13 @@ export default function Home() {
             </motion.div>
         </motion.div>
       </div>
-      <AboutMe 
-        text={content.aboutMeText} 
-        imageUrl={content.aboutMeImageUrl} 
-        backgroundUrl={content.aboutMeBackgroundUrl}
-      />
+      {content.aboutMeText && (
+        <AboutMe 
+            text={content.aboutMeText} 
+            imageUrl={content.aboutMeImageUrl} 
+            backgroundUrl={content.aboutMeBackgroundUrl}
+        />
+      )}
       <StatsSection happyCustomers={content.stats.happyCustomers} servicesProvided={content.stats.servicesProvided} />
       <SkillsSection skills={content.skills} />
       <WorkAdvertisement />
