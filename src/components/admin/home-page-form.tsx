@@ -169,6 +169,19 @@ export function HomePageForm({ initialData }: { initialData: HomePageData }) {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="aboutMeBackgroundUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>About Me Background URL</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 

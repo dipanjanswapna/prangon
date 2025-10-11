@@ -37,6 +37,7 @@ export const homePageSchema = z.object({
   heroBackgroundImageUrl: z.string().url('Must be a valid URL.'),
   aboutMeText: z.string().min(1, 'About me text is required.'),
   aboutMeImageUrl: z.string().url('Must be a valid URL.'),
+  aboutMeBackgroundUrl: z.string().url('Must be a valid URL.'),
   skills: z.array(z.string().min(1, 'Skill cannot be empty.')).min(1, 'At least one skill is required.'),
   stats: statsSchema,
   testimonials: z.array(testimonialSchema),

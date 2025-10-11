@@ -61,7 +61,7 @@ const TypingAnimation = ({ texts }: { texts: string[] }) => {
 };
 
 
-const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
+const AboutMe = ({ text, imageUrl, backgroundUrl } : { text: string, imageUrl: string, backgroundUrl: string }) => {
   const words = text.split(' ');
   const aboutRef = useRef<HTMLDivElement>(null);
 
@@ -81,7 +81,17 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
   };
 
   return (
-      <div ref={aboutRef} className="bg-background flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32 pb-16 sm:pb-24">
+    <div ref={aboutRef} className="relative">
+        <Image
+          src={backgroundUrl}
+          alt="About Me background"
+          layout="fill"
+          objectFit="cover"
+          className="absolute inset-0 z-0 opacity-30"
+          data-ai-hint="dark interior background"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background z-0"/>
+        <div className="relative bg-transparent flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32 pb-16 sm:pb-24">
           <div className="flex flex-col md:flex-row items-center gap-8 max-w-6xl mx-auto">
               <motion.div 
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -124,6 +134,7 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
               </motion.div>
           </div>
       </div>
+    </div>
   );
 };
 
@@ -795,7 +806,11 @@ export default function Home() {
           <TypingAnimation texts={content.heroAnimatedTexts} />
         </div>
       </div>
-      <AboutMe text={content.aboutMeText} imageUrl={content.aboutMeImageUrl}/>
+      <AboutMe 
+        text={content.aboutMeText} 
+        imageUrl={content.aboutMeImageUrl} 
+        backgroundUrl={content.aboutMeBackgroundUrl}
+      />
       <StatsSection happyCustomers={content.stats.happyCustomers} servicesProvided={content.stats.servicesProvided} />
       <SkillsSection skills={content.skills} />
       <WhatTheySaidSection testimonials={content.testimonials}/>
