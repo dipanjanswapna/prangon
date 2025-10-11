@@ -79,7 +79,7 @@ export default function AdminLayout({
         </header>
 
         <nav className="border-b bg-background sticky top-14 z-20">
-            <ScrollArea>
+            <ScrollArea className="w-full">
                 <div className="flex h-12 items-center gap-4 px-4 sm:px-6 whitespace-nowrap">
                     {adminNavItems.map(item => (
                         <Link
