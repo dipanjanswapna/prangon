@@ -69,8 +69,8 @@ export default function AdminLayout({
                 </SidebarMenu>
             </SidebarContent>
         </Sidebar>
-        <div className="flex flex-col flex-1 sm:gap-4 sm:py-4">
-            <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+        <div className="flex flex-col flex-1">
+            <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
                 <SidebarTrigger className="sm:hidden" />
                 <div className="relative ml-auto flex-1 md:grow-0">
                 </div>
@@ -96,7 +96,7 @@ export default function AdminLayout({
                     </DropdownMenuContent>
                 </DropdownMenu>
             </header>
-            <main className="flex-1 p-4 sm:px-6 sm:py-0">
+            <main className="p-4 sm:px-6 flex-1">
                 {children}
             </main>
         </div>
