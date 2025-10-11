@@ -118,6 +118,20 @@ body {
     .liquid-card:hover:before {
         opacity: 0.3;
     }
+    .gradient-border-button {
+      @apply relative inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-transparent rounded-full overflow-hidden;
+    }
+    .gradient-border-button::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(to right, #00f2ff, #ff00f2, #ffb300);
+      z-index: -1;
+      border-radius: 9999px;
+    }
 }
 
 @keyframes liquid-animate {

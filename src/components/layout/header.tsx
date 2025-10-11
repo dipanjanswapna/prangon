@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Menu, X, BookOpen } from 'lucide-react';
+import { Menu, X, BookOpen, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
@@ -12,17 +12,28 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ThemeToggle } from '../theme-toggle';
 import { LanguageSwitcher } from '../language-switcher';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 
-const navItems = [
+const mainNavItems = [
   { href: '/work', label: 'Work' },
+];
+
+const resourcesNavItems = [
   { href: '/about', label: 'About' },
   { href: '/social-work', label: 'Social Work' },
   { href: '/prangons-likha', label: 'Prangons Likha'},
   { href: '/library', label: 'Library' },
   { href: '/blog', label: 'Blog' },
-  { href: '/contact', label: 'Contact' },
 ];
+
+const contactNavItem = { href: '/contact', label: 'Say Hello' };
+
 
 export function Header() {
   const pathname = usePathname();
@@ -44,42 +55,80 @@ export function Header() {
     };
   }, []);
 
-  const NavLinks = ({ className }: { className?: string }) => (
-    <nav className={cn('flex items-center space-x-8 text-sm font-medium', className)}>
-      {navItems.map((item) => (
-        <motion.div key={item.label} whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
-            <Link
-              href={item.href}
-              onClick={() => setIsMobileMenuOpen(false)}
+  const NavItem = ({ href, label, isContact = false }: { href: string, label: string, isContact?: boolean }) => {
+    const isActive = pathname.startsWith(href);
+
+    if (isContact) {
+      return (
+        <Link href={href} passHref>
+           <motion.div
+             whileHover={{ scale: 1.05 }}
+             className="gradient-border-button"
+            >
+             {label}
+           </motion.div>
+        </Link>
+      );
+    }
+    
+    return (
+      <Link href={href} passHref>
+        <motion.div
+          className={cn(
+            "relative px-4 py-2 text-sm font-medium transition-colors rounded-full",
+            isActive ? "bg-white/10 text-white" : "text-neutral-400 hover:text-white"
+          )}
+        >
+          {label}
+        </motion.div>
+      </Link>
+    );
+  };
+  
+  const ResourcesDropdown = () => {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+           <motion.div
               className={cn(
-                'transition-colors hover:text-primary uppercase tracking-widest',
-                 pathname.startsWith(item.href) ? 'text-primary' : 'text-muted-foreground'
+                "relative px-4 py-2 text-sm font-medium transition-colors rounded-full cursor-pointer flex items-center gap-1",
+                resourcesNavItems.some(item => pathname.startsWith(item.href))
+                  ? "bg-white/10 text-white"
+                  : "text-neutral-400 hover:text-white"
               )}
             >
-              {item.label}
-            </Link>
-        </motion.div>
-      ))}
-    </nav>
-  );
+              Resources
+              <ChevronDown className="h-4 w-4" />
+            </motion.div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-neutral-900/80 backdrop-blur-sm border-neutral-700 text-white">
+          {resourcesNavItems.map(item => (
+            <DropdownMenuItem key={item.href} asChild>
+              <Link href={item.href}>{item.label}</Link>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
 
   return (
     <header className={cn(
-        "fixed top-0 z-50 w-full transition-all duration-300 ease-in-out",
-        hasScrolled ? "bg-background/80 backdrop-blur-sm shadow-md" : "bg-transparent"
+        "fixed top-4 left-1/2 -translate-x-1/2 z-50 w-auto transition-all duration-300 ease-in-out"
     )}>
-      <div className="container mx-auto flex h-20 items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center space-x-2">
-           <Image src="/logo.png" alt="PRANGON CENTRE Logo" width={40} height={40} className="rounded-full" />
-        </Link>
-
-        <div className="hidden md:flex items-center space-x-6">
-           <NavLinks />
-           <LanguageSwitcher />
-           <ThemeToggle />
+       <div className="hidden md:flex items-center gap-2 bg-neutral-900/50 backdrop-blur-md border border-neutral-700 rounded-full p-2">
+            {mainNavItems.map(item => (
+              <NavItem key={item.href} href={item.href} label={item.label} />
+            ))}
+            <ResourcesDropdown />
+            <NavItem href={contactNavItem.href} label={contactNavItem.label} isContact />
         </div>
 
-        <div className="md:hidden flex items-center gap-2">
+      <div className="md:hidden flex items-center justify-between container mx-auto px-4 h-20 bg-background/80 backdrop-blur-sm rounded-full border border-border">
+         <Link href="/" className="flex items-center space-x-2">
+           <Image src="/logo.png" alt="PRANGON CENTRE Logo" width={40} height={40} className="rounded-full" />
+        </Link>
+        <div className="flex items-center gap-2">
           <LanguageSwitcher />
           <ThemeToggle />
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -102,7 +151,7 @@ export function Header() {
                       </Button>
                   </div>
                   <nav className="flex flex-col space-y-4">
-                    {navItems.map((item) => (
+                    {[...mainNavItems, ...resourcesNavItems, contactNavItem].map((item) => (
                       <Link
                         key={item.label}
                         href={item.href}
