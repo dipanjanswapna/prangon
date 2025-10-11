@@ -4,7 +4,7 @@
 import { collection, getDocs } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';
 
-async function getCount(collectionName: string) {
+async function getCount(collectionName: string): Promise<number> {
     try {
         const { firestore } = await initializeFirebase();
         const colRef = collection(firestore, collectionName);
@@ -36,3 +36,4 @@ export async function getDashboardStats() {
     totalSubscriptionPlans,
   };
 }
+
