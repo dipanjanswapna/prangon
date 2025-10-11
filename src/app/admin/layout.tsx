@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const adminNavItems = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: <Home className="h-5 w-5" /> },
@@ -59,6 +60,7 @@ export default function AdminLayout({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-64">
+                  <ScrollArea className="h-96">
                     <DropdownMenuLabel>Admin Navigation</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     {adminNavItems.map(item => (
@@ -74,6 +76,7 @@ export default function AdminLayout({
                             </DropdownMenuItem>
                          </Link>
                     ))}
+                  </ScrollArea>
                 </DropdownMenuContent>
             </DropdownMenu>
 
@@ -102,7 +105,7 @@ export default function AdminLayout({
             </DropdownMenu>
         </header>
 
-        <main className="flex-1 p-4 sm:px-6 sm:py-0">
+        <main className="flex-1 p-4 sm:px-6 sm:py-0 pt-14">
             {children}
         </main>
     </div>
