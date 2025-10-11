@@ -1,40 +1,37 @@
 
 'use server';
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import { socialWorkPageSchema, SocialWorkPageData } from '@/lib/types';
+import { initializeFirebase } from '@/firebase';
 
-const dataFilePath = path.join(process.cwd(), 'data/social-work.json');
-
-async function readData(): Promise<SocialWorkPageData> {
-  try {
-    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    const fileData = JSON.parse(fileContent);
-    // Ensure both initiatives and testimonials arrays exist
-    return {
-        initiatives: fileData.initiatives || [],
-        testimonials: fileData.testimonials || [],
-    };
-  } catch (error) {
-    console.warn('Could not read social-work.json, returning default data.', error);
-    return { initiatives: [], testimonials: [] };
-  }
+async function getFirestoreInstance() {
+  const { firestore } = await initializeFirebase();
+  return firestore;
 }
 
-async function writeData(data: SocialWorkPageData) {
-  try {
-    const jsonString = JSON.stringify(data, null, 2);
-    await fs.writeFile(dataFilePath, jsonString, 'utf-8');
-  } catch (error) {
-    console.error('Failed to write to social-work.json', error);
-    throw new Error('Failed to update content in database.');
-  }
-}
+const docRef = async () => doc(await getFirestoreInstance(), 'pages', 'socialWork');
+
+const defaultData: SocialWorkPageData = {
+    initiatives: [],
+    testimonials: []
+};
 
 export async function getSocialWorkPageData(): Promise<SocialWorkPageData> {
-  return await readData();
+  try {
+    const reference = await docRef();
+    const docSnap = await getDoc(reference);
+    if (docSnap.exists()) {
+      const validation = socialWorkPageSchema.safeParse(docSnap.data());
+      if(validation.success) {
+          return validation.data;
+      }
+    }
+  } catch (error) {
+    console.warn('Could not read social-work data, returning default data.', error);
+  }
+  return defaultData;
 }
 
 export async function updateSocialWorkPageData(data: SocialWorkPageData) {
@@ -45,11 +42,14 @@ export async function updateSocialWorkPageData(data: SocialWorkPageData) {
   }
 
   try {
-    // Add unique IDs to new items
-    validation.data.initiatives.forEach(item => { if (!item.id) item.id = Date.now().toString() + Math.random(); });
-    validation.data.testimonials.forEach(item => { if (!item.id) item.id = Date.now().toString() + Math.random(); });
+    const dataWithIds = {
+        initiatives: validation.data.initiatives.map(item => ({ ...item, id: item.id || Date.now().toString() + Math.random() })),
+        testimonials: validation.data.testimonials.map(item => ({ ...item, id: item.id || Date.now().toString() + Math.random() })),
+    };
+    
+    const reference = await docRef();
+    await setDoc(reference, dataWithIds, { merge: true });
 
-    await writeData(validation.data);
     revalidatePath('/social-work');
     revalidatePath('/admin/social-work');
     return { success: true };

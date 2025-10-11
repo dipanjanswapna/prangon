@@ -1,101 +1,66 @@
 
 'use server';
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, orderBy, query } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import { achievementSchema, Achievement } from '@/lib/types';
+import { initializeFirebase } from '@/firebase';
 
-const dataFilePath = path.join(process.cwd(), 'data/achievements.json');
-
-async function readData(): Promise<Achievement[]> {
-  try {
-    await fs.access(dataFilePath);
-    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    return JSON.parse(fileContent);
-  } catch (error) {
-    return [];
-  }
+async function getFirestoreInstance() {
+  const { firestore } = await initializeFirebase();
+  return firestore;
 }
 
-async function writeData(data: Achievement[]) {
-  try {
-    const jsonString = JSON.stringify(data, null, 2);
-    await fs.writeFile(dataFilePath, jsonString, 'utf-8');
-  } catch (error) {
-    console.error('Failed to write to achievements.json', error);
-    throw new Error('Failed to update achievements in database.');
-  }
-}
+const achievementsCollection = async () => collection(await getFirestoreInstance(), 'achievements');
 
 export async function getAchievements(): Promise<Achievement[]> {
-  return await readData();
+  const achievementsRef = await achievementsCollection();
+  const q = query(achievementsRef, orderBy('date', 'desc'));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Achievement));
 }
 
 export async function addAchievement(data: Omit<Achievement, 'id'>) {
-    const items = await readData();
     const validation = achievementSchema.omit({id: true}).safeParse(data);
 
     if (!validation.success) {
         return { success: false, error: validation.error.flatten() };
     }
     
-    const newItem: Achievement = {
-        ...validation.data,
-        id: Date.now().toString(),
-    };
-
-    items.unshift(newItem);
-    
     try {
-        await writeData(items);
+        const achievementsRef = await achievementsCollection();
+        const docRef = await addDoc(achievementsRef, validation.data);
         revalidatePath('/achievements');
         revalidatePath('/admin/achievements');
-        return { success: true, item: newItem };
+        return { success: true, item: { ...validation.data, id: docRef.id } };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
 
 export async function updateAchievement(id: string, data: Omit<Achievement, 'id'>) {
-    const items = await readData();
     const validation = achievementSchema.omit({id: true}).safeParse(data);
 
     if (!validation.success) {
         return { success: false, error: validation.error.flatten() };
     }
 
-    const itemIndex = items.findIndex(p => p.id === id);
-    if (itemIndex === -1) {
-        return { success: false, error: 'Achievement not found.' };
-    }
-
-    const updatedItem = {
-        ...items[itemIndex],
-        ...validation.data,
-    };
-    items[itemIndex] = updatedItem;
-
     try {
-        await writeData(items);
+        const firestore = await getFirestoreInstance();
+        const docRef = doc(firestore, 'achievements', id);
+        await updateDoc(docRef, validation.data);
         revalidatePath('/achievements');
         revalidatePath('/admin/achievements');
-        return { success: true, item: updatedItem };
+        return { success: true, item: { ...validation.data, id } };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
 
 export async function deleteAchievement(id: string) {
-    const items = await readData();
-    const updatedItems = items.filter(p => p.id !== id);
-
-    if (items.length === updatedItems.length) {
-         return { success: false, error: 'Achievement not found.' };
-    }
-    
     try {
-        await writeData(updatedItems);
+        const firestore = await getFirestoreInstance();
+        await deleteDoc(doc(firestore, 'achievements', id));
         revalidatePath('/achievements');
         revalidatePath('/admin/achievements');
         return { success: true };

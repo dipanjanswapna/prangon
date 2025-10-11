@@ -1,106 +1,78 @@
 
 'use server';
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import { blogPostSchema, BlogPost } from '@/lib/types';
 import slugify from 'slugify';
+import { initializeFirebase } from '@/firebase';
 
-const dataFilePath = path.join(process.cwd(), 'data/blog.json');
-
-async function readData(): Promise<BlogPost[]> {
-  try {
-    await fs.access(dataFilePath);
-    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    return JSON.parse(fileContent);
-  } catch (error) {
-    // If file doesn't exist, return empty array
-    return [];
-  }
+async function getFirestoreInstance() {
+  const { firestore } = await initializeFirebase();
+  return firestore;
 }
 
-async function writeData(data: BlogPost[]) {
-  try {
-    const jsonString = JSON.stringify(data, null, 2);
-    await fs.writeFile(dataFilePath, jsonString, 'utf-8');
-  } catch (error) {
-    console.error('Failed to write to blog.json', error);
-    throw new Error('Failed to update content in database.');
-  }
-}
+const blogCollection = async () => collection(await getFirestoreInstance(), 'blogPosts');
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
-  return await readData();
+  const blogRef = await blogCollection();
+  const q = query(blogRef, orderBy('date', 'desc'));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as BlogPost));
 }
 
 export async function addBlogPost(data: Omit<BlogPost, 'id' | 'slug'>) {
-    const posts = await readData();
     const validation = blogPostSchema.omit({id: true, slug: true}).safeParse(data);
 
     if (!validation.success) {
         return { success: false, error: validation.error.flatten() };
     }
     
-    const newPost: BlogPost = {
+    const newPostData = {
         ...validation.data,
-        id: Date.now().toString(),
         slug: slugify(validation.data.title, { lower: true, strict: true }),
     };
 
-    posts.unshift(newPost);
-    
     try {
-        await writeData(posts);
+        const blogRef = await blogCollection();
+        const docRef = await addDoc(blogRef, newPostData);
         revalidatePath('/blog');
         revalidatePath('/admin/blog');
-        return { success: true, post: newPost };
+        return { success: true, post: { ...newPostData, id: docRef.id } };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
 
 export async function updateBlogPost(id: string, data: Omit<BlogPost, 'id' | 'slug'>) {
-    const posts = await readData();
     const validation = blogPostSchema.omit({id: true, slug: true}).safeParse(data);
 
     if (!validation.success) {
         return { success: false, error: validation.error.flatten() };
     }
-
-    const postIndex = posts.findIndex(p => p.id === id);
-    if (postIndex === -1) {
-        return { success: false, error: 'Post not found.' };
-    }
-
-    const updatedPost = {
-        ...posts[postIndex],
+    
+    const updatedPostData = {
         ...validation.data,
         slug: slugify(validation.data.title, { lower: true, strict: true }),
     };
-    posts[postIndex] = updatedPost;
 
     try {
-        await writeData(posts);
+        const firestore = await getFirestoreInstance();
+        const docRef = doc(firestore, 'blogPosts', id);
+        await updateDoc(docRef, updatedPostData);
         revalidatePath('/blog');
-        revalidatePath(`/blog/${updatedPost.slug}`);
+        revalidatePath(`/blog/${updatedPostData.slug}`);
         revalidatePath('/admin/blog');
-        return { success: true, post: updatedPost };
+        return { success: true, post: { ...updatedPostData, id } };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
 
 export async function deleteBlogPost(id: string) {
-    const posts = await readData();
-    const updatedPosts = posts.filter(p => p.id !== id);
-
-    if (posts.length === updatedPosts.length) {
-         return { success: false, error: 'Post not found.' };
-    }
-    
     try {
-        await writeData(updatedPosts);
+        const firestore = await getFirestoreInstance();
+        await deleteDoc(doc(firestore, 'blogPosts', id));
         revalidatePath('/blog');
         revalidatePath('/admin/blog');
         return { success: true };

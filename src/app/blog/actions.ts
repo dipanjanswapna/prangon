@@ -1,21 +1,19 @@
 
 'use server';
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { BlogPost } from '@/lib/types';
-
-const dataFilePath = path.join(process.cwd(), 'data/blog.json');
+import { initializeFirebase } from '@/firebase';
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
   try {
-    await fs.access(dataFilePath);
-    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    const posts: BlogPost[] = JSON.parse(fileContent);
-    // Sort posts by date, newest first
-    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const { firestore } = await initializeFirebase();
+    const blogRef = collection(firestore, 'blogPosts');
+    const q = query(blogRef, orderBy('date', 'desc'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as BlogPost));
   } catch (error) {
-    console.error('Could not read blog.json:', error);
+    console.error('Could not read blogPosts collection:', error);
     return [];
   }
 }

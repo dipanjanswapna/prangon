@@ -1,105 +1,77 @@
 
 'use server';
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import { libraryItemSchema, LibraryItem } from '@/lib/types';
 import slugify from 'slugify';
+import { initializeFirebase } from '@/firebase';
 
-const dataFilePath = path.join(process.cwd(), 'data/library.json');
-
-async function readData(): Promise<LibraryItem[]> {
-  try {
-    await fs.access(dataFilePath);
-    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    return JSON.parse(fileContent);
-  } catch (error) {
-    return [];
-  }
+async function getFirestoreInstance() {
+  const { firestore } = await initializeFirebase();
+  return firestore;
 }
 
-async function writeData(data: LibraryItem[]) {
-  try {
-    const jsonString = JSON.stringify(data, null, 2);
-    await fs.writeFile(dataFilePath, jsonString, 'utf-8');
-  } catch (error) {
-    console.error('Failed to write to library.json', error);
-    throw new Error('Failed to update library items in database.');
-  }
-}
+const libraryCollection = async () => collection(await getFirestoreInstance(), 'libraryItems');
 
 export async function getLibraryItems(): Promise<LibraryItem[]> {
-  return await readData();
+  const libraryRef = await libraryCollection();
+  const snapshot = await getDocs(libraryRef);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as LibraryItem));
 }
 
 export async function addLibraryItem(data: Omit<LibraryItem, 'id' | 'slug'>) {
-    const items = await readData();
     const validation = libraryItemSchema.omit({id: true, slug: true}).safeParse(data);
 
     if (!validation.success) {
         return { success: false, error: validation.error.flatten() };
     }
     
-    const newItem: LibraryItem = {
+    const newItemData = {
         ...validation.data,
-        id: Date.now().toString(),
         slug: slugify(validation.data.title, { lower: true, strict: true }),
     };
 
-    items.push(newItem);
-    
     try {
-        await writeData(items);
+        const libraryRef = await libraryCollection();
+        const docRef = await addDoc(libraryRef, newItemData);
         revalidatePath('/library');
         revalidatePath('/admin/library');
-        return { success: true, item: newItem };
+        return { success: true, item: { ...newItemData, id: docRef.id } };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
 
 export async function updateLibraryItem(id: string, data: Omit<LibraryItem, 'id' | 'slug'>) {
-    const items = await readData();
     const validation = libraryItemSchema.omit({id: true, slug: true}).safeParse(data);
 
     if (!validation.success) {
         return { success: false, error: validation.error.flatten() };
     }
 
-    const itemIndex = items.findIndex(p => p.id === id);
-    if (itemIndex === -1) {
-        return { success: false, error: 'Item not found.' };
-    }
-
-    const updatedItem = {
-        ...items[itemIndex],
+    const updatedItemData = {
         ...validation.data,
         slug: slugify(validation.data.title, { lower: true, strict: true }),
     };
-    items[itemIndex] = updatedItem;
 
     try {
-        await writeData(items);
+        const firestore = await getFirestoreInstance();
+        const docRef = doc(firestore, 'libraryItems', id);
+        await updateDoc(docRef, updatedItemData);
         revalidatePath('/library');
-        revalidatePath(`/library/${updatedItem.slug}`);
+        revalidatePath(`/library/${updatedItemData.slug}`);
         revalidatePath('/admin/library');
-        return { success: true, item: updatedItem };
+        return { success: true, item: { ...updatedItemData, id } };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
 
 export async function deleteLibraryItem(id: string) {
-    const items = await readData();
-    const updatedItems = items.filter(p => p.id !== id);
-
-    if (items.length === updatedItems.length) {
-         return { success: false, error: 'Item not found.' };
-    }
-    
     try {
-        await writeData(updatedItems);
+        const firestore = await getFirestoreInstance();
+        await deleteDoc(doc(firestore, 'libraryItems', id));
         revalidatePath('/library');
         revalidatePath('/admin/library');
         return { success: true };

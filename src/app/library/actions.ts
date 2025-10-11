@@ -1,19 +1,18 @@
 
 'use server';
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { collection, getDocs } from 'firebase/firestore';
 import { LibraryItem } from '@/lib/types';
-
-const dataFilePath = path.join(process.cwd(), 'data/library.json');
+import { initializeFirebase } from '@/firebase';
 
 export async function getLibraryItems(): Promise<LibraryItem[]> {
   try {
-    await fs.access(dataFilePath);
-    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    return JSON.parse(fileContent);
+    const { firestore } = await initializeFirebase();
+    const libraryRef = collection(firestore, 'libraryItems');
+    const snapshot = await getDocs(libraryRef);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as LibraryItem));
   } catch (error) {
-    console.error('Could not read library.json:', error);
+    console.error('Could not read libraryItems collection:', error);
     return [];
   }
 }

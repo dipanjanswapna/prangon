@@ -1,103 +1,77 @@
 
 'use server';
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import { experienceSchema, Experience } from '@/lib/types';
+import { initializeFirebase } from '@/firebase';
 
-const dataFilePath = path.join(process.cwd(), 'data/experiences.json');
-
-async function readData(): Promise<Experience[]> {
-  try {
-    await fs.access(dataFilePath);
-    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    return JSON.parse(fileContent);
-  } catch (error) {
-    return [];
-  }
+async function getFirestoreInstance() {
+  const { firestore } = await initializeFirebase();
+  return firestore;
 }
 
-async function writeData(data: Experience[]) {
-  try {
-    // Sort by period before writing
-    const sortedData = data.sort((a, b) => new Date(b.period.split(' - ')[0]).getTime() - new Date(a.period.split(' - ')[0]).getTime());
-    const jsonString = JSON.stringify(sortedData, null, 2);
-    await fs.writeFile(dataFilePath, jsonString, 'utf-8');
-  } catch (error) {
-    console.error('Failed to write to experiences.json', error);
-    throw new Error('Failed to update experiences in database.');
-  }
-}
+const experiencesCollection = async () => collection(await getFirestoreInstance(), 'experiences');
 
 export async function getExperiences(): Promise<Experience[]> {
-  return await readData();
+  const experiencesRef = await experiencesCollection();
+  // Firestore doesn't support ordering by a derived value.
+  // Sorting will be done on the client if necessary, or we store a start date.
+  // For now, let's just fetch without a specific order.
+  const snapshot = await getDocs(experiencesRef);
+  let experiences = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Experience));
+  
+  // Sort by period in memory
+  experiences.sort((a, b) => {
+    const aYear = a.period.split(' - ')[0].trim().split(' ').pop() || '0';
+    const bYear = b.period.split(' - ')[0].trim().split(' ').pop() || '0';
+    return parseInt(bYear) - parseInt(aYear);
+  });
+
+  return experiences;
 }
 
 export async function addExperience(data: Omit<Experience, 'id'>) {
-    const items = await readData();
     const validation = experienceSchema.omit({id: true}).safeParse(data);
 
     if (!validation.success) {
         return { success: false, error: validation.error.flatten() };
     }
     
-    const newItem: Experience = {
-        ...validation.data,
-        id: Date.now().toString(),
-    };
-
-    items.push(newItem);
-    
     try {
-        await writeData(items);
+        const experiencesRef = await experiencesCollection();
+        const docRef = await addDoc(experiencesRef, validation.data);
         revalidatePath('/experiences');
         revalidatePath('/admin/experiences');
-        return { success: true, item: newItem };
+        return { success: true, item: { ...validation.data, id: docRef.id } };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
 
 export async function updateExperience(id: string, data: Omit<Experience, 'id'>) {
-    const items = await readData();
     const validation = experienceSchema.omit({id: true}).safeParse(data);
 
     if (!validation.success) {
         return { success: false, error: validation.error.flatten() };
     }
 
-    const itemIndex = items.findIndex(p => p.id === id);
-    if (itemIndex === -1) {
-        return { success: false, error: 'Experience not found.' };
-    }
-
-    const updatedItem = {
-        ...items[itemIndex],
-        ...validation.data,
-    };
-    items[itemIndex] = updatedItem;
-
     try {
-        await writeData(items);
+        const firestore = await getFirestoreInstance();
+        const docRef = doc(firestore, 'experiences', id);
+        await updateDoc(docRef, validation.data);
         revalidatePath('/experiences');
         revalidatePath('/admin/experiences');
-        return { success: true, item: updatedItem };
+        return { success: true, item: { ...validation.data, id } };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
 
 export async function deleteExperience(id: string) {
-    const items = await readData();
-    const updatedItems = items.filter(p => p.id !== id);
-
-    if (items.length === updatedItems.length) {
-         return { success: false, error: 'Experience not found.' };
-    }
-    
     try {
-        await writeData(updatedItems);
+        const firestore = await getFirestoreInstance();
+        await deleteDoc(doc(firestore, 'experiences', id));
         revalidatePath('/experiences');
         revalidatePath('/admin/experiences');
         return { success: true };

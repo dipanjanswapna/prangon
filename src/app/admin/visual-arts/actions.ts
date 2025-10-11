@@ -1,101 +1,66 @@
 
 'use server';
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import { visualArtSchema, VisualArt } from '@/lib/types';
+import { initializeFirebase } from '@/firebase';
 
-const dataFilePath = path.join(process.cwd(), 'data/visual-arts.json');
-
-async function readData(): Promise<VisualArt[]> {
-  try {
-    await fs.access(dataFilePath);
-    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    return JSON.parse(fileContent);
-  } catch (error) {
-    return [];
-  }
+async function getFirestoreInstance() {
+  const { firestore } = await initializeFirebase();
+  return firestore;
 }
 
-async function writeData(data: VisualArt[]) {
-  try {
-    const jsonString = JSON.stringify(data, null, 2);
-    await fs.writeFile(dataFilePath, jsonString, 'utf-8');
-  } catch (error) {
-    console.error('Failed to write to visual-arts.json', error);
-    throw new Error('Failed to update visual arts in database.');
-  }
-}
+const visualArtsCollection = async () => collection(await getFirestoreInstance(), 'visualArts');
 
 export async function getVisualArts(): Promise<VisualArt[]> {
-  return await readData();
+  const collectionRef = await visualArtsCollection();
+  const q = query(collectionRef, orderBy('date', 'desc'));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as VisualArt));
 }
 
 export async function addVisualArt(data: Omit<VisualArt, 'id'>) {
-    const items = await readData();
     const validation = visualArtSchema.omit({id: true}).safeParse(data);
 
     if (!validation.success) {
         return { success: false, error: validation.error.flatten() };
     }
     
-    const newItem: VisualArt = {
-        ...validation.data,
-        id: Date.now().toString(),
-    };
-
-    items.unshift(newItem);
-    
     try {
-        await writeData(items);
+        const collectionRef = await visualArtsCollection();
+        const docRef = await addDoc(collectionRef, validation.data);
         revalidatePath('/visual-arts');
         revalidatePath('/admin/visual-arts');
-        return { success: true, item: newItem };
+        return { success: true, item: { ...validation.data, id: docRef.id } };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
 
 export async function updateVisualArt(id: string, data: Omit<VisualArt, 'id'>) {
-    const items = await readData();
     const validation = visualArtSchema.omit({id: true}).safeParse(data);
 
     if (!validation.success) {
         return { success: false, error: validation.error.flatten() };
     }
 
-    const itemIndex = items.findIndex(p => p.id === id);
-    if (itemIndex === -1) {
-        return { success: false, error: 'Artwork not found.' };
-    }
-
-    const updatedItem = {
-        ...items[itemIndex],
-        ...validation.data,
-    };
-    items[itemIndex] = updatedItem;
-
     try {
-        await writeData(items);
+        const firestore = await getFirestoreInstance();
+        const docRef = doc(firestore, 'visualArts', id);
+        await updateDoc(docRef, validation.data);
         revalidatePath('/visual-arts');
         revalidatePath('/admin/visual-arts');
-        return { success: true, item: updatedItem };
+        return { success: true, item: { ...validation.data, id } };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
 
 export async function deleteVisualArt(id: string) {
-    const items = await readData();
-    const updatedItems = items.filter(p => p.id !== id);
-
-    if (items.length === updatedItems.length) {
-         return { success: false, error: 'Artwork not found.' };
-    }
-    
     try {
-        await writeData(updatedItems);
+        const firestore = await getFirestoreInstance();
+        await deleteDoc(doc(firestore, 'visualArts', id));
         revalidatePath('/visual-arts');
         revalidatePath('/admin/visual-arts');
         return { success: true };

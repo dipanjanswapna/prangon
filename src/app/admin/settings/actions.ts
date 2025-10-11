@@ -1,12 +1,17 @@
 
 'use server';
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import { paymentSettingsSchema, PaymentSettings } from '@/lib/types';
+import { initializeFirebase } from '@/firebase';
 
-const dataFilePath = path.join(process.cwd(), 'data/payment-settings.json');
+async function getFirestoreInstance() {
+  const { firestore } = await initializeFirebase();
+  return firestore;
+}
+
+const docRef = async () => doc(await getFirestoreInstance(), 'settings', 'payment');
 
 const defaultSettings: PaymentSettings = {
     card: { enabled: true },
@@ -17,31 +22,18 @@ const defaultSettings: PaymentSettings = {
     upi: { enabled: false },
 };
 
-async function readData(): Promise<PaymentSettings> {
-  try {
-    await fs.access(dataFilePath);
-    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    const parsed = JSON.parse(fileContent);
-    // Merge with defaults to ensure new settings are included
-    return { ...defaultSettings, ...parsed };
-  } catch (error) {
-    // If file doesn't exist or is invalid, return default settings
-    return defaultSettings;
-  }
-}
-
-async function writeData(data: PaymentSettings) {
-  try {
-    const jsonString = JSON.stringify(data, null, 2);
-    await fs.writeFile(dataFilePath, jsonString, 'utf-8');
-  } catch (error) {
-    console.error('Failed to write to payment-settings.json', error);
-    throw new Error('Failed to update payment settings in database.');
-  }
-}
-
 export async function getPaymentSettings(): Promise<PaymentSettings> {
-  return await readData();
+  try {
+    const reference = await docRef();
+    const docSnap = await getDoc(reference);
+    if (docSnap.exists()) {
+      // Merge with defaults to ensure new settings are included
+      return { ...defaultSettings, ...docSnap.data() };
+    }
+  } catch(e) {
+    console.error("Failed to fetch payment settings:", e);
+  }
+  return defaultSettings;
 }
 
 export async function updatePaymentSettings(data: PaymentSettings) {
@@ -52,7 +44,8 @@ export async function updatePaymentSettings(data: PaymentSettings) {
   }
 
   try {
-    await writeData(validation.data);
+    const reference = await docRef();
+    await setDoc(reference, validation.data, { merge: true });
     revalidatePath('/admin/settings');
     revalidatePath('/checkout');
     return { success: true };

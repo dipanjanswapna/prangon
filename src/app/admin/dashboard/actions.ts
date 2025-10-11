@@ -1,38 +1,38 @@
 
 'use server';
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { collection, getDocs } from 'firebase/firestore';
+import { initializeFirebase } from '@/firebase';
 
-async function readFile(filePath: string): Promise<any[]> {
-  try {
-    const fullPath = path.join(process.cwd(), 'data', filePath);
-    await fs.access(fullPath);
-    const fileContent = await fs.readFile(fullPath, 'utf-8');
-    return JSON.parse(fileContent);
-  } catch (error) {
-    console.error(`Could not read ${filePath}:`, error);
-    return [];
-  }
+async function getCount(collectionName: string) {
+    try {
+        const { firestore } = await initializeFirebase();
+        const colRef = collection(firestore, collectionName);
+        const snapshot = await getDocs(colRef);
+        return snapshot.size;
+    } catch (error) {
+        console.error(`Could not read collection ${collectionName}:`, error);
+        return 0;
+    }
 }
 
 export async function getDashboardStats() {
   const [
-    blogPosts,
-    projects,
-    libraryItems,
-    subscriptionPlans
+    totalBlogPosts,
+    totalProjects,
+    totalLibraryItems,
+    totalSubscriptionPlans
   ] = await Promise.all([
-    readFile('blog.json'),
-    readFile('projects.json'),
-    readFile('library.json'),
-    readFile('subscriptions.json')
+    getCount('blogPosts'),
+    getCount('projects'),
+    getCount('libraryItems'),
+    getCount('subscriptionPlans'),
   ]);
 
   return {
-    totalBlogPosts: blogPosts.length,
-    totalProjects: projects.length,
-    totalLibraryItems: libraryItems.length,
-    totalSubscriptionPlans: subscriptionPlans.length,
+    totalBlogPosts,
+    totalProjects,
+    totalLibraryItems,
+    totalSubscriptionPlans,
   };
 }

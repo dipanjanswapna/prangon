@@ -1,101 +1,65 @@
 
 'use server';
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import { subscriptionPlanSchema, SubscriptionPlan } from '@/lib/types';
+import { initializeFirebase } from '@/firebase';
 
-const dataFilePath = path.join(process.cwd(), 'data/subscriptions.json');
-
-async function readData(): Promise<SubscriptionPlan[]> {
-  try {
-    await fs.access(dataFilePath);
-    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    return JSON.parse(fileContent);
-  } catch (error) {
-    return [];
-  }
+async function getFirestoreInstance() {
+  const { firestore } = await initializeFirebase();
+  return firestore;
 }
 
-async function writeData(data: SubscriptionPlan[]) {
-  try {
-    const jsonString = JSON.stringify(data, null, 2);
-    await fs.writeFile(dataFilePath, jsonString, 'utf-8');
-  } catch (error) {
-    console.error('Failed to write to subscriptions.json', error);
-    throw new Error('Failed to update subscription plans in database.');
-  }
-}
+const subscriptionsCollection = async () => collection(await getFirestoreInstance(), 'subscriptionPlans');
 
 export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
-  return await readData();
+  const collectionRef = await subscriptionsCollection();
+  const snapshot = await getDocs(collectionRef);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SubscriptionPlan));
 }
 
 export async function addSubscriptionPlan(data: Omit<SubscriptionPlan, 'id'>) {
-    const plans = await readData();
     const validation = subscriptionPlanSchema.omit({id: true}).safeParse(data);
 
     if (!validation.success) {
         return { success: false, error: validation.error.flatten() };
     }
     
-    const newPlan: SubscriptionPlan = {
-        ...validation.data,
-        id: Date.now().toString(),
-    };
-
-    plans.push(newPlan);
-    
     try {
-        await writeData(plans);
+        const collectionRef = await subscriptionsCollection();
+        const docRef = await addDoc(collectionRef, validation.data);
         revalidatePath('/subscribe');
         revalidatePath('/admin/subscriptions');
-        return { success: true, plan: newPlan };
+        return { success: true, plan: { ...validation.data, id: docRef.id } };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
 
 export async function updateSubscriptionPlan(id: string, data: Omit<SubscriptionPlan, 'id'>) {
-    const plans = await readData();
     const validation = subscriptionPlanSchema.omit({id: true}).safeParse(data);
 
     if (!validation.success) {
         return { success: false, error: validation.error.flatten() };
     }
 
-    const planIndex = plans.findIndex(p => p.id === id);
-    if (planIndex === -1) {
-        return { success: false, error: 'Plan not found.' };
-    }
-
-    const updatedPlan = {
-        ...plans[planIndex],
-        ...validation.data,
-    };
-    plans[planIndex] = updatedPlan;
-
     try {
-        await writeData(plans);
+        const firestore = await getFirestoreInstance();
+        const docRef = doc(firestore, 'subscriptionPlans', id);
+        await updateDoc(docRef, validation.data);
         revalidatePath('/subscribe');
         revalidatePath('/admin/subscriptions');
-        return { success: true, plan: updatedPlan };
+        return { success: true, plan: { ...validation.data, id } };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
 
 export async function deleteSubscriptionPlan(id: string) {
-    const plans = await readData();
-    const updatedPlans = plans.filter(p => p.id !== id);
-
-    if (plans.length === updatedPlans.length) {
-         return { success: false, error: 'Plan not found.' };
-    }
-    
     try {
-        await writeData(updatedPlans);
+        const firestore = await getFirestoreInstance();
+        await deleteDoc(doc(firestore, 'subscriptionPlans', id));
         revalidatePath('/subscribe');
         revalidatePath('/admin/subscriptions');
         return { success: true };

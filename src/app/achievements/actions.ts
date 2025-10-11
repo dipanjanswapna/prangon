@@ -1,19 +1,19 @@
 
 'use server';
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { Achievement } from '@/lib/types';
-
-const dataFilePath = path.join(process.cwd(), 'data/achievements.json');
+import { initializeFirebase } from '@/firebase';
 
 export async function getAchievements(): Promise<Achievement[]> {
   try {
-    await fs.access(dataFilePath);
-    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
-    return JSON.parse(fileContent);
+    const { firestore } = await initializeFirebase();
+    const achievementsRef = collection(firestore, 'achievements');
+    const q = query(achievementsRef, orderBy('date', 'desc'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Achievement));
   } catch (error) {
-    console.error('Could not read achievements.json:', error);
+    console.error('Could not read achievements collection:', error);
     return [];
   }
 }
