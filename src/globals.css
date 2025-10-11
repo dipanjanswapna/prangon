@@ -78,6 +78,18 @@ body {
   }
 }
 
+@layer components {
+    .bottom-nav {
+      @apply fixed bottom-0 left-0 right-0 z-50 h-16;
+    }
+    .bottom-nav-inner {
+      @apply relative mx-auto h-full max-w-lg bg-background/80 backdrop-blur-lg border-t;
+      @apply sm:max-w-none sm:rounded-none;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+
 @keyframes blink-caret {
   from, to { border-color: transparent }
   50% { border-color: hsl(var(--primary)); }
