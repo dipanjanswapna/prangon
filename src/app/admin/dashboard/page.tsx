@@ -2,8 +2,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Rss, GitBranch, Library, Star } from 'lucide-react';
 import { getDashboardStats } from './actions';
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
-import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
+import { DashboardChart } from '@/components/admin/dashboard-chart';
 
 export default async function DashboardPage() {
     const data = await getDashboardStats();
@@ -21,13 +20,6 @@ export default async function DashboardPage() {
         { name: 'Library', total: data.totalLibraryItems, fill: 'var(--color-library)' },
         { name: 'Plans', total: data.totalSubscriptionPlans, fill: 'var(--color-plans)' },
     ];
-
-    const chartConfig = {
-        total: {
-          label: 'Total',
-          color: 'hsl(var(--chart-1))',
-        },
-    };
 
     return (
         <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -62,14 +54,7 @@ export default async function DashboardPage() {
                              <CardDescription>A summary of all content types.</CardDescription>
                         </CardHeader>
                         <CardContent className="pl-2">
-                            <ChartContainer config={chartConfig} className="h-[250px] w-full">
-                                <BarChart accessibilityLayer data={chartData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                                    <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                                    <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value}`} />
-                                    <Tooltip cursor={{fill: 'hsla(var(--muted))'}} content={<ChartTooltipContent />} />
-                                    <Bar dataKey="total" radius={[4, 4, 0, 0]} />
-                                </BarChart>
-                            </ChartContainer>
+                            <DashboardChart data={chartData} />
                         </CardContent>
                     </Card>
                 </div>
