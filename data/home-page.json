@@ -1,0 +1,81 @@
+{
+  "heroWelcomeText": "WELCOME TO THE PRANGON CENTRE",
+  "heroTitle": "Dipanjan Swapna Prangon",
+  "heroAnimatedTexts": [
+    "Student",
+    "Writer",
+    "EdTech Innovator"
+  ],
+  "heroBackgroundImageUrl": "https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg",
+  "aboutMeText": "Everyone knows Dipanjan Swapna Prangon as Prangon. Prangon (born 10 July 2007) is a Bangladeshi student, artist. He attended Government Science College in Class 12. Prangon was born on 10 july to the Bengali Hindu \"das\" family of Bhandaria in Bangladesh. His father is Dipankar Das and his mother is Sabita Biswas. Prangon grew up in Bhandaria during her early childhood under the care of her mother and relatives. He has no brother and sister.",
+  "aboutMeImageUrl": "https://assets.about.me/users/d/i/p/dipanjanswapna_1738842981_721.jpg",
+  "skills": [
+    "Branding",
+    "Web Development",
+    "UI/UX Design",
+    "EdTech",
+    "Digital Innovation"
+  ],
+  "stats": {
+    "happyCustomers": 100,
+    "servicesProvided": 50
+  },
+  "testimonials": [
+    {
+      "quote": "Prangon’s design instincts are top-notch. He delivered a brand identity that perfectly captured our vision.",
+      "author": "John Doe",
+      "title": "CEO, Tech Innovators",
+      "image": "https://placehold.co/100x100.png",
+      "imageAiHint": "man portrait"
+    },
+    {
+      "quote": "The educational tools developed by Prangon's Ecosystem have been a game-changer for our students.",
+      "author": "Jane Smith",
+      "title": "Principal, Future Minds School",
+      "image": "https://placehold.co/100x100.png",
+      "imageAiHint": "woman portrait"
+    }
+  ],
+  "toolboxItems": [
+    { "name": "Figma" },
+    { "name": "Next.js" },
+    { "name": "React" },
+    { "name": "Firebase" },
+    { "name": "Tailwind CSS" },
+    { "name": "Adobe Suite" },
+    { "name": "VS Code" },
+    { "name": "Genkit" }
+  ],
+  "readsImage": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385l/40121378.jpg",
+  "hobbiesImage": "https://mir-s3-cdn-cf.behance.net/projects/max_808_webp/2a170a142011959.Y3JvcCw4MDgsNjMyLDAsMA.jpg",
+  "videos": [
+    {
+      "title": "How to Design a Modern UI",
+      "author": "Dipanjan Swapna",
+      "timestamp": "2 weeks ago",
+      "thumbnail": "https://i.ytimg.com/vi/Ph8h7O_PCbA/hqdefault.jpg",
+      "thumbnailAiHint": "ui design tutorial"
+    },
+    {
+      "title": "The Future of EdTech",
+      "author": "Dipanjan Swapna",
+      "timestamp": "1 month ago",
+      "thumbnail": "https://i.ytimg.com/vi/b-s2p2YV0_4/hqdefault.jpg",
+      "thumbnailAiHint": "education technology"
+    },
+    {
+      "title": "My Branding Process",
+      "author": "Dipanjan Swapna",
+      "timestamp": "3 months ago",
+      "thumbnail": "https://i.ytimg.com/vi/p8I6-6z-M8c/hqdefault.jpg",
+      "thumbnailAiHint": "branding design process"
+    }
+  ],
+  "upcomingEvents": {
+    "title": "Upcoming Events",
+    "description": "Check this section to stay updated on my recent and upcoming events. You are always welcome to connect with me.",
+    "buttonText": "Invite Me",
+    "buttonLink": "/contact",
+    "backgroundImageUrl": "https://picsum.photos/seed/events/1200/800"
+  }
+}

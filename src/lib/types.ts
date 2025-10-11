@@ -26,6 +26,13 @@ const statsSchema = z.object({
   servicesProvided: z.number().int().positive('Must be a positive number.'),
 });
 
+const upcomingEventsSchema = z.object({
+  title: z.string().min(1, 'Title is required.'),
+  description: z.string().min(1, 'Description is required.'),
+  buttonText: z.string().min(1, 'Button text is required.'),
+  buttonLink: z.string().url('Must be a valid URL.'),
+  backgroundImageUrl: z.string().url('Must be a valid URL.'),
+});
 
 export const homePageSchema = z.object({
   heroWelcomeText: z.string().min(1, 'Welcome text is required.'),
@@ -40,7 +47,8 @@ export const homePageSchema = z.object({
   toolboxItems: z.array(toolboxItemSchema),
   readsImage: z.string().url('Must be a valid URL.'),
   hobbiesImage: z.string().url('Must be a valid URL.'),
-  videos: z.array(videoSchema)
+  videos: z.array(videoSchema),
+  upcomingEvents: upcomingEventsSchema,
 });
 
 export type HomePageData = z.infer<typeof homePageSchema>;

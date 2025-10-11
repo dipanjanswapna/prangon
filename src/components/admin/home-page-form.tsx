@@ -383,6 +383,29 @@ export function HomePageForm({ initialData }: { initialData: HomePageData }) {
 
         <Card>
             <CardHeader>
+                <CardTitle>Upcoming Events Section</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <FormField control={form.control} name="upcomingEvents.title" render={({ field }) => (
+                    <FormItem><FormLabel>Title</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                )}/>
+                <FormField control={form.control} name="upcomingEvents.description" render={({ field }) => (
+                    <FormItem><FormLabel>Description</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
+                )}/>
+                <FormField control={form.control} name="upcomingEvents.buttonText" render={({ field }) => (
+                    <FormItem><FormLabel>Button Text</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                )}/>
+                 <FormField control={form.control} name="upcomingEvents.buttonLink" render={({ field }) => (
+                    <FormItem><FormLabel>Button Link</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                )}/>
+                <FormField control={form.control} name="upcomingEvents.backgroundImageUrl" render={({ field }) => (
+                    <FormItem><FormLabel>Background Image URL</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                )}/>
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
                 <CardTitle>Latest Videos Section</CardTitle>
                 <CardDescription>Manage YouTube videos.</CardDescription>
             </CardHeader>

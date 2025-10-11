@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, animate } from 'framer-motion';
-import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost, Check, Crown, HelpCircle } from 'lucide-react';
+import { Youtube, Sparkles, ChevronsRight, Loader2, Heart, Briefcase, BookCopy, Star, Ghost, Check, Crown, HelpCircle, CalendarDays } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getHomePageContent } from './admin/home/actions';
@@ -454,6 +454,42 @@ const InfoSection = ({ toolboxItems, readsImage, hobbiesImage } : { toolboxItems
     );
 }
 
+const UpcomingEventsSection = ({ data }: { data: HomePageData['upcomingEvents'] }) => {
+  return (
+    <div className="relative py-20 sm:py-32">
+      <Image 
+        src={data.backgroundImageUrl}
+        alt="Upcoming events background"
+        layout="fill"
+        className="object-cover opacity-20"
+        data-ai-hint="audience event"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+      <div className="relative z-10 container mx-auto px-4 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="inline-block bg-primary/10 p-3 rounded-full mb-4">
+            <CalendarDays className="h-8 w-8 text-primary" />
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold font-headline text-primary-foreground mb-4" style={{ fontFamily: 'cursive' }}>
+            {data.title}
+          </h2>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+            {data.description}
+          </p>
+          <Link href={data.buttonLink}>
+            <Button size="lg">{data.buttonText}</Button>
+          </Link>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
 const LatestVideosSection = ({ videos }: { videos: any[] }) => {
     const plugin = useRef(
       Autoplay({ delay: 5000, stopOnInteraction: true })
@@ -870,6 +906,7 @@ export default function Home() {
       <StatsSection happyCustomers={content.stats.happyCustomers} servicesProvided={content.stats.servicesProvided} />
       <WhatTheySaidSection testimonials={content.testimonials}/>
       <InfoSection toolboxItems={content.toolboxItems} readsImage={content.readsImage} hobbiesImage={content.hobbiesImage} />
+      <UpcomingEventsSection data={content.upcomingEvents} />
       <LatestVideosSection videos={content.videos} />
       <SubscriptionSection />
       <FAQSection />
