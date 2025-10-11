@@ -91,7 +91,7 @@ const AboutMe = ({ text, imageUrl, backgroundUrl } : { text: string, imageUrl: s
           data-ai-hint="dark interior background"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background z-0"/>
-        <div className="relative bg-transparent flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32">
+        <div className="relative bg-transparent flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32 pb-16 sm:pb-24">
           <div className="flex flex-col md:flex-row items-center gap-8 max-w-6xl mx-auto">
               <motion.div 
                   initial={{ opacity: 0, scale: 0.8 }}
