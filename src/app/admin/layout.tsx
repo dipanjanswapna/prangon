@@ -79,23 +79,21 @@ export default function AdminLayout({
         </header>
 
         <nav className="border-b bg-background sticky top-14 z-20">
-            <ScrollArea className="w-full">
-                <div className="flex h-12 items-center gap-4 px-4 sm:px-6 whitespace-nowrap">
-                    {adminNavItems.map(item => (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className={cn(
-                                "flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary",
-                                pathname === item.href ? 'text-primary' : 'text-muted-foreground'
-                            )}
-                        >
-                            {item.icon}
-                            {item.label}
-                        </Link>
-                    ))}
-                </div>
-            </ScrollArea>
+            <div className="flex flex-wrap items-center gap-4 px-4 sm:px-6 py-2">
+                {adminNavItems.map(item => (
+                    <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                            "flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary",
+                            pathname === item.href ? 'text-primary' : 'text-muted-foreground'
+                        )}
+                    >
+                        {item.icon}
+                        {item.label}
+                    </Link>
+                ))}
+            </div>
         </nav>
 
         <main className="flex-1 p-4 sm:px-6">
