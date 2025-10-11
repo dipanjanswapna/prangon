@@ -2,11 +2,11 @@
 import type { FirebaseOptions } from 'firebase/app';
 
 export const firebaseConfig: FirebaseOptions = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyAHrkUUbl97f_p3NR2qiGGRQc-krF0sD8Y",
+  authDomain: "rdc-students-planner-463906.firebaseapp.com",
+  projectId: "rdc-students-planner-463906",
+  storageBucket: "rdc-students-planner-463906.appspot.com",
+  messagingSenderId: "844189707171",
+  appId: "1:844189707171:web:34811a014d359e7ca0c816",
+  measurementId: "G-JQPXXT5L1R"
 };

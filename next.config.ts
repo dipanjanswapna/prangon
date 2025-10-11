@@ -142,6 +142,12 @@ const nextConfig: NextConfig = {
         hostname: 'picsum.photos',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'rdc-students-planner-463906.appspot.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
