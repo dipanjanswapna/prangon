@@ -91,14 +91,14 @@ const AboutMe = ({ text, imageUrl, backgroundUrl } : { text: string, imageUrl: s
           data-ai-hint="dark interior background"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background z-0"/>
-        <div className="relative bg-transparent flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32 pb-16 sm:pb-24">
+        <div className="relative bg-transparent flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-32">
           <div className="flex flex-col md:flex-row items-center gap-8 max-w-6xl mx-auto">
               <motion.div 
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.8 }}
-                  className="w-full md:w-2/5 flex justify-center relative order-1 md:order-2"
+                  className="w-full md:w-2/5 flex justify-center relative order-1 md:order-1"
               >
                   <Image
                       src={imageUrl}
@@ -115,7 +115,7 @@ const AboutMe = ({ text, imageUrl, backgroundUrl } : { text: string, imageUrl: s
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.8 }}
-                  className="w-full md:w-3/5 order-2 md:order-1"
+                  className="w-full md:w-3/5 order-2 md:order-2"
               >
                   <p className="text-sm tracking-[0.3em] mb-6 text-muted-foreground uppercase">About Me</p>
                   <motion.h2 
@@ -138,25 +138,45 @@ const AboutMe = ({ text, imageUrl, backgroundUrl } : { text: string, imageUrl: s
   );
 };
 
+
 const SkillsSection = ({ skills }: { skills: string[] }) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+      target: containerRef,
+      offset: ['start end', 'end start'],
+    });
+
     return (
-        <div className="bg-background py-16 sm:py-24">
-            <div className="container mx-auto px-4">
+        <div ref={containerRef} className="relative bg-background py-20 sm:py-32">
+             <Image
+                src="https://i.postimg.cc/RFdJy58F/image.png"
+                alt="Skills background"
+                layout="fill"
+                objectFit="cover"
+                className="absolute inset-0 z-0 opacity-30"
+                data-ai-hint="abstract technology"
+            />
+            <div className="absolute inset-0 bg-background/50 z-0" />
+            <div className="container mx-auto px-4 relative z-10">
                 <div className="grid grid-cols-1 divide-y divide-border">
-                    {skills.map((skill, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, x: -50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="py-4 md:py-6"
-                        >
-                            <h3 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase text-primary-foreground/80 hover:text-primary transition-colors duration-300">
-                                {skill}
-                            </h3>
-                        </motion.div>
-                    ))}
+                    {skills.map((skill, index) => {
+                       const start = index / skills.length;
+                       const end = start + (1 / skills.length) * 0.5;
+                       const opacity = useTransform(scrollYProgress, [start, end], [0, 1]);
+                       const y = useTransform(scrollYProgress, [start, end], [50, 0]);
+
+                        return (
+                          <motion.div
+                              key={index}
+                              style={{ opacity, y }}
+                              className="py-4 md:py-6"
+                          >
+                              <h3 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase text-primary-foreground/80 hover:text-primary transition-colors duration-300">
+                                  {skill}
+                              </h3>
+                          </motion.div>
+                        )
+                    })}
                 </div>
             </div>
         </div>
