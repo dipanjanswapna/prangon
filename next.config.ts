@@ -42,7 +42,7 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
-        protocol: 'https',
+        protocol: 'https' ,
         hostname: 'mir-s3-cdn-cf.behance.net',
         port: '',
         pathname: '/**',
@@ -131,13 +131,6 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       }
-    ],
-  },
-  experimental: {
-    // This is to allow the Next.js dev server to accept requests from the
-    // Firebase Studio development environment.
-    allowedDevOrigins: [
-      'https://6000-firebase-studio-1754029207766.cluster-qxqlf3vb3nbf2r42l5qfoebdry.cloudworkstations.dev',
     ],
   },
 };
