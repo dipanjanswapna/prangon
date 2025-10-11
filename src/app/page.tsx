@@ -138,39 +138,15 @@ const SkillsSection = ({ skills }: { skills: string[] }) => {
   const earthY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
   return (
-    <div ref={containerRef} className="relative min-h-screen bg-background text-foreground flex flex-col justify-center overflow-hidden py-16 px-4">
-      <motion.div
-        className="absolute inset-0 z-0"
-        style={{ opacity: earthOpacity, y: earthY }}
-      >
-        <Image
-          src="https://images.pond5.com/3d-animation-earth-rotation-looped-085333912_prevstill.jpeg"
-          alt="Earth"
-          className="object-cover w-full h-full"
-          data-ai-hint="dark earth globe"
-          fill
-        />
-      </motion.div>
-      <div className="relative z-10 container mx-auto px-4">
-        {skills.map((skill, index) => {
-          const start = index / skills.length;
-          const end = (index + 1) / skills.length;
-          const opacity = useTransform(scrollYProgress, [start, (start + end) / 2, end], [0.2, 1, 0.2]);
-
-          return (
-            <motion.div
-              key={`${skill}-${index}`}
-              className="py-4 md:py-8 border-b border-border"
-              style={{ opacity }}
-            >
-              <h2 className="text-4xl sm:text-6xl md:text-8xl font-black uppercase text-center text-primary-foreground">
-                {skill}
-              </h2>
-            </motion.div>
-          );
-        })}
-      </div>
-    </div>
+    <motion.div>
+      <Image
+        src="https://images.pond5.com/3d-animation-earth-rotation-looped-085333912_prevstill.jpeg"
+        alt="Earth"
+        className="object-cover w-full h-full"
+        data-ai-hint="dark earth globe"
+        fill
+      />
+    </motion.div>
   );
 };
 
@@ -191,7 +167,7 @@ function AnimatedCounter({ to, suffix }: { to: number, suffix?: string }) {
       return () => controls.stop();
     }, [to, suffix]);
   
-    return <p ref={nodeRef} className="text-4xl font-extrabold text-primary-foreground" />;
+    return <p ref={nodeRef} className="text-4xl font-extrabold text-white" />;
   }
 
 const StatsSection = ({ happyCustomers, servicesProvided }: { happyCustomers: number, servicesProvided: number }) => {
@@ -240,32 +216,41 @@ const StatsSection = ({ happyCustomers, servicesProvided }: { happyCustomers: nu
     };
 
     return (
-        <div className="bg-background py-16 sm:py-24">
-            <div className="container mx-auto px-4">
+        <div className="relative py-16 sm:py-24 overflow-hidden">
+            <Image
+                src="https://i.postimg.cc/cHnJWq6b/abstract-flowing-neon-wave-background-53876-101942.avif"
+                alt="Stats background"
+                layout="fill"
+                objectFit="cover"
+                className="absolute inset-0 z-0 opacity-50"
+                data-ai-hint="abstract neon wave"
+            />
+            <div className="absolute inset-0 bg-background/50 z-0" />
+            <div className="container mx-auto px-4 relative z-10">
                 <motion.div
                     variants={containerVariants}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.3 }}
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+                    className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
                 >
                     {stats.map((stat, index) => {
-                        const StatCard = (
-                            <motion.div key={stat.name} variants={itemVariants}>
-                                <Card className="bg-muted/30 p-6 text-center rounded-2xl shadow-lg hover:shadow-primary/20 hover:-translate-y-2 transition-all duration-300 h-full">
-                                    <div className="flex justify-center items-center mb-4 bg-primary/10 w-16 h-16 mx-auto rounded-full">
+                        const StatCardContent = (
+                            <motion.div key={stat.name} variants={itemVariants} className="liquid-card h-full">
+                                <div className="p-4 sm:p-6 text-center flex flex-col items-center justify-center h-full">
+                                    <div className="mb-2 sm:mb-4">
                                         {stat.icon}
                                     </div>
                                     <AnimatedCounter to={stat.value} suffix={stat.suffix} />
-                                    <p className="text-muted-foreground mt-1">{stat.name}</p>
-                                </Card>
+                                    <p className="text-white/80 text-xs sm:text-sm mt-1">{stat.name}</p>
+                                </div>
                             </motion.div>
                         );
 
                         if (stat.href) {
-                            return <Link href={stat.href} key={stat.name}>{StatCard}</Link>;
+                            return <Link href={stat.href} key={stat.name} className="block h-full">{StatCardContent}</Link>;
                         }
-                        return StatCard;
+                        return StatCardContent;
                     })}
                 </motion.div>
             </div>
@@ -809,7 +794,6 @@ export default function Home() {
         </div>
       </div>
       <AboutMe text={content.aboutMeText} imageUrl={content.aboutMeImageUrl}/>
-      <SkillsSection skills={content.skills} />
       <StatsSection happyCustomers={content.stats.happyCustomers} servicesProvided={content.stats.servicesProvided} />
       <WhatTheySaidSection testimonials={content.testimonials}/>
       {content.upcomingEvents && <UpcomingEventsSection data={content.upcomingEvents} />}
@@ -823,4 +807,5 @@ export default function Home() {
     
 
     
+
 

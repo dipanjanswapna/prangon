@@ -96,3 +96,32 @@ body {
   letter-spacing: .15em;
   animation: blink-caret .75s step-end infinite;
 }
+
+@layer components {
+    .liquid-card {
+        @apply relative rounded-xl border border-white/10 bg-black/20 backdrop-blur-sm transition-all duration-300;
+        transform-style: preserve-3d;
+    }
+    .liquid-card:before {
+        content: '';
+        @apply absolute top-0 left-0 w-full h-full rounded-xl;
+        background: linear-gradient(45deg,
+            #ff0000, #ff7300, #fffb00, #48ff00,
+            #00ffd5, #002bff, #7a00ff, #ff00c8,
+            #ff0000);
+        background-size: 400% 400%;
+        animation: liquid-animate 10s ease infinite;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        z-index: -1;
+    }
+    .liquid-card:hover:before {
+        opacity: 0.3;
+    }
+}
+
+@keyframes liquid-animate {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
