@@ -128,27 +128,41 @@ const AboutMe = ({ text, imageUrl } : { text: string, imageUrl: string }) => {
 };
 
 const SkillsSection = ({ skills }: { skills: string[] }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-
-  const earthOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.1, 0.3, 0.1]);
-  const earthY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-
-  return (
-    <motion.div>
-      <Image
-        src="https://images.pond5.com/3d-animation-earth-rotation-looped-085333912_prevstill.jpeg"
-        alt="Earth"
-        className="object-cover w-full h-full"
-        data-ai-hint="dark earth globe"
-        fill
-      />
-    </motion.div>
-  );
-};
+    const containerRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+      target: containerRef,
+      offset: ["start end", "end start"],
+    });
+  
+    const x = useTransform(scrollYProgress, [0, 1], ["-100%", "100%"]);
+  
+    return (
+      <div ref={containerRef} className="relative bg-background py-16 sm:py-24 overflow-hidden">
+        <div className="container mx-auto px-4 relative z-10 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold font-headline text-primary-foreground mb-8">My Skills</h2>
+            <motion.div
+              className="flex whitespace-nowrap"
+              style={{ x }}
+              animate={{ x: ["-100%", "100%"] }}
+              transition={{
+                x: {
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  duration: 20,
+                  ease: "linear",
+                },
+              }}
+            >
+              {[...skills, ...skills].map((skill, index) => (
+                <span key={index} className="text-2xl font-semibold mx-8 text-muted-foreground">
+                  {skill}
+                </span>
+              ))}
+            </motion.div>
+        </div>
+      </div>
+    );
+  };
 
 function AnimatedCounter({ to, suffix }: { to: number, suffix?: string }) {
     const nodeRef = useRef<HTMLParagraphElement>(null);
@@ -794,6 +808,7 @@ export default function Home() {
         </div>
       </div>
       <AboutMe text={content.aboutMeText} imageUrl={content.aboutMeImageUrl}/>
+      <SkillsSection skills={content.skills} />
       <StatsSection happyCustomers={content.stats.happyCustomers} servicesProvided={content.stats.servicesProvided} />
       <WhatTheySaidSection testimonials={content.testimonials}/>
       {content.upcomingEvents && <UpcomingEventsSection data={content.upcomingEvents} />}
@@ -807,6 +822,7 @@ export default function Home() {
     
 
     
+
 
 
 
