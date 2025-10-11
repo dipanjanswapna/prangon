@@ -5,7 +5,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { revalidatePath } from 'next/cache';
 import { aboutPageSchema, AboutPageData } from '@/lib/types';
-import defaultData from '@/../data/about-page.json';
+import aboutPageDefaultData from '../../../../about-page-data.json';
 
 const dataFilePath = path.join(process.cwd(), 'data/about-page.json');
 
@@ -17,7 +17,7 @@ async function readData(): Promise<AboutPageData> {
   } catch (error) {
     console.warn('Could not read about-page.json, returning default data.', error);
     // If the file doesn't exist or is invalid, return the default data from the import
-    return defaultData as AboutPageData;
+    return aboutPageDefaultData as AboutPageData;
   }
 }
 
@@ -34,7 +34,7 @@ async function writeData(data: AboutPageData) {
 
 export async function getAboutPageContent(): Promise<AboutPageData> {
   const fileData = await readData();
-  return { ...defaultData, ...fileData };
+  return { ...aboutPageDefaultData, ...fileData };
 }
 
 export async function updateAboutPageContent(data: AboutPageData) {
