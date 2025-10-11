@@ -846,7 +846,13 @@ export default function Home() {
             className="font-headline text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase leading-none tracking-tighter"
           >
            {titleWords.map((word, index) => (
-             <span key={index} className="inline-block">
+             <span
+                key={index}
+                className={cn(
+                    "inline-block",
+                    word.toUpperCase() === "SWAPNA" && "text-red-500"
+                )}
+             >
                 {word.split("").map((char, charIndex) => (
                     <motion.span key={charIndex} variants={titleItem} className="inline-block">
                         {char}
