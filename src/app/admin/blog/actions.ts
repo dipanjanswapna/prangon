@@ -1,23 +1,16 @@
 
 'use server';
 
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import { blogPostSchema, BlogPost } from '@/lib/types';
 import slugify from 'slugify';
-import { initializeFirebase } from '@/firebase';
+import admin from '@/lib/firebase-admin';
 
-async function getFirestoreInstance() {
-  const { firestore } = await initializeFirebase();
-  return firestore;
-}
-
-const blogCollection = async () => collection(await getFirestoreInstance(), 'blogPosts');
+const db = admin.firestore();
+const blogCollection = db.collection('blogPosts');
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
-  const blogRef = await blogCollection();
-  const q = query(blogRef, orderBy('date', 'desc'));
-  const snapshot = await getDocs(q);
+  const snapshot = await blogCollection.orderBy('date', 'desc').get();
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as BlogPost));
 }
 
@@ -34,8 +27,7 @@ export async function addBlogPost(data: Omit<BlogPost, 'id' | 'slug'>) {
     };
 
     try {
-        const blogRef = await blogCollection();
-        const docRef = await addDoc(blogRef, newPostData);
+        const docRef = await blogCollection.add(newPostData);
         revalidatePath('/blog');
         revalidatePath('/admin/blog');
         return { success: true, post: { ...newPostData, id: docRef.id } };
@@ -57,9 +49,8 @@ export async function updateBlogPost(id: string, data: Omit<BlogPost, 'id' | 'sl
     };
 
     try {
-        const firestore = await getFirestoreInstance();
-        const docRef = doc(firestore, 'blogPosts', id);
-        await updateDoc(docRef, updatedPostData);
+        const docRef = blogCollection.doc(id);
+        await docRef.update(updatedPostData);
         revalidatePath('/blog');
         revalidatePath(`/blog/${updatedPostData.slug}`);
         revalidatePath('/admin/blog');
@@ -71,8 +62,7 @@ export async function updateBlogPost(id: string, data: Omit<BlogPost, 'id' | 'sl
 
 export async function deleteBlogPost(id: string) {
     try {
-        const firestore = await getFirestoreInstance();
-        await deleteDoc(doc(firestore, 'blogPosts', id));
+        await blogCollection.doc(id).delete();
         revalidatePath('/blog');
         revalidatePath('/admin/blog');
         return { success: true };
