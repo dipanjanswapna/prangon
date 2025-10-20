@@ -22,7 +22,6 @@ import { Loader2 } from 'lucide-react';
 
 const adminNavItems = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: <Home className="h-5 w-5" /> },
-    { href: '/admin/users', label: 'Users', icon: <Users className="h-5 w-5" /> },
     { href: '/admin/home', label: 'Home Page', icon: <Home className="h-5 w-5" /> },
     { href: '/admin/about', label: 'About Page', icon: <Info className="h-5 w-5" /> },
     { href: '/admin/experiences', label: 'Experiences', icon: <Briefcase className="h-5 w-5" /> },
@@ -47,7 +46,7 @@ export default function AdminLayout({
   const router = useRouter();
   const { user, appUser, loading } = useUser();
 
-  if (loading) {
+  if (loading || (user && !appUser)) {
     return (
         <div className="flex h-screen items-center justify-center">
             <Loader2 className="h-8 w-8 animate-spin" />
@@ -55,6 +54,21 @@ export default function AdminLayout({
     );
   }
 
+  // Allow access to login page even if not authenticated
+  if (pathname === '/admin/login') {
+    // If admin is already logged in, redirect to dashboard
+    if (user && appUser?.role === 'admin') {
+      router.push('/admin/dashboard');
+      return (
+        <div className="flex h-screen items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      );
+    }
+    return <>{children}</>;
+  }
+  
+  // For all other admin pages, enforce admin role
   if (!user || appUser?.role !== 'admin') {
       if (typeof window !== 'undefined') {
         router.push('/admin/login');
@@ -64,10 +78,6 @@ export default function AdminLayout({
             <p>Redirecting to login...</p>
         </div>
       );
-  }
-  
-  if (pathname === '/admin/login') {
-      return <>{children}</>;
   }
 
 
