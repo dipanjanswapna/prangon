@@ -1,3 +1,4 @@
+
 'use client';
 
 import { onAuthStateChanged, type User } from 'firebase/auth';
@@ -18,7 +19,6 @@ export function useUser() {
 
   useEffect(() => {
     if (!auth || !firestore) {
-      // Firebase might not be initialized yet
       setLoading(false);
       return;
     }
@@ -26,12 +26,10 @@ export function useUser() {
       setUser(user);
       if (user) {
         try {
-            // First, check if the user is in the 'admins' collection
-            const adminRef = doc(firestore, 'admins', user.uid);
-            const adminSnap = await getDoc(adminRef);
+            const tokenResult = await user.getIdTokenResult();
+            const isAdmin = tokenResult.claims.admin === true;
 
-            if (adminSnap.exists()) {
-                // This is an admin
+            if (isAdmin) {
                 const adminData: AppUser = {
                     uid: user.uid,
                     email: user.email!,
@@ -55,20 +53,18 @@ export function useUser() {
                     });
                 }
             } else {
-                // This is a regular user
                 const userRef = doc(firestore, 'users', user.uid);
                 const docSnap = await getDoc(userRef);
 
                 if (docSnap.exists()) {
                     setAppUser(docSnap.data() as AppUser);
                 } else {
-                    // Create user profile if it doesn't exist
                     const newUser: AppUser = {
                         uid: user.uid,
                         email: user.email!,
                         displayName: user.displayName || 'New User',
                         photoURL: user.photoURL,
-                        role: 'user', // Assign default role
+                        role: 'user',
                     };
                     setDoc(userRef, newUser, { merge: true }).catch(serverError => {
                         const permissionError = new FirestorePermissionError({
@@ -82,13 +78,14 @@ export function useUser() {
                 }
             }
         } catch(e: any) {
-            if (e.code === 'permission-denied') {
-                const errorContext = { path: e.customData?.path || `admins/${user.uid}` , operation: 'get' as const };
-                const permissionError = new FirestorePermissionError(errorContext);
-                errorEmitter.emit('permission-error', permissionError);
-            } else {
-                console.error("An unexpected error occurred in useUser:", e);
-            }
+            console.error("An unexpected error occurred in useUser:", e);
+             // Fallback for non-permission errors
+            const userRef = doc(firestore, 'users', user.uid);
+            getDoc(userRef).then(docSnap => {
+                if (docSnap.exists()) {
+                    setAppUser(docSnap.data() as AppUser);
+                }
+            });
         }
       } else {
         setAppUser(null);
