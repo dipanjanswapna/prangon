@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { blogPostSchema, BlogPost } from '@/lib/types';
 import slugify from 'slugify';
 import { initializeFirebase } from '@/firebase';
+import { verifyIsAdmin } from '@/lib/firebase-admin';
 
 async function getFirestoreInstance() {
   const { firestore } = await initializeFirebase();
@@ -22,6 +23,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 }
 
 export async function addBlogPost(data: Omit<BlogPost, 'id' | 'slug'>) {
+    await verifyIsAdmin();
     const validation = blogPostSchema.omit({id: true, slug: true}).safeParse(data);
 
     if (!validation.success) {
@@ -45,6 +47,7 @@ export async function addBlogPost(data: Omit<BlogPost, 'id' | 'slug'>) {
 }
 
 export async function updateBlogPost(id: string, data: Omit<BlogPost, 'id' | 'slug'>) {
+    await verifyIsAdmin();
     const validation = blogPostSchema.omit({id: true, slug: true}).safeParse(data);
 
     if (!validation.success) {
@@ -70,9 +73,9 @@ export async function updateBlogPost(id: string, data: Omit<BlogPost, 'id' | 'sl
 }
 
 export async function deleteBlogPost(id: string) {
+    await verifyIsAdmin();
     try {
         const firestore = await getFirestoreInstance();
-        const blogCollectionRef = await getBlogCollection();
         const docRef = doc(firestore, 'blogPosts', id);
         
         // Fetch the document to get the slug before deleting

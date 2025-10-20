@@ -1,41 +1,51 @@
 
 import * as admin from 'firebase-admin';
-import type { App } from 'firebase-admin/app';
+import { cookies } from 'next/headers';
 import { firebaseConfig } from '@/firebase/config';
-
-let app: App | undefined = undefined;
 
 function initializeAppIfNeeded() {
     if (!admin.apps.length) {
         try {
-            app = admin.initializeApp({
+            admin.initializeApp({
                 credential: admin.credential.cert({
-                    projectId: process.env.FIREBASE_PROJECT_ID,
+                    projectId: firebaseConfig.projectId,
                     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
                     privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
                 }),
-                ...firebaseConfig
             });
         } catch (error) {
             console.error('Firebase admin initialization error', error);
         }
-    } else {
-        app = admin.apps[0]!;
     }
 }
 
-// Initialize on module load
 initializeAppIfNeeded();
 
-
-export const getFirebaseAdmin = (): App => {
-    if (!app) {
+export const getFirebaseAdmin = () => {
+    if (!admin.apps.length) {
         initializeAppIfNeeded();
-        if (!app) {
-            throw new Error("Firebase Admin SDK could not be initialized. Check server logs for details.");
-        }
     }
-    return app;
+    return admin;
+};
+
+export const verifyIsAdmin = async () => {
+    const admin = getFirebaseAdmin();
+    const session = cookies().get('__session')?.value || '';
+
+    if (!session) {
+        throw new Error('User not authenticated.');
+    }
+
+    try {
+        const decodedClaims = await admin.auth().verifySessionCookie(session, true);
+        if (decodedClaims.admin !== true) {
+            throw new Error('User is not an admin.');
+        }
+        return decodedClaims;
+    } catch (error) {
+        console.error('Admin verification failed:', error);
+        throw new Error('Could not verify admin status.');
+    }
 };
 
 export const setAdminClaim = async (uid: string) => {
