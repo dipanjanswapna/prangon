@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 
 import { useAuth, useFirestore } from '../provider';
 import { AppUser } from '@/lib/types';
+import { errorEmitter } from '../error-emitter';
+import { FirestorePermissionError } from '../errors';
 
 export function useUser() {
   const auth = useAuth();
@@ -28,7 +30,7 @@ export function useUser() {
 
         if (adminSnap.exists()) {
           // This is an admin
-          const adminData = {
+          const adminData: AppUser = {
             uid: user.uid,
             email: user.email!,
             displayName: user.displayName || 'Admin',
@@ -41,7 +43,14 @@ export function useUser() {
           const userRef = doc(firestore, 'users', user.uid);
           const userSnap = await getDoc(userRef);
           if (!userSnap.exists()) {
-              await setDoc(userRef, adminData, { merge: true });
+              setDoc(userRef, adminData, { merge: true }).catch(serverError => {
+                  const permissionError = new FirestorePermissionError({
+                      path: userRef.path,
+                      operation: 'create',
+                      requestResourceData: adminData
+                  });
+                  errorEmitter.emit('permission-error', permissionError);
+              });
           }
 
         } else {
@@ -60,7 +69,14 @@ export function useUser() {
               photoURL: user.photoURL,
               role: 'user', // Assign default role
             };
-            await setDoc(userRef, newUser);
+            setDoc(userRef, newUser, { merge: true }).catch(serverError => {
+                const permissionError = new FirestorePermissionError({
+                    path: userRef.path,
+                    operation: 'create',
+                    requestResourceData: newUser
+                });
+                errorEmitter.emit('permission-error', permissionError);
+            });
             setAppUser(newUser);
           }
         }
