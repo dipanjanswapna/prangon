@@ -14,9 +14,17 @@ async function getFirestoreInstance() {
 const subscriptionsCollection = async () => collection(await getFirestoreInstance(), 'subscriptionPlans');
 
 export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
-  const collectionRef = await subscriptionsCollection();
-  const snapshot = await getDocs(collectionRef);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SubscriptionPlan));
+  try {
+    const collectionRef = await subscriptionsCollection();
+    const snapshot = await getDocs(collectionRef);
+    if (snapshot.empty) {
+        return [];
+    }
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SubscriptionPlan));
+  } catch (error) {
+      console.error("Could not read subscriptionPlans collection:", error);
+      return [];
+  }
 }
 
 export async function addSubscriptionPlan(data: Omit<SubscriptionPlan, 'id'>) {

@@ -1,7 +1,7 @@
 
 'use server';
 
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import { experienceSchema, Experience } from '@/lib/types';
 import { initializeFirebase } from '@/firebase';
@@ -14,21 +14,25 @@ async function getFirestoreInstance() {
 const experiencesCollection = async () => collection(await getFirestoreInstance(), 'experiences');
 
 export async function getExperiences(): Promise<Experience[]> {
-  const experiencesRef = await experiencesCollection();
-  // Firestore doesn't support ordering by a derived value.
-  // Sorting will be done on the client if necessary, or we store a start date.
-  // For now, let's just fetch without a specific order.
-  const snapshot = await getDocs(experiencesRef);
-  let experiences = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Experience));
-  
-  // Sort by period in memory
-  experiences.sort((a, b) => {
-    const aYear = a.period.split(' - ')[0].trim().split(' ').pop() || '0';
-    const bYear = b.period.split(' - ')[0].trim().split(' ').pop() || '0';
-    return parseInt(bYear) - parseInt(aYear);
-  });
+    try {
+        const experiencesRef = await experiencesCollection();
+        const snapshot = await getDocs(experiencesRef);
+        if (snapshot.empty) {
+            return [];
+        }
+        let experiences = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Experience));
+        
+        experiences.sort((a, b) => {
+            const aYear = a.period.split(' - ')[0].trim().split(' ').pop() || '0';
+            const bYear = b.period.split(' - ')[0].trim().split(' ').pop() || '0';
+            return parseInt(bYear) - parseInt(aYear);
+        });
 
-  return experiences;
+        return experiences;
+    } catch (error) {
+        console.error('Could not read experiences collection:', error);
+        return [];
+    }
 }
 
 export async function addExperience(data: Omit<Experience, 'id'>) {

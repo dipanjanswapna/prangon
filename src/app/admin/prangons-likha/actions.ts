@@ -15,9 +15,17 @@ async function getFirestoreInstance() {
 const prangonsLikhaCollection = async () => collection(await getFirestoreInstance(), 'prangonsLikha');
 
 export async function getPrangonsLikhaPosts(): Promise<PrangonsLikhaPost[]> {
-  const collectionRef = await prangonsLikhaCollection();
-  const snapshot = await getDocs(collectionRef);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as PrangonsLikhaPost));
+  try {
+    const collectionRef = await prangonsLikhaCollection();
+    const snapshot = await getDocs(collectionRef);
+    if (snapshot.empty) {
+      return [];
+    }
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as PrangonsLikhaPost));
+  } catch(e) {
+    console.error("Could not read prangonsLikha collection:", e);
+    return [];
+  }
 }
 
 export async function addPrangonsLikhaPost(data: Omit<PrangonsLikhaPost, 'id' | 'slug'>) {

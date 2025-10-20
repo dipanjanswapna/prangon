@@ -1,7 +1,7 @@
 
 'use server';
 
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import { libraryItemSchema, LibraryItem } from '@/lib/types';
 import slugify from 'slugify';
@@ -15,9 +15,17 @@ async function getFirestoreInstance() {
 const libraryCollection = async () => collection(await getFirestoreInstance(), 'libraryItems');
 
 export async function getLibraryItems(): Promise<LibraryItem[]> {
-  const libraryRef = await libraryCollection();
-  const snapshot = await getDocs(libraryRef);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as LibraryItem));
+  try {
+    const libraryRef = await libraryCollection();
+    const snapshot = await getDocs(libraryRef);
+    if (snapshot.empty) {
+      return [];
+    }
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as LibraryItem));
+  } catch (error) {
+    console.error('Could not read libraryItems collection:', error);
+    return [];
+  }
 }
 
 export async function addLibraryItem(data: Omit<LibraryItem, 'id' | 'slug'>) {

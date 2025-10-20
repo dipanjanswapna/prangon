@@ -14,10 +14,18 @@ async function getFirestoreInstance() {
 const visualArtsCollection = async () => collection(await getFirestoreInstance(), 'visualArts');
 
 export async function getVisualArts(): Promise<VisualArt[]> {
-  const collectionRef = await visualArtsCollection();
-  const q = query(collectionRef, orderBy('date', 'desc'));
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as VisualArt));
+  try {
+    const collectionRef = await visualArtsCollection();
+    const q = query(collectionRef, orderBy('date', 'desc'));
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) {
+      return [];
+    }
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as VisualArt));
+  } catch (error) {
+    console.error("Could not read visualArts collection:", error);
+    return [];
+  }
 }
 
 export async function addVisualArt(data: Omit<VisualArt, 'id'>) {

@@ -23,7 +23,6 @@ export async function getFAQPageData(): Promise<FAQPageData> {
           return validation.data;
       }
     }
-    // Return default empty state if not found or invalid
     return { faqs: [] };
   } catch (error) {
     console.warn('Could not read FAQ data, returning default data.', error);
@@ -39,7 +38,6 @@ export async function updateFAQPageData(data: FAQPageData) {
   }
 
   try {
-    // Add unique IDs to new items
     const dataWithIds = {
         ...validation.data,
         faqs: validation.data.faqs.map(item => ({...item, id: item.id || Date.now().toString() + Math.random().toString(36).substring(2)}))

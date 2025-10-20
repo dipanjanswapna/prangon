@@ -13,11 +13,6 @@ async function getFirestoreInstance() {
 
 const docRef = async () => doc(await getFirestoreInstance(), 'pages', 'socialWork');
 
-const defaultData: SocialWorkPageData = {
-    initiatives: [],
-    testimonials: []
-};
-
 export async function getSocialWorkPageData(): Promise<SocialWorkPageData> {
   try {
     const reference = await docRef();
@@ -28,10 +23,12 @@ export async function getSocialWorkPageData(): Promise<SocialWorkPageData> {
           return validation.data;
       }
     }
+    // If no data, or data is invalid, return default.
+    return { initiatives: [], testimonials: [] };
   } catch (error) {
     console.warn('Could not read social-work data, returning default data.', error);
+    return { initiatives: [], testimonials: [] };
   }
-  return defaultData;
 }
 
 export async function updateSocialWorkPageData(data: SocialWorkPageData) {

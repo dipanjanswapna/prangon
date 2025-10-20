@@ -14,9 +14,17 @@ async function getFirestoreInstance() {
 const projectsCollection = async () => collection(await getFirestoreInstance(), 'projects');
 
 export async function getProjects(): Promise<Project[]> {
-  const projectsRef = await projectsCollection();
-  const snapshot = await getDocs(projectsRef);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project));
+  try {
+    const projectsRef = await projectsCollection();
+    const snapshot = await getDocs(projectsRef);
+    if (snapshot.empty) {
+      return [];
+    }
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project));
+  } catch (error) {
+    console.error('Could not read projects collection:', error);
+    return [];
+  }
 }
 
 export async function addProject(data: Omit<Project, 'id'>) {

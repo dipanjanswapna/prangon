@@ -14,10 +14,18 @@ async function getFirestoreInstance() {
 const achievementsCollection = async () => collection(await getFirestoreInstance(), 'achievements');
 
 export async function getAchievements(): Promise<Achievement[]> {
-  const achievementsRef = await achievementsCollection();
-  const q = query(achievementsRef, orderBy('date', 'desc'));
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Achievement));
+  try {
+    const achievementsRef = await achievementsCollection();
+    const q = query(achievementsRef, orderBy('date', 'desc'));
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) {
+      return [];
+    }
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Achievement));
+  } catch (error) {
+    console.error('Could not read achievements collection:', error);
+    return [];
+  }
 }
 
 export async function addAchievement(data: Omit<Achievement, 'id'>) {
