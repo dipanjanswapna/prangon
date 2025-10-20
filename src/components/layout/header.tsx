@@ -127,7 +127,12 @@ export function Header() {
       }
       return (
         <Link href="/login" passHref>
-             <Button variant="outline" size="sm">Login</Button>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="gradient-border-button px-3 py-1.5"
+          >
+           Login
+          </motion.div>
         </Link>
       )
   }
