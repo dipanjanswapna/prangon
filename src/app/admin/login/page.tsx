@@ -50,11 +50,26 @@ export default function AdminLoginPage() {
       const adminSnap = await getDoc(adminRef);
 
       if (adminSnap.exists()) {
-        toast({
-            title: 'Admin Login Successful',
-            description: `Welcome back, ${user.displayName}!`,
+        const idToken = await user.getIdToken();
+        const response = await fetch('/api/auth/session', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${idToken}`,
+            },
         });
-        // The useEffect will handle the redirect to the dashboard
+
+        if (response.ok) {
+            toast({
+                title: 'Admin Login Successful',
+                description: `Welcome back, ${user.displayName}!`,
+            });
+             // The useEffect will handle the redirect to the dashboard after state update
+             // We can force a router refresh to ensure cookie is picked up if needed.
+             router.refresh();
+        } else {
+             await auth.signOut();
+             throw new Error('Session creation failed.');
+        }
       } else {
         await auth.signOut();
         toast({
