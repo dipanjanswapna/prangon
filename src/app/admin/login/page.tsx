@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useAuth } from '@/firebase';
@@ -22,7 +23,8 @@ export default function AdminLoginPage() {
   const { user, appUser, loading } = useUser();
 
    useEffect(() => {
-    if (!loading && appUser?.role === 'admin') {
+    // If the user is already logged in and is an admin, redirect them to the dashboard.
+    if (!loading && user && appUser?.role === 'admin') {
       router.push('/admin/dashboard');
     }
   }, [user, appUser, loading, router]);
@@ -52,7 +54,7 @@ export default function AdminLoginPage() {
             title: 'Admin Login Successful',
             description: `Welcome back, ${user.displayName}!`,
         });
-        router.push('/admin/dashboard');
+        // The useEffect will handle the redirect to the dashboard
       } else {
         await auth.signOut();
         toast({
@@ -70,6 +72,16 @@ export default function AdminLoginPage() {
       });
     }
   };
+
+  // If user is already an admin, the useEffect will redirect them.
+  // We can show a loading state until that happens.
+  if (loading || (user && appUser?.role === 'admin')) {
+      return (
+          <div className="flex h-screen items-center justify-center">
+              <p>Loading...</p>
+          </div>
+      )
+  }
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center">

@@ -46,6 +46,7 @@ export default function AdminLayout({
   const router = useRouter();
   const { user, appUser, loading } = useUser();
 
+  // Show a loader while Firebase auth state is being determined
   if (loading || (user && !appUser)) {
     return (
         <div className="flex h-screen items-center justify-center">
@@ -54,30 +55,21 @@ export default function AdminLayout({
     );
   }
 
-  // Allow access to login page even if not authenticated
-  if (pathname === '/admin/login') {
-    // If admin is already logged in, redirect to dashboard
-    if (user && appUser?.role === 'admin') {
-      router.push('/admin/dashboard');
-      return (
-        <div className="flex h-screen items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin" />
-        </div>
-      );
-    }
-    return <>{children}</>;
-  }
-  
-  // For all other admin pages, enforce admin role
-  if (!user || appUser?.role !== 'admin') {
+  // If on any admin page other than the login page, check for admin role
+  if (pathname !== '/admin/login' && appUser?.role !== 'admin') {
       if (typeof window !== 'undefined') {
         router.push('/admin/login');
       }
       return (
         <div className="flex h-screen items-center justify-center">
-            <p>Redirecting to login...</p>
+            <p>Redirecting to admin login...</p>
         </div>
       );
+  }
+
+  // Allow login page to render
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
   }
 
 
@@ -124,8 +116,8 @@ export default function AdminLayout({
                 <DropdownMenuTrigger asChild>
                     <Button variant="secondary" size="icon" className="rounded-full">
                     <Avatar className="h-8 w-8">
-                            <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} />
-                            <AvatarFallback>{user.displayName?.charAt(0) || 'A'}</AvatarFallback>
+                            <AvatarImage src={user?.photoURL || undefined} alt={user?.displayName || 'User'} />
+                            <AvatarFallback>{user?.displayName?.charAt(0) || 'A'}</AvatarFallback>
                         </Avatar>
                         <span className="sr-only">Toggle user menu</span>
                     </Button>
