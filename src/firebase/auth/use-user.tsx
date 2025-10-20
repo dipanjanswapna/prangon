@@ -19,66 +19,76 @@ export function useUser() {
   useEffect(() => {
     if (!auth || !firestore) {
       // Firebase might not be initialized yet
+      setLoading(false);
       return;
     }
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
       if (user) {
-        // First, check if the user is in the 'admins' collection
-        const adminRef = doc(firestore, 'admins', user.uid);
-        const adminSnap = await getDoc(adminRef);
+        try {
+            // First, check if the user is in the 'admins' collection
+            const adminRef = doc(firestore, 'admins', user.uid);
+            const adminSnap = await getDoc(adminRef);
 
-        if (adminSnap.exists()) {
-          // This is an admin
-          const adminData: AppUser = {
-            uid: user.uid,
-            email: user.email!,
-            displayName: user.displayName || 'Admin',
-            photoURL: user.photoURL,
-            role: 'admin' as const,
-          };
-          setAppUser(adminData);
-          
-          // Ensure a corresponding user profile exists for consistency
-          const userRef = doc(firestore, 'users', user.uid);
-          const userSnap = await getDoc(userRef);
-          if (!userSnap.exists()) {
-              setDoc(userRef, adminData, { merge: true }).catch(serverError => {
-                  const permissionError = new FirestorePermissionError({
-                      path: userRef.path,
-                      operation: 'create',
-                      requestResourceData: adminData
-                  });
-                  errorEmitter.emit('permission-error', permissionError);
-              });
-          }
+            if (adminSnap.exists()) {
+                // This is an admin
+                const adminData: AppUser = {
+                    uid: user.uid,
+                    email: user.email!,
+                    displayName: user.displayName || 'Admin',
+                    photoURL: user.photoURL,
+                    role: 'admin' as const,
+                };
+                setAppUser(adminData);
 
-        } else {
-          // This is a regular user
-          const userRef = doc(firestore, 'users', user.uid);
-          const docSnap = await getDoc(userRef);
+                // Ensure a corresponding user profile exists for consistency
+                const userRef = doc(firestore, 'users', user.uid);
+                const userSnap = await getDoc(userRef);
+                if (!userSnap.exists()) {
+                    setDoc(userRef, adminData, { merge: true }).catch(serverError => {
+                        const permissionError = new FirestorePermissionError({
+                            path: userRef.path,
+                            operation: 'create',
+                            requestResourceData: adminData
+                        });
+                        errorEmitter.emit('permission-error', permissionError);
+                    });
+                }
+            } else {
+                // This is a regular user
+                const userRef = doc(firestore, 'users', user.uid);
+                const docSnap = await getDoc(userRef);
 
-          if (docSnap.exists()) {
-            setAppUser(docSnap.data() as AppUser);
-          } else {
-            // Create user profile if it doesn't exist
-            const newUser: AppUser = {
-              uid: user.uid,
-              email: user.email!,
-              displayName: user.displayName || 'New User',
-              photoURL: user.photoURL,
-              role: 'user', // Assign default role
-            };
-            setDoc(userRef, newUser, { merge: true }).catch(serverError => {
-                const permissionError = new FirestorePermissionError({
-                    path: userRef.path,
-                    operation: 'create',
-                    requestResourceData: newUser
-                });
+                if (docSnap.exists()) {
+                    setAppUser(docSnap.data() as AppUser);
+                } else {
+                    // Create user profile if it doesn't exist
+                    const newUser: AppUser = {
+                        uid: user.uid,
+                        email: user.email!,
+                        displayName: user.displayName || 'New User',
+                        photoURL: user.photoURL,
+                        role: 'user', // Assign default role
+                    };
+                    setDoc(userRef, newUser, { merge: true }).catch(serverError => {
+                        const permissionError = new FirestorePermissionError({
+                            path: userRef.path,
+                            operation: 'create',
+                            requestResourceData: newUser
+                        });
+                        errorEmitter.emit('permission-error', permissionError);
+                    });
+                    setAppUser(newUser);
+                }
+            }
+        } catch(e: any) {
+            if (e.code === 'permission-denied') {
+                const errorContext = { path: `admins/${user.uid}` , operation: 'get' as const };
+                const permissionError = new FirestorePermissionError(errorContext);
                 errorEmitter.emit('permission-error', permissionError);
-            });
-            setAppUser(newUser);
-          }
+            } else {
+                console.error("An unexpected error occurred in useUser:", e);
+            }
         }
       } else {
         setAppUser(null);
