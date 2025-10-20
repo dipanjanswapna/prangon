@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useAuth, useFirestore } from '@/firebase';
@@ -42,25 +43,9 @@ export default function LoginPage() {
     }
     const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
-      const loggedInUser = result.user;
-
-      const adminRef = doc(firestore, 'admins', loggedInUser.uid);
-      const adminSnap = await getDoc(adminRef);
-
-      if (adminSnap.exists()) {
-        toast({
-            title: 'Admin Login Successful',
-            description: `Welcome back, ${loggedInUser.displayName}!`,
-        });
-        router.push('/admin/dashboard');
-      } else {
-         toast({
-            title: 'Login Successful',
-            description: `Welcome, ${loggedInUser.displayName}!`,
-        });
-        router.push('/account');
-      }
+      // The useUser hook will handle the redirection via the useEffect above.
+      // We just need to trigger the sign-in.
+      await signInWithPopup(auth, provider);
 
     } catch (error) {
       console.error('Error signing in with Google: ', error);
