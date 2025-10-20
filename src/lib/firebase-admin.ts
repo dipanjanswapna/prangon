@@ -1,17 +1,18 @@
-
-import * as admin from 'firebase-admin';
-import { cookies } from 'next/headers';
+import admin from 'firebase-admin';
+import { getApps } from 'firebase-admin/app';
 import { firebaseConfig } from '@/firebase/config';
+import { cookies } from 'next/headers';
 
 function initializeAppIfNeeded() {
-    if (!admin.apps.length) {
+    if (!getApps().length) {
         try {
             admin.initializeApp({
                 credential: admin.credential.cert({
-                    projectId: firebaseConfig.projectId,
+                    projectId: process.env.FIREBASE_PROJECT_ID || firebaseConfig.projectId,
                     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
                     privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
                 }),
+                databaseURL: `https://${process.env.FIREBASE_PROJECT_ID || firebaseConfig.projectId}.firebaseio.com`,
             });
         } catch (error) {
             console.error('Firebase admin initialization error', error);
@@ -20,13 +21,7 @@ function initializeAppIfNeeded() {
 }
 
 initializeAppIfNeeded();
-
-export const getFirebaseAdmin = () => {
-    if (!admin.apps.length) {
-        initializeAppIfNeeded();
-    }
-    return admin;
-};
+export const getFirebaseAdmin = () => admin;
 
 export const verifyIsAdmin = async () => {
     const admin = getFirebaseAdmin();

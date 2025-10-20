@@ -1,19 +1,16 @@
-
 'use client';
 
-import { useAuth } from '@/firebase';
+import { useAuth, useFirestore } from '@/firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Chrome } from 'lucide-react';
+import { Chrome, Loader2 } from 'lucide-react';
 import Image from 'next/image';
-import { useToast } from '@/hooks/use-toast';
 import { doc, getDoc } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
-import { useEffect } from 'react';
+import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/firebase/auth/use-user';
-
+import { useEffect } from 'react';
 
 export default function AdminLoginPage() {
   const auth = useAuth();
@@ -33,7 +30,7 @@ export default function AdminLoginPage() {
   const handleGoogleSignIn = async () => {
     if (!auth || !firestore) {
         console.error("Auth service or Firestore is not available.");
-        toast({
+         toast({
             variant: 'destructive',
             title: 'Error',
             description: 'Could not connect to Firebase services.',
@@ -45,7 +42,8 @@ export default function AdminLoginPage() {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // Check if the user is an admin
+      // This is a temp check to see if the user is an admin.
+      // The secure check happens on the server with session cookies.
       const adminRef = doc(firestore, 'admins', user.uid);
       const adminSnap = await getDoc(adminRef);
 
@@ -57,14 +55,13 @@ export default function AdminLoginPage() {
                 'Authorization': `Bearer ${idToken}`,
             },
         });
-
+        
         if (response.ok) {
             toast({
                 title: 'Admin Login Successful',
                 description: `Welcome back, ${user.displayName}!`,
             });
              // The useEffect will handle the redirect to the dashboard after state update
-             // We can force a router refresh to ensure cookie is picked up if needed.
              router.refresh();
         } else {
              await auth.signOut();
@@ -87,14 +84,12 @@ export default function AdminLoginPage() {
       });
     }
   };
-
-  // If user is already an admin, the useEffect will redirect them.
-  // We can show a loading state until that happens.
+  
   if (loading || (user && appUser?.role === 'admin')) {
       return (
-          <div className="flex h-screen items-center justify-center">
-              <p>Loading...</p>
-          </div>
+        <div className="flex h-screen items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
       )
   }
 

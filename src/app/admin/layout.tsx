@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Home, Settings, Feather, Palette, Star, UserCircle, Library, Briefcase, Trophy, Info, Rss, HandHeart, GitBranch, HelpCircle, Users, Menu, ShieldAlert, X, LayoutDashboard, ChevronDown, LogOut } from 'lucide-react';
@@ -52,27 +51,23 @@ export default function AdminLayout({
 
     if (!user) {
         if (pathname !== '/admin/login') {
-            router.push('/admin/login');
+            router.push('/login?redirect=/admin/dashboard');
         }
         return;
     }
 
     if (appUser?.role !== 'admin') {
-        // Logged in but not an admin
-        if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
-            // Prevent non-admins from accessing any admin page
-            router.push('/account'); // Or show an unauthorized page
-        }
+        router.push('/account'); // Or show an unauthorized page
     } else {
          // Logged in as admin
-        if (pathname === '/admin/login') {
+        if (pathname === '/login' || pathname === '/admin/login') {
             router.push('/admin/dashboard');
         }
     }
   }, [user, appUser, loading, pathname, router]);
 
   // Show a loader while Firebase auth state is being determined
-  if (loading) {
+  if (loading || (pathname.startsWith('/admin') && appUser?.role !== 'admin')) {
     return (
         <div className="flex h-screen items-center justify-center">
             <Loader2 className="h-8 w-8 animate-spin" />
@@ -83,16 +78,6 @@ export default function AdminLayout({
   // Allow login page to render without the layout if user is not authenticated yet
   if (pathname === '/admin/login') {
     return <>{children}</>;
-  }
-
-  // If user is not an admin, don't render the admin layout, useEffect will redirect
-  if (appUser?.role !== 'admin') {
-      return (
-          <div className="flex h-screen items-center justify-center">
-              <p>Verifying access...</p>
-              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
-          </div>
-      );
   }
 
 

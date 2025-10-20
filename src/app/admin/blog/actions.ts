@@ -1,14 +1,10 @@
-
 'use server';
 
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, getDoc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import { blogPostSchema, BlogPost } from '@/lib/types';
 import slugify from 'slugify';
 import { initializeFirebase } from '@/firebase';
-import { errorEmitter } from '@/firebase/error-emitter';
-import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
-
 
 async function getFirestoreInstance() {
   const { firestore } = await initializeFirebase();
@@ -48,14 +44,6 @@ export async function addBlogPost(data: Omit<BlogPost, 'id' | 'slug'>) {
         revalidatePath('/admin/blog');
         return { success: true, post: { ...newPostData, id: docRef.id } };
     } catch (error: any) {
-        if (error.code === 'permission-denied') {
-            const permissionError = new FirestorePermissionError({
-                path: (await getBlogCollection()).path,
-                operation: 'create',
-                requestResourceData: newPostData,
-            });
-            errorEmitter.emit('permission-error', permissionError);
-        }
         return { success: false, error: error.message };
     }
 }
@@ -81,14 +69,6 @@ export async function updateBlogPost(id: string, data: Omit<BlogPost, 'id' | 'sl
         revalidatePath('/admin/blog');
         return { success: true, post: { ...updatedPostData, id } };
     } catch (error: any) {
-        if (error.code === 'permission-denied') {
-            const permissionError = new FirestorePermissionError({
-                path: doc(await getFirestoreInstance(), 'blogPosts', id).path,
-                operation: 'update',
-                requestResourceData: updatedPostData,
-            });
-            errorEmitter.emit('permission-error', permissionError);
-        }
         return { success: false, error: error.message };
     }
 }
@@ -111,14 +91,6 @@ export async function deleteBlogPost(id: string) {
         revalidatePath('/admin/blog');
         return { success: true };
     } catch (error: any) {
-        if (error.code === 'permission-denied') {
-            const permissionError = new FirestorePermissionError({
-                path: doc(await getFirestoreInstance(), 'blogPosts', id).path,
-                operation: 'delete',
-            });
-            errorEmitter.emit('permission-error', permissionError);
-        }
         return { success: false, error: error.message };
     }
 }
-

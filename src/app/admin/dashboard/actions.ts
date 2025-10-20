@@ -1,4 +1,3 @@
-
 'use server';
 
 import { collection, getDocs } from 'firebase/firestore';
@@ -16,11 +15,11 @@ async function getCount(collectionName: string): Promise<number> {
         const snapshot = await getDocs(collectionRef);
         return snapshot.size;
     } catch (error) {
-        console.error(`Could not read collection ${collectionName}:`, error);
+        // We don't log the error here because it might just be due to rules.
+        // It's better to let the UI handle a count of 0 gracefully.
         return 0;
     }
 }
-
 
 export async function getDashboardStats() {
   const [
