@@ -1,15 +1,12 @@
 
 'use server';
 
-import { initializeFirebase } from '@/firebase';
-import { collection, getDocs } from 'firebase/firestore';
-
+import admin from '@/lib/firebase-admin';
 
 async function getCount(collectionName: string): Promise<number> {
     try {
-        const { firestore } = await initializeFirebase();
-        const collectionRef = collection(firestore, collectionName);
-        const snapshot = await getDocs(collectionRef);
+        const firestore = admin.firestore();
+        const snapshot = await firestore.collection(collectionName).get();
         return snapshot.size;
     } catch (error) {
         console.error(`Could not read collection ${collectionName}:`, error);
