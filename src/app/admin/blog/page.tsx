@@ -1,4 +1,6 @@
 
+'use client';
+
 import { getBlogPosts } from './actions';
 import { BlogForm, DeletePostButton } from '@/components/admin/blog-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,10 +14,19 @@ import {
 } from "@/components/ui/table"
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-import { Star } from 'lucide-react';
+import { Star, Loader2 } from 'lucide-react';
+import { BlogPost } from '@/lib/types';
+import { useState, useEffect } from 'react';
 
-export default async function AdminBlogPage() {
-  const posts = await getBlogPosts();
+export default function AdminBlogPage() {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getBlogPosts()
+      .then(setPosts)
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div className="p-4 md:p-8">
@@ -36,6 +47,11 @@ export default async function AdminBlogPage() {
                 <CardDescription>View and manage all your current blog posts.</CardDescription>
             </CardHeader>
             <CardContent>
+                {loading ? (
+                    <div className="flex justify-center items-center h-24">
+                        <Loader2 className="h-6 w-6 animate-spin" />
+                    </div>
+                ) : (
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -87,6 +103,7 @@ export default async function AdminBlogPage() {
                          )}
                     </TableBody>
                 </Table>
+                )}
             </CardContent>
         </Card>
       </div>
