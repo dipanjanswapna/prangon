@@ -83,7 +83,7 @@ export function useUser() {
             }
         } catch(e: any) {
             if (e.code === 'permission-denied') {
-                const errorContext = { path: `admins/${user.uid}` , operation: 'get' as const };
+                const errorContext = { path: e.customData?.path || `admins/${user.uid}` , operation: 'get' as const };
                 const permissionError = new FirestorePermissionError(errorContext);
                 errorEmitter.emit('permission-error', permissionError);
             } else {
