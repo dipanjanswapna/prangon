@@ -6,10 +6,14 @@ import { blogPostSchema, BlogPost } from '@/lib/types';
 import slugify from 'slugify';
 import admin from '@/lib/firebase-admin';
 
-const getBlogCollection = () => admin.firestore().collection('blogPosts');
+const getBlogCollection = () => {
+    const firestore = admin.firestore();
+    return firestore.collection('blogPosts');
+}
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
-  const snapshot = await getBlogCollection().orderBy('date', 'desc').get();
+  const blogCollection = getBlogCollection();
+  const snapshot = await blogCollection.orderBy('date', 'desc').get();
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as BlogPost));
 }
 
@@ -26,7 +30,8 @@ export async function addBlogPost(data: Omit<BlogPost, 'id' | 'slug'>) {
     };
 
     try {
-        const docRef = await getBlogCollection().add(newPostData);
+        const blogCollection = getBlogCollection();
+        const docRef = await blogCollection.add(newPostData);
         revalidatePath('/blog');
         revalidatePath('/admin/blog');
         return { success: true, post: { ...newPostData, id: docRef.id } };
@@ -48,7 +53,8 @@ export async function updateBlogPost(id: string, data: Omit<BlogPost, 'id' | 'sl
     };
 
     try {
-        const docRef = getBlogCollection().doc(id);
+        const blogCollection = getBlogCollection();
+        const docRef = blogCollection.doc(id);
         await docRef.update(updatedPostData);
         revalidatePath('/blog');
         revalidatePath(`/blog/${updatedPostData.slug}`);
@@ -61,7 +67,8 @@ export async function updateBlogPost(id: string, data: Omit<BlogPost, 'id' | 'sl
 
 export async function deleteBlogPost(id: string) {
     try {
-        await getBlogCollection().doc(id).delete();
+        const blogCollection = getBlogCollection();
+        await blogCollection.doc(id).delete();
         revalidatePath('/blog');
         revalidatePath('/admin/blog');
         return { success: true };

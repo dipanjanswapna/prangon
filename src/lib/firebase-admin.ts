@@ -1,35 +1,37 @@
 
 import * as admin from 'firebase-admin';
 import type { App } from 'firebase-admin/app';
+import { firebaseConfig } from '@/firebase/config';
 
 let app: App | undefined = undefined;
 
 function initializeAppIfNeeded() {
     if (!admin.apps.length) {
         try {
-            const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+            // Using service account credentials from environment variables is the standard for production.
+            // However, for a simplified setup, we can try to initialize with what we have.
+            // This setup assumes you are running in an environment where ADC (Application Default Credentials)
+            // are configured, or you are using the emulator.
+            // For local development without a service account file, this will rely on ADC.
+             const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n');
 
-            if (!process.env.FIREBASE_PROJECT_ID) {
-                throw new Error('FIREBASE_PROJECT_ID is not set.');
-            }
-            if (!process.env.FIREBASE_CLIENT_EMAIL) {
-                throw new Error('FIREBASE_CLIENT_EMAIL is not set.');
-            }
-            if (!privateKey) {
-                throw new Error('FIREBASE_PRIVATE_KEY is not set.');
+            if (process.env.FIREBASE_CLIENT_EMAIL && privateKey) {
+                 app = admin.initializeApp({
+                    credential: admin.credential.cert({
+                        projectId: process.env.FIREBASE_PROJECT_ID,
+                        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+                        privateKey: privateKey,
+                    }),
+                });
+            } else {
+                // Fallback for environments without full service account details in env vars
+                 app = admin.initializeApp({
+                    projectId: firebaseConfig.projectId,
+                 });
             }
 
-            app = admin.initializeApp({
-                credential: admin.credential.cert({
-                    projectId: process.env.FIREBASE_PROJECT_ID,
-                    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-                    privateKey: privateKey,
-                }),
-            });
         } catch (error) {
             console.error('Firebase admin initialization error', error);
-            // We don't want to throw here, as it might crash the server.
-            // Let the caller handle the case where admin is not initialized.
         }
     } else {
         app = admin.apps[0]!;
@@ -40,10 +42,8 @@ function initializeAppIfNeeded() {
 initializeAppIfNeeded();
 
 
-export const getFirebaseAdmin = () => {
+export const getFirebaseAdmin = (): App => {
     if (!app) {
-        // This case should ideally not happen if environment variables are set correctly,
-        // but it's a safeguard.
         initializeAppIfNeeded();
         if (!app) {
             throw new Error("Firebase Admin SDK could not be initialized. Check server logs for details.");
@@ -59,15 +59,16 @@ export const setAdminClaim = async (uid: string) => {
 
 export default {
     ...admin,
-    initializeApp: () => {
+    initializeApp: (): App => {
        initializeAppIfNeeded();
+       if (!app) throw new Error("Firebase Admin SDK failed to initialize.");
        return app;
     },
-    firestore: () => {
+    firestore: (): admin.firestore.Firestore => {
         const adminApp = getFirebaseAdmin();
         return adminApp.firestore();
     },
-    auth: () => {
+    auth: (): admin.auth.Auth => {
         const adminApp = getFirebaseAdmin();
         return adminApp.auth();
     }
